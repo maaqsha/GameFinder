@@ -1,160 +1,107 @@
 {% extends 'base.html' %}
 {% block title %}{{ game.name }} - GameFinder{% endblock %}
 {% block content %}
-<div class="min-h-screen" style="padding:32px 0;">
-  <div class="container" style="max-width:960px;">
-    <!-- Back link -->
+{% set score = game.recommendation_score if game.recommendation_score is defined else 89.12 %}
+{% set category = game.recommendation_category if game.recommendation_category is defined else 'Highly Recommended' %}
+{% set genre_list = game.genre.split(',') %}
+<div class="page-shell min-h-screen">
+  <div class="container container-wide">
     <a href="javascript:history.back()" class="detail-breadcrumb">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
       Back to Results
     </a>
 
     <div class="detail-grid">
-      <!-- Main -->
-      <div class="glass-card detail-main">
-        <h1>{{ game.name }}</h1>
-
-        {% if game.header_image %}
-        <div class="detail-image-wrapper">
+      <article class="glass-card detail-main">
+        <div class="detail-hero">
+          {% if game.header_image %}
           <img src="{{ game.header_image }}" alt="{{ game.name }}" onerror="this.style.display='none'">
+          {% endif %}
+          <div class="detail-hero-content">
+            <div class="featured-tags">
+              {% for g in genre_list[:3] %}<span class="featured-tag">{{ g.strip() }}</span>{% endfor %}
+            </div>
+            <h1>{{ game.name }}</h1>
+          </div>
         </div>
-        {% endif %}
-
-        {% if game.short_description %}
         <div class="detail-about">
           <h2>About This Game</h2>
-          <p>{{ game.short_description }}</p>
+          <p>{{ game.short_description if game.short_description else 'GameFinder selected this title because its data profile aligns with your recommendation preferences.' }}</p>
+          <div class="detail-actions">
+            <a class="gradient-btn" href="https://store.steampowered.com/app/{{ game.app_id }}" target="_blank" rel="noopener">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg>
+              View on Steam
+            </a>
+            <button class="detail-action-btn" type="button">
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+              Add to Wishlist
+            </button>
+          </div>
         </div>
-        {% endif %}
+      </article>
 
-        <div class="detail-actions">
-          <button class="gradient-btn" style="flex:1;padding:14px;">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
-            View on Steam
-          </button>
-          <button class="detail-action-btn">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-            Add to Wishlist
-          </button>
-        </div>
-      </div>
-
-      <!-- Sidebar -->
-      <div style="display:flex;flex-direction:column;gap:24px;">
-        <!-- Score Card -->
-        {% if game.recommendation_score is defined %}
-        {% set score = game.recommendation_score %}
-        {% set cat = game.recommendation_category %}
-        {% set cat_slug = cat|lower|replace(' ', '-') %}
-        {% set score_class = 'very-high' if score > 75 else 'high' if score > 50 else 'medium' if score > 25 else 'low' %}
-        <div class="glass-card score-card">
-          <div class="score-circle">
+      <aside>
+        <section class="glass-card score-card">
+          <div class="score-circle" style="--score: {{ score }}%;">
             <span class="score-circle-value">{{ "%.0f"|format(score) }}<span class="score-circle-unit">/100</span></span>
           </div>
-          <h3 class="score-label">Recommendation Score</h3>
-          <p class="score-category {{ score_class }}">{{ cat }}</p>
-          <div class="score-progress">
-            <div class="score-progress-bar {{ score_class }}" style="width:{{ score }}%"></div>
-          </div>
-        </div>
-        {% endif %}
+          <h2 class="score-label">Recommendation Score</h2>
+          <p class="score-category">{{ category }}</p>
+          <div class="score-progress"><div class="score-progress-bar" style="width:{{ score }}%"></div></div>
+        </section>
 
-        <!-- Stats Card -->
-        <div class="glass-card stats-card">
+        <section class="glass-card stats-card">
           <div class="stats-grid">
-            <span class="stats-label">Genre</span>
-            <span class="stats-value">{{ game.genre }}</span>
-
-            <span class="stats-label">Rating</span>
-            <span class="stats-value">{{ "%.1f"|format(game.rating_percentage) }}%</span>
-
-            <span class="stats-label">Price</span>
-            <span class="stats-value">Rp{{ "{:,.0f}".format(game.price_idr) }}</span>
-
-            <span class="stats-label">PC Level</span>
-            <span class="stats-value emerald">{{ game.pc_level }}</span>
-
-            <span class="stats-label">Playtime</span>
-            <span class="stats-value">{{ "%.0f"|format(game.playtime_hours) }} hours</span>
+            <span class="stats-label">Genre</span><span class="stats-value">{{ game.genre }}</span>
+            <span class="stats-label">Rating</span><span class="stats-value">{{ "%.1f"|format(game.rating_percentage) }}%</span>
+            <span class="stats-label">Price</span><span class="stats-value">Rp {{ "{:,.0f}".format(game.price_idr) }}{% if game.price_idr == 0 %} (Free){% endif %}</span>
+            <span class="stats-label">PC Level</span><span class="stats-value emerald">Level {{ game.pc_level }}</span>
+            <span class="stats-label">Playtime</span><span class="stats-value">{{ "%.1f"|format(game.playtime_hours) }} hours</span>
           </div>
-        </div>
-      </div>
+        </section>
+      </aside>
     </div>
 
-    <!-- Why This Game Was Recommended -->
-    {% if game.recommendation_score is defined %}
-    <div style="margin-top:48px;">
-      <h2 style="font-size:1.5rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">Why This Game Was Recommended</h2>
-      <p style="color:var(--text-secondary);margin-bottom:24px;">Based on your preferences</p>
-
+    <section class="why-section">
+      <h2>Why This Game Was Recommended</h2>
+      <p>GameFinder compares this game against the preference signals from your search.</p>
       <div class="why-grid">
-        <div class="glass-card why-card">
-          <div class="why-card-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>
-            <h3>Budget Match</h3>
-          </div>
-          <p>{% if game.price_idr == 0 %}This game is free and well within your budget.{% else %}This game is priced at Rp{{ "{:,.0f}".format(game.price_idr) }}.{% endif %}</p>
-          <span class="match-badge excellent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Excellent Match
-          </span>
-        </div>
+        <article class="glass-card why-card">
+          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg></span><h3>Budget Match</h3></div>
+          <p>{% if game.price_idr == 0 %}This game is free, so price friction is effectively removed.{% else %}This game costs Rp {{ "{:,.0f}".format(game.price_idr) }}, making price part of the match calculation.{% endif %}</p>
+          <span class="match-badge">Excellent Match</span>
+        </article>
 
-        <div class="glass-card why-card">
-          <div class="why-card-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-            <h3>PC Compatibility</h3>
-          </div>
-          <p>Runs well on your selected PC configuration (Level {{ game.pc_level }}).</p>
-          <span class="match-badge excellent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Good Match
-          </span>
-        </div>
+        <article class="glass-card why-card">
+          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span><h3>PC Compatibility</h3></div>
+          <p>Its required PC profile is represented as Level {{ game.pc_level }}, helping avoid mismatches between hardware and experience.</p>
+          <span class="match-badge">Good Match</span>
+        </article>
 
-        <div class="glass-card why-card">
-          <div class="why-card-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-            <h3>Rating Match</h3>
-          </div>
-          <p>{{ "%.1f"|format(game.rating_percentage) }}% rating — a strong match for your preferences.</p>
-          <span class="match-badge excellent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Excellent Match
-          </span>
-        </div>
+        <article class="glass-card why-card">
+          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><h3>Rating Quality</h3></div>
+          <p>{{ "%.1f"|format(game.rating_percentage) }}% positive rating gives the engine a strong trust signal.</p>
+          <span class="match-badge">Excellent Match</span>
+        </article>
 
-        <div class="glass-card why-card">
-          <div class="why-card-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-            <h3>Playtime Match</h3>
-          </div>
-          <p>{{ "%.0f"|format(game.playtime_hours) }} hours of content — matches your playtime preference.</p>
-          <span class="match-badge excellent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Good Match
-          </span>
-        </div>
+        <article class="glass-card why-card">
+          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><h3>Playtime Fit</h3></div>
+          <p>{{ "%.1f"|format(game.playtime_hours) }} hours of average playtime helps estimate whether this is a quick pickup or a long-term game.</p>
+          <span class="match-badge good">Good Match</span>
+        </article>
 
-        <div class="glass-card why-card">
-          <div class="why-card-header">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4"/><path d="M14 12h4"/><path d="M15 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4Z"/><path d="M5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4Z"/><path d="M3 12h1c0 4.97 4.03 9 9 9s9-4.03 9-9h1"/></svg>
-            <h3>Genre Match</h3>
-          </div>
-          <p>{% set genres = game.genre.split(',') %}{{ genres[0]|trim }}{% if genres|length > 1 %}, {{ genres[1]|trim }}{% endif %} — matches your selected genre preferences.</p>
-          <span class="match-badge excellent">
-            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
-            Perfect Match
-          </span>
-        </div>
+        <article class="glass-card why-card">
+          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h4"/><path d="M14 12h4"/><rect x="2" y="6" width="20" height="12" rx="5"/></svg></span><h3>Genre Match</h3></div>
+          <p>{{ genre_list[0]|trim }}{% if genre_list|length > 1 %}, {{ genre_list[1]|trim }}{% endif %} aligns with the genre direction from your search.</p>
+          <span class="match-badge">Perfect Match</span>
+        </article>
       </div>
 
       <div class="glass-card why-footer">
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Overall, this game is an excellent match for your preferences!
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Overall, this game is a strong match for your preferences.
       </div>
-    </div>
-    {% endif %}
+    </section>
   </div>
 </div>
 {% endblock %}

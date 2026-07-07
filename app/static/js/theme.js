@@ -13,7 +13,7 @@
     localStorage.setItem(STORAGE_KEY, theme);
     var icon = document.getElementById('theme-icon');
     var label = document.getElementById('theme-label-text');
-    if (icon) icon.textContent = theme === 'dark' ? '\u2600' : '\u263E';
+    if (icon) icon.textContent = theme === 'dark' ? '\u263E' : '\u2600';
     if (label) label.textContent = theme === 'dark' ? 'Dark' : 'Light';
   }
 
