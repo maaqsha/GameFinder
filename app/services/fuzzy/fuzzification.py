@@ -3,6 +3,7 @@ from .membership import (
     PC_LEVEL_LOW, PC_LEVEL_MEDIUM, PC_LEVEL_HIGH,
     RATING_LOW, RATING_MEDIUM, RATING_HIGH,
     PLAYTIME_SHORT, PLAYTIME_MEDIUM, PLAYTIME_LONG,
+    triangular,
 )
 
 
@@ -22,26 +23,37 @@ def fuzzify_pc_level(pc_level):
     }
 
 
-def fuzzify_rating(rating_percentage):
+def fuzzify_rating(rating_percentage, preferred_rating):
+    p = max(preferred_rating, 1)
+    # Compare game rating to user's preferred rating.
+    # High = meets or exceeds preference
+    # Medium = slightly below preference
+    # Low = far below preference
     return {
-        'Low': RATING_LOW(rating_percentage),
-        'Medium': RATING_MEDIUM(rating_percentage),
-        'High': RATING_HIGH(rating_percentage),
+        'Low': triangular(rating_percentage, 0, 0, p + 10),
+        'Medium': triangular(rating_percentage, p - 20, p - 5, p + 10),
+        'High': 1.0 if rating_percentage >= p else triangular(rating_percentage, p - 15, p, p),
     }
 
 
-def fuzzify_playtime(playtime_hours):
+def fuzzify_playtime(playtime_hours, preferred_playtime):
+    p = max(preferred_playtime, 1)
+    # Compare game playtime to user's preferred playtime.
+    # Short = much shorter than preferred
+    # Medium = close to preferred (best match)
+    # Long = much longer than preferred
     return {
-        'Short': PLAYTIME_SHORT(playtime_hours),
-        'Medium': PLAYTIME_MEDIUM(playtime_hours),
-        'Long': PLAYTIME_LONG(playtime_hours),
+        'Short': triangular(playtime_hours, 0, 0, p * 0.7),
+        'Medium': triangular(playtime_hours, p * 0.4, p, p * 1.6),
+        'Long': triangular(playtime_hours, p * 1.2, p * 2, p * 2),
     }
 
 
-def fuzzify_game(price_idr, pc_level, rating_percentage, playtime_hours):
+def fuzzify_game(price_idr, pc_level, rating_percentage, playtime_hours,
+                 preferred_rating=100, preferred_playtime=50):
     return {
         'budget': fuzzify_budget(price_idr),
         'pc_level': fuzzify_pc_level(pc_level),
-        'rating': fuzzify_rating(rating_percentage),
-        'playtime': fuzzify_playtime(playtime_hours),
+        'rating': fuzzify_rating(rating_percentage, preferred_rating),
+        'playtime': fuzzify_playtime(playtime_hours, preferred_playtime),
     }

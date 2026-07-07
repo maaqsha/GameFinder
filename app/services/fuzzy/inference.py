@@ -16,7 +16,7 @@ def _is_good(var, label):
     if var == 'budget':
         return label == 'Low'
     if var == 'playtime':
-        return label == 'Short'
+        return label == 'Medium'
     return False
 
 
@@ -28,7 +28,7 @@ def _is_bad(var, label):
     if var == 'budget':
         return label == 'High'
     if var == 'playtime':
-        return label == 'Long'
+        return label == 'Short' or label == 'Long'
     return False
 
 
@@ -67,7 +67,7 @@ def _get_output(budget, pc, rating, playtime):
         return 2
 
     if goods >= 3:
-        return 2
+        return 1
 
     if goods >= 2 and bads == 0:
         return 2
