@@ -1,0 +1,20 @@
+<nav class="navbar-gamefinder">
+  <div class="container">
+    <a href="{{ url_for('home.index') }}" class="navbar-brand-gamefinder">
+      <div class="brand-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 12h4"/><path d="M14 12h4"/><path d="M15 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V4Z"/><path d="M5 4a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4Z"/><path d="M3 12h1c0 4.97 4.03 9 9 9s9-4.03 9-9h1"/></svg>
+      </div>
+      <span>GameFinder</span>
+    </a>
+
+    <div class="navbar-links">
+      <a href="{{ url_for('home.index') }}" class="{% if request.endpoint == 'home.index' %}active{% endif %}">Home</a>
+      <a href="{{ url_for('recommendation.recommend') }}" class="{% if request.endpoint and request.endpoint.startswith('recommendation.') %}active{% endif %}">Recommendation</a>
+    </div>
+
+    <button id="theme-toggle-btn" class="theme-toggle-pill" type="button">
+      <span id="theme-icon">&#9728;</span>
+      <span id="theme-label-text">Dark</span>
+    </button>
+  </div>
+</nav>

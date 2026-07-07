@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block title %}Find Your Game - GameFinder{% endblock %}
+{% block content %}
+<div class="min-h-screen" style="padding: 48px 0;">
+  <div class="container" style="max-width: 720px;">
+    <div style="text-align:center;margin-bottom:40px;">
+      <h1 style="font-size:2.25rem;font-weight:700;color:var(--text-primary);margin-bottom:12px;">Find Your Perfect Game</h1>
+      <p style="color:var(--text-secondary);">Tell us your preferences and let our AI find the best games for you</p>
+    </div>
+
+    <form method="POST" action="{{ url_for('recommendation.recommend') }}" class="glass-card" style="padding:32px;">
+      <div style="display:flex;flex-direction:column;gap:40px;">
+
+        <!-- 1. Budget Range -->
+        <div>
+          <div class="form-step-label">
+            <span class="form-step-dot">1</span>
+            <span class="form-step-number">Budget Range</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+            <span style="font-size:0.875rem;font-weight:500;color:var(--text-primary);">Maximum Budget</span>
+            <span id="budget-display" style="color:var(--accent);font-weight:600;font-size:0.9375rem;">Rp 300,000</span>
+          </div>
+          <div class="range-slider-wrapper">
+            <input type="range" class="range-slider" id="budget" name="budget" min="0" max="10000000" step="50000" value="300000">
+          </div>
+          <div class="range-slider-labels">
+            <span>Rp 0</span>
+            <span>Rp 10.000.000</span>
+          </div>
+        </div>
+
+        <!-- 2. Genre -->
+        <div>
+          <div class="form-step-label">
+            <span class="form-step-dot">2</span>
+            <span class="form-step-number">Genre</span>
+          </div>
+          <div class="search-input-wrapper" style="margin-bottom:12px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+            <input type="text" id="genre" name="genre" value="Action" placeholder="Search or select genre...">
+          </div>
+          <div class="genre-chips" id="genre-chips">
+            {% set genres = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Indie', 'Racing', 'Sports', 'Horror'] %}
+            {% for g in genres %}
+              <button type="button" class="genre-chip {% if g == 'Action' %}active{% endif %}" data-genre="{{ g }}">{{ g }}</button>
+            {% endfor %}
+            <button type="button" class="genre-chip" data-genre="+ More">+ More</button>
+          </div>
+        </div>
+
+        <!-- 3. PC Level -->
+        <div>
+          <div class="form-step-label">
+            <span class="form-step-dot">3</span>
+            <span class="form-step-number">PC Level</span>
+          </div>
+          <div class="segment-group cols-3">
+            <button type="button" class="segment-btn" data-pc="1">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              <span>Low End</span>
+              <span class="seg-desc">(Level 1)</span>
+            </button>
+            <button type="button" class="segment-btn active" data-pc="2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              <span>Mid End</span>
+              <span class="seg-desc">(Level 2)</span>
+            </button>
+            <button type="button" class="segment-btn" data-pc="3">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+              <span>High End</span>
+              <span class="seg-desc">(Level 3)</span>
+            </button>
+          </div>
+          <input type="hidden" id="pc_level" name="pc_level" value="2">
+        </div>
+
+        <!-- 4. Preferred Rating -->
+        <div>
+          <div class="form-step-label">
+            <span class="form-step-dot">4</span>
+            <span class="form-step-number">Preferred Rating</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+            <span id="rating-stars" style="display:flex;gap:2px;">
+              {% for i in range(1,6) %}
+                <svg class="rating-star" data-star="{{ i }}" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="{% if i <= 4 %}#eab308{% else %}#e2e8f0{% endif %}" stroke="{% if i <= 4 %}#eab308{% else %}#e2e8f0{% endif %}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {% endfor %}
+            </span>
+            <span id="rating-display" style="color:var(--text-secondary);font-size:0.875rem;">(75%)</span>
+          </div>
+          <div class="range-slider-wrapper">
+            <input type="range" class="range-slider" id="preferred_rating" name="preferred_rating" min="0" max="100" value="75">
+          </div>
+          <div class="range-slider-labels">
+            <span>0%</span>
+            <span>100%</span>
+          </div>
+        </div>
+
+        <!-- 5. Preferred Playtime -->
+        <div>
+          <div class="form-step-label">
+            <span class="form-step-dot">5</span>
+            <span class="form-step-number">Preferred Playtime</span>
+          </div>
+          <div class="segment-group cols-3" style="margin-bottom:24px;">
+            <button type="button" class="segment-btn" data-playtime="10">
+              <span style="font-size:0.875rem;font-weight:500;">Short</span>
+              <span class="seg-desc">(&lt; 10 hours)</span>
+            </button>
+            <button type="button" class="segment-btn active" data-playtime="30">
+              <span style="font-size:0.875rem;font-weight:500;">Medium</span>
+              <span class="seg-desc">(10 - 50 hours)</span>
+            </button>
+            <button type="button" class="segment-btn" data-playtime="100">
+              <span style="font-size:0.875rem;font-weight:500;">Long</span>
+              <span class="seg-desc">(&gt; 50 hours)</span>
+            </button>
+          </div>
+          <input type="hidden" id="preferred_playtime" name="preferred_playtime" value="30">
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" class="gradient-btn gradient-btn-lg" style="width:100%;margin-top:16px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+          Find My Game
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+(function() {
+  // Budget slider
+  var budgetSlider = document.getElementById('budget');
+  var budgetDisplay = document.getElementById('budget-display');
+  if (budgetSlider) {
+    budgetSlider.addEventListener('input', function() {
+      budgetDisplay.textContent = 'Rp ' + Number(this.value).toLocaleString('id-ID');
+    });
+  }
+
+  // Rating slider + stars
+  var ratingSlider = document.getElementById('preferred_rating');
+  var ratingDisplay = document.getElementById('rating-display');
+  function updateRatingStars(val) {
+    var stars = document.querySelectorAll('.rating-star');
+    var filled = Math.round(val / 20);
+    stars.forEach(function(s, i) {
+      var fill = i < filled ? '#eab308' : (i < filled || (i === filled && val % 20 >= 10) ? '#eab308' : '#e2e8f0');
+      s.setAttribute('fill', i < filled ? '#eab308' : '#e2e8f0');
+      s.setAttribute('stroke', i < filled ? '#eab308' : '#e2e8f0');
+    });
+  }
+  if (ratingSlider) {
+    ratingSlider.addEventListener('input', function() {
+      ratingDisplay.textContent = '(' + this.value + '%)';
+      updateRatingStars(this.value);
+    });
+  }
+
+  // Genre chips
+  var chips = document.querySelectorAll('.genre-chip');
+  var genreInput = document.getElementById('genre');
+  chips.forEach(function(chip) {
+    chip.addEventListener('click', function() {
+      chips.forEach(function(c) { c.classList.remove('active'); });
+      this.classList.add('active');
+      genreInput.value = this.getAttribute('data-genre') === '+ More' ? genreInput.value : this.getAttribute('data-genre');
+    });
+  });
+
+  // PC Level segments
+  var pcBtns = document.querySelectorAll('[data-pc]');
+  var pcInput = document.getElementById('pc_level');
+  pcBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      pcBtns.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      pcInput.value = this.getAttribute('data-pc');
+    });
+  });
+
+  // Playtime segments
+  var playBtns = document.querySelectorAll('[data-playtime]');
+  var playInput = document.getElementById('preferred_playtime');
+  playBtns.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      playBtns.forEach(function(b) { b.classList.remove('active'); });
+      this.classList.add('active');
+      playInput.value = this.getAttribute('data-playtime');
+    });
+  });
+})();
+</script>
+{% endblock %}

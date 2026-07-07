@@ -1,0 +1,27 @@
+/* @import url() FONT IMPORTS MUST ALWAYS BE AT THE VERY TOP OF THIS FILE, ABOVE THE TAILWIND IMPORTS — DO NOT DELETE THIS COMMENT */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CRITICAL: THE FOLLOWING TAILWIND IMPORTS MUST NEVER BE DELETED OR REORDERED — DO NOT DELETE THIS COMMENT */
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+/* END TAILWIND IMPORTS — ALL OTHER CSS MUST GO BELOW THIS LINE */
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 font-sans antialiased dark:bg-[#0a0e1a] dark:text-slate-200 transition-colors duration-200;
+    font-family: 'Inter', sans-serif;
+  }
+}
+@layer utilities {
+  .glass-card {
+    @apply bg-white dark:bg-[#131a2a]/80 backdrop-blur-md border border-slate-200 dark:border-slate-800/50 rounded-xl shadow-sm dark:shadow-none transition-colors duration-200;
+  }
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-blue-800 dark:from-blue-400 dark:to-blue-600;
+  }
+  .gradient-btn {
+    @apply bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-500 dark:to-purple-600 hover:from-blue-700 hover:to-blue-800 dark:hover:from-blue-400 dark:hover:to-purple-500 text-white font-medium rounded-lg transition-all duration-200;
+  }
+}

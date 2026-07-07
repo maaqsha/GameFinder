@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% block title %}Your Recommendations - GameFinder{% endblock %}
+{% block content %}
+<div class="min-h-screen" style="padding:48px 0;">
+  <div class="container" style="max-width:960px;">
+    <!-- Header -->
+    <div class="results-header">
+      <div>
+        <h1>Top {{ results|length }} Recommendations</h1>
+        <p>Based on your preferences</p>
+      </div>
+      <a href="{{ url_for('recommendation.recommend') }}" class="btn-secondary-outline" style="padding:10px 24px;font-size:0.875rem;border-color:rgba(var(--accent-rgb),0.3);color:var(--accent);">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M12 7V3h4"/><path d="m15 3-2 3"/></svg>
+        Modify Search
+      </a>
+    </div>
+
+    <!-- Filters Summary -->
+    {% if form_data %}
+    <div class="glass-card results-summary">
+      <div>
+        <span class="summary-item-label">Budget</span>
+        <span class="summary-item-value">Rp {{ "{:,.0f}".format(form_data.budget|int) }}</span>
+      </div>
+      <div>
+        <span class="summary-item-label">PC Level</span>
+        <span class="summary-item-value">
+          {% set pc_names = {1: 'Low End (1)', 2: 'Mid End (2)', 3: 'High End (3)'} %}
+          {{ pc_names.get(form_data.pc_level|int, form_data.pc_level) }}
+        </span>
+      </div>
+      <div>
+        <span class="summary-item-label">Rating</span>
+        <span class="summary-item-value">&ge; {{ form_data.preferred_rating }}%</span>
+      </div>
+      <div>
+        <span class="summary-item-label">Playtime</span>
+        <span class="summary-item-value">&ge; {{ form_data.preferred_playtime }} hours</span>
+      </div>
+      <div>
+        <span class="summary-item-label">Genre</span>
+        <span class="summary-item-value">{{ form_data.genre }}</span>
+      </div>
+    </div>
+    {% endif %}
+
+    {% if not results %}
+    <div class="glass-card" style="text-align:center;padding:64px 16px;">
+      <div style="font-size:3rem;margin-bottom:16px;">&#128270;</div>
+      <h2 style="font-size:1.25rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;">No games found</h2>
+      <p style="color:var(--text-secondary);margin-bottom:24px;">Try expanding your budget, lowering PC requirements, or choosing a broader genre.</p>
+      <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">Try Again</a>
+    </div>
+    {% else %}
+    <!-- Results List -->
+    <div class="results-list">
+      {% for game in results %}
+      <a href="{{ url_for('detail.show', app_id=game.app_id) }}" class="glass-card glass-card-hover result-row" style="text-decoration:none;display:grid;">
+
+        <!-- Rank -->
+        <div class="result-rank {% if loop.index <= 3 %}top-3{% endif %}">{{ loop.index }}</div>
+
+        <!-- Game Info -->
+        <div class="result-game">
+          {% if game.header_image %}
+          <img src="{{ game.header_image }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'">
+          {% endif %}
+          <div class="result-game-info">
+            <h3>{{ game.name }}</h3>
+            <div class="result-game-tags">
+              {% set genre_list = game.genre.split(',') %}
+              {% for g in genre_list[:3] %}
+              <span class="result-game-tag">{{ g.strip() }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+
+        <!-- Score -->
+        <div class="result-stat score">
+          <div class="result-stat-value">{{ "%.2f"|format(game.recommendation_score) }}</div>
+          <div class="result-stat-label">Score</div>
+        </div>
+
+        <!-- Rating -->
+        <div class="result-stat">
+          <div class="result-stat-value">{{ "%.1f"|format(game.rating_percentage) }}%</div>
+          <div class="result-stat-label">Rating</div>
+        </div>
+
+        <!-- Playtime -->
+        <div class="result-stat">
+          <div class="result-stat-value">{{ "%.0f"|format(game.playtime_hours) }}h</div>
+          <div class="result-stat-label">Playtime</div>
+        </div>
+
+        <!-- Price -->
+        <div class="result-stat price">
+          <div class="result-stat-value">Rp{{ "{:,.0f}".format(game.price_idr) }}</div>
+          <div class="result-stat-label">{% if game.price_idr == 0 %}Free{% else %}Price{% endif %}</div>
+        </div>
+
+        <!-- Fav -->
+        <span class="result-fav-btn" onclick="event.stopPropagation();event.preventDefault();">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+        </span>
+      </a>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

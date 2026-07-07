@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Error - GameFinder{% endblock %}
+{% block content %}
+<div class="min-h-screen" style="padding:64px 16px;">
+  <div class="error-page">
+    <div style="font-size:3rem;margin-bottom:16px;">&#9888;</div>
+    <h2>Oops!</h2>
+    {% if message %}
+      <p>{{ message }}</p>
+    {% else %}
+      <p>Something went wrong. Please try again.</p>
+    {% endif %}
+    <a href="{{ url_for('home.index') }}" class="gradient-btn gradient-btn-lg">Back to Home</a>
+  </div>
+</div>
+{% endblock %}
