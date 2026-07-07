@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
 {% block title %}{{ game.name }} - GameFinder{% endblock %}
 {% block content %}
-{% set score = game.recommendation_score if game.recommendation_score is defined else 89.12 %}
-{% set category = game.recommendation_category if game.recommendation_category is defined else 'Highly Recommended' %}
+{% set score = game.recommendation_score if game.recommendation_score is defined else 75 %}
+{% set category = game.recommendation_category if game.recommendation_category is defined else 'Recommended' %}
+{% set reasons = game.reasons if game.reasons is defined else None %}
 {% set genre_list = game.genre.split(',') %}
 <div class="page-shell min-h-screen">
   <div class="container container-wide">
@@ -64,42 +65,59 @@
 
     <section class="why-section">
       <h2>Why This Game Was Recommended</h2>
-      <p>GameFinder compares this game against the preference signals from your search.</p>
+      <p>GameFinder compares this game against your preference signals.</p>
       <div class="why-grid">
-        <article class="glass-card why-card">
-          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg></span><h3>Budget Match</h3></div>
-          <p>{% if game.price_idr == 0 %}This game is free, so price friction is effectively removed.{% else %}This game costs Rp {{ "{:,.0f}".format(game.price_idr) }}, making price part of the match calculation.{% endif %}</p>
-          <span class="match-badge">Excellent Match</span>
-        </article>
-
-        <article class="glass-card why-card">
-          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span><h3>PC Compatibility</h3></div>
-          <p>Its required PC profile is represented as Level {{ game.pc_level }}, helping avoid mismatches between hardware and experience.</p>
-          <span class="match-badge">Good Match</span>
-        </article>
-
-        <article class="glass-card why-card">
-          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><h3>Rating Quality</h3></div>
-          <p>{{ "%.1f"|format(game.rating_percentage) }}% positive rating gives the engine a strong trust signal.</p>
-          <span class="match-badge">Excellent Match</span>
-        </article>
-
-        <article class="glass-card why-card">
-          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><h3>Playtime Fit</h3></div>
-          <p>{{ "%.1f"|format(game.playtime_hours) }} hours of average playtime helps estimate whether this is a quick pickup or a long-term game.</p>
-          <span class="match-badge good">Good Match</span>
-        </article>
-
-        <article class="glass-card why-card">
-          <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h4"/><path d="M14 12h4"/><rect x="2" y="6" width="20" height="12" rx="5"/></svg></span><h3>Genre Match</h3></div>
-          <p>{{ genre_list[0]|trim }}{% if genre_list|length > 1 %}, {{ genre_list[1]|trim }}{% endif %} aligns with the genre direction from your search.</p>
-          <span class="match-badge">Perfect Match</span>
-        </article>
+        {% if reasons %}
+          {% set icons = {
+            'budget': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg>',
+            'pc': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg>',
+            'rating': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+            'playtime': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+            'community': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+            'popular': '<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+          } %}
+          {% for r in reasons %}
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon">{{ icons.get(r.key, '')|safe }}</span><h3>{{ r.text.split('—')[0].strip() }}</h3></div>
+            <p>{{ r.text }}</p>
+            <span class="match-badge {% if r.match == 'good' %}good{% elif r.match == 'neutral' %}neutral{% elif r.match == 'poor' %}poor{% endif %}">
+              {% if r.match == 'excellent' %}Excellent Match{% elif r.match == 'good' %}Good Match{% elif r.match == 'neutral' %}Consideration{% else %}Requires Trade-off{% endif %}
+            </span>
+          </article>
+          {% endfor %}
+        {% else %}
+          <!-- Static fallback when navigated directly -->
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/><path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/><path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/></svg></span><h3>Budget Match</h3></div>
+            <p>{% if game.price_idr == 0 %}This game is free, removing price friction entirely.{% else %}Priced at Rp {{ "{:,.0f}".format(game.price_idr) }}, within typical Steam range.{% endif %}</p>
+            <span class="match-badge">Consideration</span>
+          </article>
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8"/><path d="M12 17v4"/></svg></span><h3>PC Compatibility</h3></div>
+            <p>System requirement profile estimated at Level {{ game.pc_level }}.</p>
+            <span class="match-badge">Consideration</span>
+          </article>
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span><h3>Rating Quality</h3></div>
+            <p>{{ "%.1f"|format(game.rating_percentage) }}% positive rating from {{ (game.positive|int + game.negative|int) }} reviews.</p>
+            <span class="match-badge">Consideration</span>
+          </article>
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span><h3>Playtime Fit</h3></div>
+            <p>{{ "%.1f"|format(game.playtime_hours) }} hours average playtime.</p>
+            <span class="match-badge">Consideration</span>
+          </article>
+          <article class="glass-card why-card">
+            <div class="why-card-header"><span class="factor-icon"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h4"/><path d="M14 12h4"/><rect x="2" y="6" width="20" height="12" rx="5"/></svg></span><h3>Genre Match</h3></div>
+            <p>{{ genre_list[0]|trim }}{% if genre_list|length > 1 %}, {{ genre_list[1]|trim }}{% endif %} aligns with typical gaming preferences.</p>
+            <span class="match-badge">Consideration</span>
+          </article>
+        {% endif %}
       </div>
 
       <div class="glass-card why-footer">
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        Overall, this game is a strong match for your preferences.
+        Overall, this game is {% if reasons %}{% set excellent = reasons|selectattr('match', 'equalto', 'excellent')|list|length %}{% if excellent >= 3 %}a strong{% elif excellent >= 1 %}a decent{% else %}a reasonable{% endif %}{% else %}a{% endif %} match for your gaming preferences.
       </div>
     </section>
   </div>

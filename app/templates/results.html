@@ -35,21 +35,28 @@
     <section class="results-list" aria-label="Recommended games">
       {% for game in results %}
       {% set genre_list = game.genre.split(',') %}
-      <a href="{{ url_for('detail.show', app_id=game.app_id, score='%.2f'|format(game.recommendation_score), category=game.recommendation_category) }}" class="glass-card glass-card-hover result-row {% if loop.first %}featured-result{% endif %}">
+      <a href="{{ url_for('detail.show', app_id=game.app_id, score='%.2f'|format(game.recommendation_score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime) }}" class="glass-card glass-card-hover result-row {% if loop.first %}featured-result{% endif %}">
         <div class="result-rank {% if loop.index <= 3 %}top-3{% endif %}">{{ loop.index }}</div>
 
         <div class="result-game">
           {% if game.header_image %}
           <img src="{{ game.header_image }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.visibility='hidden'">
           {% endif %}
-          <div class="result-game-info">
-            <h3>{{ game.name }}</h3>
-            <div class="result-game-tags">
-              {% for g in genre_list[:3] %}
-              <span class="result-game-tag">{{ g.strip() }}</span>
-              {% endfor %}
+            <div class="result-game-info">
+              <h3>{{ game.name }}</h3>
+              <div class="result-game-tags">
+                {% for g in genre_list[:3] %}
+                <span class="result-game-tag">{{ g.strip() }}</span>
+                {% endfor %}
+              </div>
+              <div class="result-reasons">
+                {% if game.reasons %}
+                  {% for r in game.reasons[:3] %}
+                  <span class="reason-chip reason-{{ r.match }}">{{ r.text.split('—')[0].strip() }}</span>
+                  {% endfor %}
+                {% endif %}
+              </div>
             </div>
-          </div>
         </div>
 
         <div class="result-stat score">

@@ -180,6 +180,25 @@
   }
   bindSegments('[data-pc]', 'pc_level', 'data-pc');
   bindSegments('[data-playtime]', 'preferred_playtime', 'data-playtime');
+
+  // Loading state on form submit
+  var form = document.querySelector('form');
+  var submitBtn = form ? form.querySelector('button[type=submit]') : null;
+  if (form && submitBtn) {
+    var overlay = document.getElementById('loading-overlay');
+    form.addEventListener('submit', function() {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Finding matches...';
+      if (overlay) overlay.style.display = 'flex';
+    });
+  }
 })();
 </script>
+
+<div id="loading-overlay" class="loading-overlay" style="display:none;">
+  <div class="loading-card">
+    <div class="loading-spinner large"></div>
+    <p>GameFinder is analyzing 150,000+ games...</p>
+  </div>
+</div>
 {% endblock %}
