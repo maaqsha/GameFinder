@@ -14,8 +14,10 @@ instance/
 # Database
 *.db
 
-# Dataset (keep template but not raw data)
-dataset/*.csv
+# Dataset — raw data only (keep clean output)
+dataset/steam_dataset_2025_csv_package_v1/
+dataset/steamdataset.csv
+dataset/steamgamesdataset.csv
 
 # IDE
 .vscode/
