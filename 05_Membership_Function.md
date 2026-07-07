@@ -37,23 +37,11 @@ Range: 1 -- 3
         2 Medium
         3 High
 
-The application converts these values into fuzzy memberships.
+PC Level uses crisp singleton membership — μ(x) = 1 when value matches, 0 otherwise. No triangular membership.
 
 ------------------------------------------------------------------------
 
-# 3. Available Storage (GB)
-
-Range: 0 -- 200
-
-  Membership   Range
-  ------------ ------------
-  Small        0 -- 50
-  Medium       30 -- 120
-  Large        100 -- 200
-
-------------------------------------------------------------------------
-
-# 4. Minimum Rating (%)
+# 3. Preferred Rating (%)
 
 Range: 0 -- 100
 
@@ -65,7 +53,7 @@ Range: 0 -- 100
 
 ------------------------------------------------------------------------
 
-# 5. Preferred Playtime (Hours)
+# 4. Preferred Playtime (Hours)
 
 Range: 0 -- 200
 

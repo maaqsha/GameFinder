@@ -68,7 +68,7 @@ Deliverable: - Working Fuzzy Mamdani engine.
 
 ## Task 5
 
--   Generate all 243 rules.
+-   Generate all 81 rules.
 -   Validate all combinations.
 -   Ensure no duplicate or conflicting rules.
 

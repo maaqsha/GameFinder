@@ -41,9 +41,8 @@ The system shall provide a landing page introducing the project.
   F1   Budget                           Yes
   F2   Preferred Genre                  Yes
   F3   PC Level (Low / Medium / High)   Yes
-  F4   Available Storage                Yes
-  F5   Minimum Rating                   Yes
-  F6   Preferred Playtime               Yes
+  F4   Preferred Rating                 Yes
+  F5   Preferred Playtime               Yes
 
 ### Requirements
 
@@ -110,7 +109,6 @@ Display:
 -   Price
 -   Steam Rating
 -   Minimum PC Level
--   Required Storage
 -   Estimated Playtime
 -   Recommendation Score
 -   Recommendation Explanation
@@ -125,7 +123,6 @@ Example explanations:
 -   Budget matches user preference.
 -   PC level is sufficient.
 -   Rating meets minimum requirement.
--   Storage requirement fits.
 -   Playtime matches preference.
 
 ------------------------------------------------------------------------

@@ -34,21 +34,14 @@ Low-rated games should rarely receive a high recommendation.
 
 ------------------------------------------------------------------------
 
-# KB-04 Storage
-
-If the user's available storage is insufficient, the recommendation
-decreases.
-
-------------------------------------------------------------------------
-
-# KB-05 Playtime
+# KB-04 Playtime
 
 Games whose playtime matches the user's preference receive a higher
 recommendation.
 
 ------------------------------------------------------------------------
 
-# KB-06 Genre
+# KB-05 Genre
 
 Genre is not a fuzzy variable.
 
@@ -56,47 +49,46 @@ Genre is only used to filter candidate games before fuzzy inference.
 
 ------------------------------------------------------------------------
 
-# KB-07 Priority Order
+# KB-06 Priority Order
 
 The importance of each variable is:
 
 1.  PC Level
 2.  Rating
 3.  Budget
-4.  Storage
-5.  Playtime
+4.  Playtime
 
 ------------------------------------------------------------------------
 
-# KB-08 Highly Recommended
+# KB-07 Highly Recommended
 
 A game should be classified as **Highly Recommended** only when almost
 all important criteria match the user's preferences.
 
 ------------------------------------------------------------------------
 
-# KB-09 Recommended
+# KB-08 Recommended
 
 A game should be classified as **Recommended** when most criteria match
 and no critical mismatch exists.
 
 ------------------------------------------------------------------------
 
-# KB-10 Less Recommended
+# KB-09 Less Recommended
 
 Used when several criteria partially match but one or more important
 factors reduce suitability.
 
 ------------------------------------------------------------------------
 
-# KB-11 Not Recommended
+# KB-10 Not Recommended
 
 Assigned when there is a major mismatch, especially in PC compatibility
 or multiple important criteria.
 
 ------------------------------------------------------------------------
 
-# KB-12 Score Interpretation
+# KB-11 Score Interpretation
 
 Recommendation Score:
 
@@ -109,7 +101,7 @@ Recommendation Score:
 
 ------------------------------------------------------------------------
 
-# KB-13 Rule Consistency
+# KB-12 Rule Consistency
 
 -   Similar inputs should produce similar outputs.
 -   No contradictory rules.
@@ -117,14 +109,14 @@ Recommendation Score:
 
 ------------------------------------------------------------------------
 
-# KB-14 Scalability
+# KB-13 Scalability
 
 Adding new games to the database must not require changes to the fuzzy
 rule base.
 
 ------------------------------------------------------------------------
 
-# KB-15 Explainability
+# KB-14 Explainability
 
 Every recommendation should be explainable using these knowledge rules
 rather than arbitrary scoring.
@@ -133,5 +125,5 @@ rather than arbitrary scoring.
 
 # Conclusion
 
-The complete 243-rule base must be generated according to this knowledge
+The complete 81-rule base must be generated according to this knowledge
 base to ensure consistency, explainability, and maintainability.

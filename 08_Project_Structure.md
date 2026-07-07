@@ -44,9 +44,6 @@ steam-game-recommendation/
 │   │   ├── js/
 │   │   └── images/
 │   │
-│   ├── database/
-│   │   └── steamgames.db
-│   │
 │   └── utils/
 │
 ├── dataset/

@@ -23,9 +23,9 @@ Only one table is required.
   positive            INT                           Positive reviews
   negative            INT                           Negative reviews
   rating_percentage   DECIMAL(5,2)                  Calculated rating percentage
-  playtime            INT                           Average playtime forever (minutes)
+  playtime_hours      DECIMAL(8,2)                  Average playtime forever (hours)
   genre               VARCHAR(255)                  Game genres
-  pc_level            ENUM('Low','Medium','High')   PC requirement level
+  pc_level            TINYINT                       PC requirement level (1=Low, 2=Medium, 3=High)
   about               TEXT                          Game description
   header_image        TEXT                          Cover image URL
   website             TEXT                          Official website
@@ -50,13 +50,13 @@ Formula:
 
 ## pc_level
 
-Assigned manually or through preprocessing.
+Assigned during preprocessing.
 
 Values:
 
--   Low
--   Medium
--   High
+-   1 = Low
+-   2 = Medium
+-   3 = High
 
 ------------------------------------------------------------------------
 
@@ -77,8 +77,10 @@ Before importing:
 -   Remove duplicate App IDs.
 -   Replace missing descriptions with an empty string.
 -   Replace missing website URLs with NULL.
+-   Convert price from USD to IDR using a configurable exchange rate.
+-   Convert average playtime from minutes to hours.
 -   Calculate rating_percentage.
--   Assign pc_level.
+-   Assign pc_level as INTEGER (1, 2, or 3).
 -   Normalize genre values.
 
 ------------------------------------------------------------------------

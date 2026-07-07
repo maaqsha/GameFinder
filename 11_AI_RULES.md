@@ -150,7 +150,7 @@ Wait for user confirmation before starting the next major phase.
 
 When generating the fuzzy rule base:
 
--   Cover all 243 combinations.
+-   Cover all 81 combinations.
 -   No duplicate rules.
 -   No conflicting outputs.
 -   Follow:

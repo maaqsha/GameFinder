@@ -4,7 +4,7 @@
 
 ## Purpose
 
-This document defines how the 243 fuzzy rules are designed to ensure
+This document defines how the 81 fuzzy rules are designed to ensure
 consistency across the entire rule base.
 
 ------------------------------------------------------------------------
@@ -16,7 +16,6 @@ Each rule follows this format:
     IF
     Budget IS ...
     AND PC_Level IS ...
-    AND Storage IS ...
     AND Rating IS ...
     AND Playtime IS ...
 
@@ -30,13 +29,12 @@ Each rule follows this format:
   ---------- ----------------------
   Budget     Low, Medium, High
   PC Level   Low, Medium, High
-  Storage    Small, Medium, Large
   Rating     Low, Medium, High
   Playtime   Short, Medium, Long
 
 Total combinations:
 
-    3 × 3 × 3 × 3 × 3 = 243 Rules
+    3 × 3 × 3 × 3 = 81 Rules
 
 ------------------------------------------------------------------------
 
@@ -47,8 +45,7 @@ The recommendation priority is:
 1.  PC Level
 2.  Rating
 3.  Budget
-4.  Storage
-5.  Playtime
+4.  Playtime
 
 PC compatibility has the highest impact because a game should not be
 recommended if the user's PC cannot reasonably run it.
@@ -75,7 +72,6 @@ Typical conditions:
 -   High PC compatibility
 -   Rating is High
 -   Budget is suitable
--   Storage is sufficient
 -   Playtime matches user preference
 
 ------------------------------------------------------------------------
@@ -113,7 +109,7 @@ Typical conditions:
 -   Similar inputs should produce similar outputs.
 -   No contradictory rules.
 -   Every input combination must map to exactly one output.
--   All 243 combinations must be covered.
+-   All 81 combinations must be covered.
 
 ------------------------------------------------------------------------
 
@@ -121,7 +117,7 @@ Typical conditions:
 
 Before accepting the final rule base:
 
--   243 rules exist.
+-   81 rules exist.
 -   No duplicate rules.
 -   No missing combinations.
 -   No conflicting outputs.
@@ -131,5 +127,5 @@ Before accepting the final rule base:
 
 # Next Document
 
-The next document (07_Rule_Base.md) will contain the complete set of 243
-fuzzy rules following this strategy.
+The next document (07_Knowledge_Base.md) will contain the knowledge base
+used to generate all 81 fuzzy rules.

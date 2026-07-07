@@ -35,17 +35,7 @@ Memberships:
 
 ------------------------------------------------------------------------
 
-## 3. Available Storage
-
-Memberships:
-
--   Small
--   Medium
--   Large
-
-------------------------------------------------------------------------
-
-## 4. Minimum Rating
+## 3. Preferred Rating
 
 Memberships:
 
@@ -55,7 +45,7 @@ Memberships:
 
 ------------------------------------------------------------------------
 
-## 5. Preferred Playtime
+## 4. Preferred Playtime
 
 Memberships:
 
@@ -115,14 +105,11 @@ Recommendation Score
 
 The fuzzy engine uses:
 
--   5 input variables
+-   4 input variables
 -   3 membership functions for each input
 -   Total possible combinations:
 
-```{=html}
-<!-- -->
-```
-    3^5 = 243 Rules
+    3^4 = 81 Rules
 
 All combinations are covered in the rule base.
 

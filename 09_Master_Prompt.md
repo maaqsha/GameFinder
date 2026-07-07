@@ -59,7 +59,7 @@ Recommendation System using the Fuzzy Mamdani method.
 -   Implement the full Fuzzy Mamdani process.
 -   Use the documented membership functions.
 -   Use Centroid defuzzification.
--   Generate a complete 243-rule base from the documented Knowledge Base
+-   Generate a complete 81-rule base from the documented Knowledge Base
     and Rule Strategy.
 -   Every possible combination must be covered exactly once.
 
