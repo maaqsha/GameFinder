@@ -1,106 +1,100 @@
 {% extends 'base.html' %}
-{% block title %}GameFinder - Game Recommendation System{% endblock %}
+{% block title %}GameFinder - Steam Game Recommendation System{% endblock %}
 {% block content %}
-<div class="min-h-screen" style="padding-bottom: 80px;">
-  <div class="container" style="padding-top: 64px;">
-    <!-- Hero -->
-    <div class="hero-grid" style="margin-bottom: 96px;">
-      <div>
-        <div class="hero-tag">
-          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16 9l-4-4-4 4"/><path d="M8 15l4 4 4-4"/></svg>
-          Steam Game Recommendation System
-        </div>
-        <h1 class="hero-title">Find Your Next<br>Favorite <span class="accent">Game</span></h1>
-        <p class="hero-desc">Smart recommendations powered by Fuzzy Mamdani algorithm. Discover games that match your budget, PC specs, rating preference, playtime, and favorite genres.</p>
-        <div class="hero-actions">
-          <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg" style="box-shadow: 0 4px 14px rgba(var(--accent-rgb), 0.25);">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16 9l-4-4-4 4"/><path d="M8 15l4 4 4-4"/></svg>
-            Start Recommendation
-          </a>
-          <a href="#" class="btn-secondary-outline">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path dM12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16Z"/><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/></svg>
-            Learn More
-          </a>
-        </div>
+<section class="hero-section" style="--hero-image: url('https://images.unsplash.com/photo-1542751110-97427bbecf20?auto=format&fit=crop&w=1600&q=85');">
+  <div class="container container-wide">
+    <div class="hero-content">
+      <div class="section-kicker">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        Steam game recommendation system
       </div>
-      <div class="hero-image-wrapper">
-        <div class="hero-glow"></div>
-        <img src="https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=1000&q=80" alt="Gamer setup" class="hero-image">
-      </div>
-    </div>
-
-    <!-- Features -->
-    <div class="features-grid">
-      <div class="glass-card feature-card">
-        <div class="feature-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M16 9l-4-4-4 4"/><path d="M8 15l4 4 4-4"/></svg>
-        </div>
-        <div>
-          <h3 style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;">Smart Algorithm</h3>
-          <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Fuzzy Mamdani algorithm analyzes multiple factors to find your perfect game</p>
-        </div>
-      </div>
-      <div class="glass-card feature-card">
-        <div class="feature-icon purple">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="15" y1="9" y2="9"/><line x1="10" x2="17" y1="7" y2="7"/><line x1="12" x2="19" y1="5" y2="5"/><path d="M4 21V3h16v14l-4 4H4Z"/><path d="M4 17h12v4"/></svg>
-        </div>
-        <div>
-          <h3 style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;">150,000+ Games</h3>
-          <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Huge database of Steam games with real-time data and insights</p>
-        </div>
-      </div>
-      <div class="glass-card feature-card">
-        <div class="feature-icon emerald">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-        </div>
-        <div>
-          <h3 style="font-size:1.125rem;font-weight:600;color:var(--text-primary);margin-bottom:8px;">Personalized for You</h3>
-          <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Advanced fuzzy logic system for personalized recommendations</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Featured Games -->
-    <div>
-      <div class="featured-header">
-        <div class="featured-header-left">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-          <h2 style="font-size:1.5rem;font-weight:700;color:var(--text-primary);margin:0;">Featured Games</h2>
-        </div>
-        <button class="btn-secondary-outline" style="padding:8px 16px;font-size:0.875rem;">View All</button>
-      </div>
-      <div class="featured-grid">
-        {% set featured = [
-          {'name': 'Elden Ring', 'image': 'https://images.unsplash.com/photo-1605901309584-818e25960b8f?auto=format&fit=crop&w=600&q=80', 'tags': ['RPG', 'Souls-like'], 'price': 'Rp 599.000', 'rating': 96},
-          {'name': "Baldur's Gate 3", 'image': 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80', 'tags': ['RPG', 'Strategy'], 'price': 'Rp 599.000', 'rating': 96},
-          {'name': 'Hades', 'image': 'https://images.unsplash.com/photo-1552820728-8b83bb6b773f?auto=format&fit=crop&w=600&q=80', 'tags': ['Roguelike', 'Action'], 'price': 'Rp 118.999', 'rating': 97},
-          {'name': 'Red Dead Redemption 2', 'image': 'https://images.unsplash.com/photo-1486401899868-0e435ed85128?auto=format&fit=crop&w=600&q=80', 'tags': ['Adventure', 'Action'], 'price': 'Rp 299.000', 'rating': 98},
-          {'name': 'Stardew Valley', 'image': 'https://images.unsplash.com/photo-1592839719941-8e2651039d01?auto=format&fit=crop&w=600&q=80', 'tags': ['RPG', 'Simulation'], 'price': 'Rp 79.999', 'rating': 96},
-        ] %}
-        {% for game in featured %}
-          <div class="glass-card featured-card">
-            <div class="featured-card-image">
-              <img src="{{ game.image }}" alt="{{ game.name }}" loading="lazy">
-            </div>
-            <div class="featured-card-body">
-              <h3>{{ game.name }}</h3>
-              <div class="featured-tags">
-                {% for tag in game.tags %}
-                  <span class="featured-tag">{{ tag }}</span>
-                {% endfor %}
-              </div>
-              <div class="featured-card-footer">
-                <span class="featured-price">{{ game.price }}</span>
-                <span class="featured-rating">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-                  {{ game.rating }}%
-                </span>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
+      <h1 class="hero-title">Find Your Next Favorite <span class="accent">Steam Game</span></h1>
+      <p class="hero-desc">GameFinder reads your budget, PC level, review standards, playtime habits, and genre taste, then uses Fuzzy Mamdani reasoning to surface games that actually fit you.</p>
+      <div class="hero-actions">
+        <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 14-8-4 16-3-7-7-1Z"/></svg>
+          Start Recommendation
+        </a>
+        <a href="#about" class="btn-secondary-outline">
+          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+          Learn More
+        </a>
       </div>
     </div>
   </div>
+</section>
+
+<div class="container container-wide">
+  <section id="about" class="trust-row">
+    <div class="glass-card feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M2 12h20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m19.07 4.93-14.14 14.14"/></svg>
+      </div>
+      <div>
+        <h3>Smart Recommendations</h3>
+        <p>Fuzzy logic weighs multiple preferences instead of forcing a single rigid filter.</p>
+      </div>
+    </div>
+    <div class="glass-card feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h4"/><path d="M14 12h4"/><path d="M8 8v8"/><path d="M16 8v8"/><rect x="2" y="6" width="20" height="12" rx="5"/></svg>
+      </div>
+      <div>
+        <h3>150,000+ Steam Games</h3>
+        <p>A large Steam dataset gives the recommender enough breadth to find niche matches.</p>
+      </div>
+    </div>
+    <div class="glass-card feature-card">
+      <div class="feature-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>
+      </div>
+      <div>
+        <h3>Built Around Fit</h3>
+        <p>Every recommendation explains price, PC compatibility, rating quality, playtime, and genre.</p>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-bottom:80px;">
+    <div class="featured-header">
+      <div class="featured-header-left">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <h2>Featured Games</h2>
+      </div>
+      <a href="{{ url_for('recommendation.recommend') }}" class="btn-secondary-outline" style="min-height:38px;padding:8px 16px;font-size:.86rem;">Find Yours</a>
+    </div>
+    <div class="featured-grid">
+      {% set featured = [
+        {'name': 'Elden Ring', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg', 'tags': ['RPG', 'Souls-like'], 'price': 'Rp 599.000', 'rating': 96},
+        {'name': "Baldur's Gate 3", 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg', 'tags': ['RPG', 'Strategy'], 'price': 'Rp 599.000', 'rating': 96},
+        {'name': 'Hades', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/library_600x900.jpg', 'tags': ['Roguelike', 'Action'], 'price': 'Rp 118.999', 'rating': 97},
+        {'name': 'Red Dead Redemption 2', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/library_600x900.jpg', 'tags': ['Adventure', 'Action'], 'price': 'Rp 299.000', 'rating': 96},
+        {'name': 'Stardew Valley', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/413150/library_600x900.jpg', 'tags': ['RPG', 'Simulation'], 'price': 'Rp 79.999', 'rating': 98}
+      ] %}
+      {% for game in featured %}
+      <article class="glass-card glass-card-hover featured-card">
+        <div class="featured-card-image">
+          <img src="{{ game.image }}" alt="{{ game.name }}" loading="lazy">
+          <span class="floating-fav" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </span>
+        </div>
+        <div class="featured-card-body">
+          <h3>{{ game.name }}</h3>
+          <div class="featured-tags">
+            {% for tag in game.tags %}<span class="featured-tag">{{ tag }}</span>{% endfor %}
+          </div>
+          <div class="featured-card-footer">
+            <span class="featured-price">{{ game.price }}</span>
+            <span class="featured-rating">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {{ game.rating }}%
+            </span>
+          </div>
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
 </div>
 {% endblock %}

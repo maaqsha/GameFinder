@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, abort
+from flask import Blueprint, render_template, abort, request
 import mysql.connector
 from app.config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
 
@@ -23,5 +23,15 @@ def show(app_id):
 
     if not game:
         abort(404)
+
+    score = request.args.get('score')
+    category = request.args.get('category')
+    if score is not None:
+        try:
+            game['recommendation_score'] = float(score)
+        except ValueError:
+            pass
+    if category:
+        game['recommendation_category'] = category
 
     return render_template('detail.html', game=game)
