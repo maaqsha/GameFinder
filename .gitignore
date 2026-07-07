@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Flask
+instance/
+.env
+
+# Database
+*.db
+
+# Dataset (keep template but not raw data)
+dataset/*.csv
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Config with secrets
+*.secret.*
