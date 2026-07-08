@@ -68,7 +68,7 @@ Deliverable: - Working Fuzzy Mamdani engine.
 
 ## Task 5
 
--   Generate all 81 rules.
+-   Generate all 243 rules (3⁵ budget × pc_level × gamer_type × rating × playtime).
 -   Validate all combinations.
 -   Ensure no duplicate or conflicting rules.
 

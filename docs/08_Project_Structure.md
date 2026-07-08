@@ -34,20 +34,36 @@ steam-game-recommendation/
 │   │   └── game.py
 │   │
 │   ├── templates/
-│   │   ├── home.html
-│   │   ├── recommendation.html
-│   │   ├── result.html
-│   │   └── detail.html
+│   │   ├── base.html
+│   │   ├── index.html
+│   │   ├── recommend.html
+│   │   ├── results.html
+│   │   ├── detail.html
+│   │   ├── error.html
+│   │   └── components/
+│   │       ├── navbar.html
+│   │       ├── footer.html
+│   │       └── game_card.html
 │   │
 │   ├── static/
 │   │   ├── css/
-│   │   ├── js/
-│   │   └── images/
+│   │   │   └── style.css
+│   │   └── js/
+│   │       └── theme.js
 │   │
 │   └── utils/
 │
 ├── dataset/
-│   └── steamgamesdataset.csv
+│   ├── steamgames_clean.csv
+│   ├── steamgames_clean_v3.csv
+│   ├── steam_games_2024-2026.csv
+│   └── import.sql
+│
+├── preprocessing/
+│   ├── clean_data.py
+│   ├── import_to_mysql.py
+│   ├── reimport_db.py
+│   └── ...
 │
 ├── docs/
 │

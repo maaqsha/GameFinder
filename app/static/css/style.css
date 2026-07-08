@@ -1027,6 +1027,7 @@ a { color: inherit; }
   align-items: center;
   gap: 9px;
   font-weight: 850;
+  text-decoration: none;
 }
 .detail-info-chips {
   display: flex;

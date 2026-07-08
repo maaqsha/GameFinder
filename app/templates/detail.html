@@ -16,7 +16,7 @@
 {% set gamer_tags = ['Casual', 'Hardcore', 'Competitive', 'Story Rich'] %}
 <div class="page-shell min-h-screen">
   <div class="container container-wide">
-    <a href="javascript:history.back()" class="detail-breadcrumb">
+    <a href="javascript:history.back()" onclick="if (document.referrer === '') { this.href='{{ url_for('home.index') }}'; }" class="detail-breadcrumb">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
       Back to Results
     </a>
@@ -102,10 +102,10 @@
               <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v8"/><path d="m8 12 4 4 4-4"/></svg>
               View on Steam
             </a>
-            <button class="detail-action-btn" type="button">
+            <a class="detail-action-btn" href="https://store.steampowered.com/app/{{ game.app_id }}" target="_blank" rel="noopener">
               <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-              Add to Wishlist
-            </button>
+              Steam Wishlist
+            </a>
           </div>
         </div>
       </article>

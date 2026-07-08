@@ -27,7 +27,7 @@
 
     {% if not results %}
     <section class="glass-card empty-state">
-      <div class="empty-state-icon">&#128270;</div>
+      <div class="empty-state-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
       <h2>No confident matches yet</h2>
       <p>Try a broader genre, a higher budget, or a more flexible playtime preference.</p>
       <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">Tune Preferences</a>
