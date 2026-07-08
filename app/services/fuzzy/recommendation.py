@@ -8,14 +8,8 @@ from .defuzzification import centroid
 _RULES = None
 _DB_CONFIG = None
 
-# --- Quality constants (derived from dataset analysis) ---
-GLOBAL_AVG_RATING = 75.19     # average rating_percentage across games with 5+ reviews
-BAYESIAN_K = 10                # smoothing factor — lower = less smoothing, higher = more weight on global avg
-MIN_REVIEWS = 5                # minimum positive+negative reviews to be considered
+MIN_REVIEWS = 5
 
-# --- Configurable content filter ---
-# Games whose genre matches any of these patterns (case-insensitive, regex) are excluded.
-# Kept as a simple list for easy maintenance — add/remove patterns as needed.
 CONTENT_BLOCK_PATTERNS = [
     r'\bsexual content\b',
     r'\bnudity\b',
@@ -23,6 +17,7 @@ CONTENT_BLOCK_PATTERNS = [
     r'\bnsfw\b',
     r'\bporn(ographic)?\b',
     r'\berotic\b',
+    r'\badult\b',
 ]
 
 _CONTENT_RE = None
@@ -36,10 +31,18 @@ def _get_content_re():
     return _CONTENT_RE
 
 
-def _is_content_blocked(genre):
-    if not genre:
-        return False
-    return bool(_get_content_re().search(genre))
+def _is_content_blocked(genre, tags, name=None):
+    cr = _get_content_re()
+    if genre and cr.search(genre):
+        return True
+    if tags and cr.search(tags):
+        return True
+    if name:
+        name_lower = name.lower()
+        for kw in ['hentai', 'nsfw', 'sex ', ' sex', 'porn', 'erotic']:
+            if kw in name_lower:
+                return True
+    return False
 
 
 def _get_rules():
@@ -62,9 +65,11 @@ def _get_db():
 
 
 def evaluate_game(price_idr, pc_level, rating_percentage, playtime_hours,
-                  preferred_rating=100, preferred_playtime=50):
+                  preferred_rating=100, preferred_playtime=50,
+                  preferred_gamer_type=2):
     fuzzy_inputs = fuzzify_game(price_idr, pc_level, rating_percentage, playtime_hours,
-                                preferred_rating, preferred_playtime)
+                                preferred_rating, preferred_playtime,
+                                preferred_gamer_type)
     rules = _get_rules()
     strengths = evaluate_rules(fuzzy_inputs, rules)
     agg = aggregate(strengths)
@@ -82,17 +87,19 @@ def score_category(score):
     return 'Highly Recommended'
 
 
-def _bayesian_score(rating_pct, total_reviews):
-    """Bayesian weighted rating — pulls low-review-count games toward the global average."""
-    return (GLOBAL_AVG_RATING * BAYESIAN_K + rating_pct * total_reviews) / (BAYESIAN_K + total_reviews)
+GAMER_NAMES = {1: 'Casual', 2: 'Balanced', 3: 'Hardcore'}
 
 
-def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime):
-    """Build human-readable reasons explaining why this game was recommended."""
+def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime,
+                   preferred_gamer_type=2):
     reasons = []
-    total_reviews = int(game['positive']) + int(game['negative'])
+    total_reviews = int(game['total_reviews'])
+    estimated_owners = int(game.get('estimated_owners', 0))
+    peak_players = int(game.get('peak_players', 0))
 
-    # 1. Budget
+    gamer_label = GAMER_NAMES.get(preferred_gamer_type, 'Balanced')
+    reasons.append({'key': 'gamer_type', 'text': f'Matched for {gamer_label} play style', 'match': 'excellent'})
+
     if float(game['price_idr']) <= budget:
         if float(game['price_idr']) == 0:
             reasons.append({'key': 'budget', 'text': 'Free game — fits any budget', 'match': 'excellent'})
@@ -101,13 +108,6 @@ def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime)
     else:
         reasons.append({'key': 'budget', 'text': 'Exceeds your budget', 'match': 'poor'})
 
-    # 2. PC compatibility
-    if int(game['pc_level']) <= pc_level:
-        reasons.append({'key': 'pc', 'text': 'Compatible with your PC', 'match': 'excellent'})
-    else:
-        reasons.append({'key': 'pc', 'text': 'Exceeds your PC specs', 'match': 'poor'})
-
-    # 3. Rating match
     rating = float(game['rating_percentage'])
     if rating >= preferred_rating:
         reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% meets your {preferred_rating:.0f}% preference', 'match': 'excellent'})
@@ -116,13 +116,12 @@ def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime)
     else:
         reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% is below your {preferred_rating:.0f}% preference', 'match': 'poor'})
 
-    # 4. Playtime match
-    pt = float(game['playtime_hours'])
+    pt = float(game.get('playtime_hours', 0))
     if preferred_playtime > 0:
-        ratio = pt / preferred_playtime
+        ratio = pt / preferred_playtime if pt > 0 else 0
         if 0.5 <= ratio <= 2.0:
             reasons.append({'key': 'playtime', 'text': f'Playtime ({pt:.0f}h) matches your preference', 'match': 'excellent'})
-        elif ratio < 0.5 and pt > 0:
+        elif ratio < 0.5:
             reasons.append({'key': 'playtime', 'text': f'Shorter game ({pt:.0f}h) — good for quick sessions', 'match': 'good'})
         elif ratio > 2.0:
             reasons.append({'key': 'playtime', 'text': f'Long game ({pt:.0f}h) — great value for time', 'match': 'good'})
@@ -131,88 +130,122 @@ def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime)
     else:
         reasons.append({'key': 'playtime', 'text': f'Playtime: {pt:.0f}h', 'match': 'neutral'})
 
-    # 5. Community validation
-    if total_reviews >= 50:
+    if estimated_owners >= 1000000:
+        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimated owners — massive player base', 'match': 'excellent'})
+    elif estimated_owners >= 100000:
+        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimated owners — large community', 'match': 'good'})
+    elif peak_players >= 1000:
+        reasons.append({'key': 'community', 'text': f'{peak_players:,} peak players — active community', 'match': 'good'})
+    elif total_reviews >= 50:
         reasons.append({'key': 'community', 'text': f'{total_reviews} reviews — trusted by the community', 'match': 'excellent'})
     elif total_reviews >= MIN_REVIEWS:
         reasons.append({'key': 'community', 'text': f'{total_reviews} reviews — some community feedback', 'match': 'good'})
 
-    # 6. Popularity signal
-    if total_reviews >= 20 and float(game['rating_percentage']) >= 80:
+    if total_reviews >= 20 and rating >= 80:
         reasons.append({'key': 'popular', 'text': 'Highly rated by players', 'match': 'excellent'})
 
     return reasons
 
 
-def recommend(budget, pc_level, preferred_rating, preferred_playtime, genre, top_n=10):
+def recommend(budget, pc_level, preferred_rating, preferred_playtime, genre,
+              top_n=10, preferred_gamer_type=2):
     conn = _get_db()
     cursor = conn.cursor(dictionary=True)
 
-    # Candidate selection strategy:
-    # 1. Genre + PC + budget pre-filter (existing)
-    # 2. MIN_REVIEWS threshold to filter shovelware with no community validation
-    # 3. Content filter to block adult/pornographic content
-    # 4. Bayesian weighted score ordering — promotes games with many reviews,
-    #    demotes games with few reviews but perfect rating
-    # 5. LIMIT 200 keeps performance fast
-    sql = """
-        SELECT app_id, name, price_idr, positive, negative,
-               rating_percentage, playtime_hours,
-               genre, pc_level, header_image, short_description
+    select_cols = """
+        SELECT app_id, name, price_idr, rating_percentage,
+               total_reviews, genre, tags,
+               estimated_owners, peak_players
         FROM games
-        WHERE MATCH(genre) AGAINST(%s IN BOOLEAN MODE)
-          AND pc_level <= %s
-          AND price_idr <= %s
-          AND positive + negative >= %s
-        ORDER BY (%s * %s + rating_percentage * (positive + negative)) / (%s + positive + negative) DESC
-        LIMIT 200
     """
-    cursor.execute(sql, (
-        genre,
-        pc_level,
-        budget,
-        MIN_REVIEWS,
-        GLOBAL_AVG_RATING, BAYESIAN_K,
-        BAYESIAN_K,
-    ))
-    candidates = cursor.fetchall()
+
+    def add_clause(where, params, clause, val=None):
+        if clause:
+            where.append(clause)
+            if val is not None:
+                params.append(val)
+
+    genres = [g.strip() for g in genre.split(',') if g.strip()]
+
+    def match_clause(genres):
+        if not genres:
+            return None, None
+        if len(genres) == 1:
+            return ("MATCH(genre, tags) AGAINST(%s IN BOOLEAN MODE)",
+                    '+' + genres[0] + '*')
+        terms = ' '.join('+' + g + '*' for g in genres)
+        return ("MATCH(genre, tags) AGAINST(%s IN BOOLEAN MODE)", terms)
+
+    def like_clause(genres):
+        if not genres:
+            return None, None
+        if len(genres) == 1:
+            return ("genre LIKE CONCAT('%%', %s, '%%')", genres[0])
+        clauses = ' OR '.join('genre LIKE CONCAT(\'%%\', %s, \'%%\')' for _ in genres)
+        return (clauses, genres)
+
+    query_configs = [
+        ("MATCH genre", *match_clause(genres), budget),
+        ("LIKE genre", *like_clause(genres), budget),
+        ("no genre", None, None, budget),
+        ("no genre+$max", None, None, 99000000),
+    ]
+
+    candidates = []
+    for label, gc, gv, bv in query_configs:
+        where = []
+        params = []
+        if gc and gv:
+            if isinstance(gv, list):
+                where.append(gc)
+                params.extend(gv)
+            else:
+                add_clause(where, params, gc, gv)
+        add_clause(where, params, "price_idr <= %s", bv)
+        add_clause(where, params, "total_reviews >= %s", MIN_REVIEWS)
+        sql = f"{select_cols} WHERE {' AND '.join(where)} ORDER BY SQRT(estimated_owners + 1) * rating_percentage DESC LIMIT 500"
+        cursor.execute(sql, params)
+        candidates = cursor.fetchall()
+        if candidates:
+            break
+
     cursor.close()
     conn.close()
 
     results = []
     for g in candidates:
-        # Skip content-blocked games
-        if _is_content_blocked(g['genre']):
+        if _is_content_blocked(g['genre'], g['tags'], g['name']):
             continue
 
         score, _ = evaluate_game(
             price_idr=float(g['price_idr']),
-            pc_level=int(g['pc_level']),
+            pc_level=2,
             rating_percentage=float(g['rating_percentage']),
-            playtime_hours=float(g['playtime_hours']),
+            playtime_hours=15,
             preferred_rating=preferred_rating,
             preferred_playtime=preferred_playtime,
+            preferred_gamer_type=preferred_gamer_type,
         )
         cat = score_category(score)
-        reasons = _build_reasons(g, budget, pc_level, preferred_rating, preferred_playtime)
+        reasons = _build_reasons(g, budget, pc_level, preferred_rating,
+                                 preferred_playtime, preferred_gamer_type)
         results.append({
             'app_id': g['app_id'],
             'name': g['name'],
             'price_idr': g['price_idr'],
             'rating_percentage': g['rating_percentage'],
-            'playtime_hours': g['playtime_hours'],
+            'playtime_hours': 15.0,
             'genre': g['genre'],
-            'pc_level': g['pc_level'],
-            'header_image': g['header_image'],
-            'short_description': g['short_description'],
-            'positive': g['positive'],
-            'negative': g['negative'],
+            'tags': g['tags'],
+            'total_reviews': g['total_reviews'],
+            'estimated_owners': g['estimated_owners'],
+            'peak_players': g['peak_players'],
             'recommendation_score': score,
             'recommendation_category': cat,
             'reasons': reasons,
         })
 
-    results.sort(key=lambda x: x['recommendation_score'], reverse=True)
+    results.sort(key=lambda x: (x['recommendation_score'], x['estimated_owners']), reverse=True)
     return results[:top_n]
 
 
@@ -223,6 +256,7 @@ def demo():
     print('User Profile:')
     print('  Budget: 300,000 IDR')
     print('  PC Level: 2 (Medium)')
+    print('  Gamer Type: 2 (Balanced)')
     print('  Preferred Rating: 75%')
     print('  Preferred Playtime: 20 hours')
     print('  Genre: Action')
@@ -235,23 +269,21 @@ def demo():
         preferred_playtime=20,
         genre='Action',
         top_n=10,
+        preferred_gamer_type=2,
     )
 
     if not results:
         print('No matching games found.')
         return
 
-    print(f'Top {len(results)} Recommendations:')
-    print('-' * 110)
-    header = f'{"#":<3} {"Name":<40} {"Price(IDR)":<12} {"Rating":<8} {"Playtime":<9} {"PC":<4} {"Score":<8} {"Category":<20}'
+    header = f'{"#":<3} {"Name":<40} {"Price(IDR)":<12} {"Rating":<8} {"Genre":<20} {"Score":<8} {"Category":<20} {"Owners":<12}'
     print(header)
-    print('-' * 110)
+    print('-' * 120)
     for i, g in enumerate(results, 1):
         name = g['name'][:38]
         price = f'{int(g["price_idr"]):>10,}'
         rating = f'{g["rating_percentage"]:>6.2f}%'
-        playtime = f'{g["playtime_hours"]:>7.1f}h'
-        print(f'{i:<3} {name:<40} Rp{price:<9} {rating:<8} {playtime:<9} {g["pc_level"]:<4} {g["recommendation_score"]:<8} {g["recommendation_category"]:<20}')
+        print(f'{i:<3} {name:<40} Rp{price:<9} {rating:<8} {g["genre"]:<20} {g["recommendation_score"]:<8} {g["recommendation_category"]:<20} {g["estimated_owners"]:>10,}')
 
 
 if __name__ == '__main__':

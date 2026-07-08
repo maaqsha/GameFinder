@@ -32,6 +32,11 @@ PLAYTIME_MEDIUM = lambda x: triangular(x, 10, 45, 80)
 PLAYTIME_LONG = lambda x: triangular(x, 60, 130, 200)
 
 
+GAMER_CASUAL = lambda x: 1.0 if x == 1 else 0.0
+GAMER_BALANCED = lambda x: 1.0 if x == 2 else 0.0
+GAMER_HARDCORE = lambda x: 1.0 if x == 3 else 0.0
+
+
 REC_NOT = lambda x: triangular(x, 0, 0, 25)
 REC_LESS = lambda x: triangular(x, 20, 35, 50)
 REC_YES = lambda x: triangular(x, 45, 60, 75)

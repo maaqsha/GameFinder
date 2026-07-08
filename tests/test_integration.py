@@ -35,9 +35,11 @@ def print_results(label, results):
     for i, g in enumerate(results, 1):
         name_short = g['name'][:40].encode('ascii', 'replace').decode('ascii')
         price_str = f'Rp{int(g["price_idr"]):>8,}'
+        owners_str = f'{int(g["estimated_owners"]):>10,}' if g.get('estimated_owners') else '?'
         print(f'    {i:>2}. {name_short:<42} {price_str}  '
-              f'{g["rating_percentage"]:>6.2f}%  {g["playtime_hours"]:>7.1f}h  '
-              f'PC{g["pc_level"]}  {g["recommendation_score"]:>6.2f}  {g["recommendation_category"]}')
+              f'{g["rating_percentage"]:>6.2f}%  '
+              f'owners={owners_str}  '
+              f'{g["recommendation_score"]:>6.2f}  {g["recommendation_category"]}')
 
 
 # ======================================================================
@@ -48,15 +50,14 @@ header('A. Low Budget (50K IDR), Low PC (1), Action')
 
 print('''
 Rationale: User has very limited budget and an old/weak PC.
-Expect: Only games with pc_level=1 (Low) and price_idr <= 50,000.
+Expect: Games with price_idr <= 50,000 (pc_level no longer in schema).
 ''')
 results = recommend(budget=50000, pc_level=1, preferred_rating=50,
                     preferred_playtime=10, genre='Action', top_n=10)
 print_results('Top 10', results)
-all_pc1 = all(g['pc_level'] == 1 for g in results)
 all_affordable = all(float(g['price_idr']) <= 50000 for g in results)
-print(f'\n  SQL FILTER:    All PC=1: {all_pc1}    All price <= 50K: {all_affordable}')
-print(f'  Reasonable?    YES -- user gets free/cheap low-spec games.')
+print(f'\n  SQL FILTER:    All price <= 50K: {all_affordable}')
+print(f'  Reasonable?    YES -- user gets free/cheap games.')
 
 
 # ======================================================================
@@ -67,14 +68,13 @@ header('B. Medium Budget (300K IDR), Medium PC (2), RPG')
 
 print('''
 Rationale: Mainstream gamer with mid-range budget and PC.
-Expect: Mix of free and budget games with PC <= 2.
+Expect: Games within budget and genre.
 ''')
 results = recommend(budget=300000, pc_level=2, preferred_rating=70,
                     preferred_playtime=20, genre='RPG', top_n=10)
 print_results('Top 10', results)
-all_pc_ok = all(g['pc_level'] <= 2 for g in results)
 all_affordable = all(float(g['price_idr']) <= 300000 for g in results)
-print(f'\n  SQL FILTER:    All PC <= 2: {all_pc_ok}    All price <= 300K: {all_affordable}')
+print(f'\n  SQL FILTER:    All price <= 300K: {all_affordable}')
 print(f'  Reasonable?    YES - budget-friendly RPGs within spec.')
 
 
@@ -86,15 +86,14 @@ header('C. High Budget (1M IDR), High PC (3), Strategy')
 
 print('''
 Rationale: Enthusiast with high-end PC, willing to spend.
-Expect: All games with PC <= 3 and price <= 1M (most of the catalog).
+Expect: Games with price <= 1M.
 ''')
 results = recommend(budget=1000000, pc_level=3, preferred_rating=90,
                     preferred_playtime=50, genre='Strategy', top_n=10)
 print_results('Top 10', results)
-all_pc_ok = all(g['pc_level'] <= 3 for g in results)
 all_affordable = all(float(g['price_idr']) <= 1000000 for g in results)
 high_rated = sum(1 for g in results if float(g['rating_percentage']) >= 85)
-print(f'\n  SQL FILTER:    All PC <= 3: {all_pc_ok}    All price <= 1M: {all_affordable}')
+print(f'\n  SQL FILTER:    All price <= 1M: {all_affordable}')
 print(f'  Games with rating >= 85%: {high_rated}/10')
 print(f'  Reasonable?    YES - top Strategy games within budget.')
 
@@ -161,15 +160,12 @@ header('G. Very Short Preferred Playtime (2h), Adventure')
 
 print('''
 Rationale: User wants short gaming sessions (casual/commute).
-Expect: Games with short playtime ranked higher; long-playtime games
-        get Long=1.0 and are penalized.
+Expect: Games recommended for short playtime preference.
 ''')
 results = recommend(budget=200000, pc_level=2, preferred_rating=80,
                     preferred_playtime=2, genre='Adventure', top_n=10)
 print_results('Top 10', results)
-short_play = sum(1 for g in results if float(g['playtime_hours']) < 10)
-print(f'\n  Games with playtime < 10h: {short_play}/10')
-print(f'  Reasonable?    YES - short adventures are prioritized.')
+print(f'  Reasonable?    YES - adventures recommended.')
 
 
 # ======================================================================
@@ -180,14 +176,12 @@ header('H. Very Long Preferred Playtime (200h), RPG')
 
 print('''
 Rationale: User wants deeply replayable games for extended play.
-Expect: Games with longer playtime ranked higher.
+Expect: RPGs recommended for long playtime preference.
 ''')
 results = recommend(budget=200000, pc_level=2, preferred_rating=80,
                     preferred_playtime=200, genre='RPG', top_n=10)
 print_results('Top 10', results)
-long_play = sum(1 for g in results if float(g['playtime_hours']) > 50)
-print(f'\n  Games with playtime > 50h: {long_play}/10')
-print(f'  Reasonable?    YES - long RPGs are prioritized.')
+print(f'  Reasonable?    YES - RPGs recommended.')
 
 
 # ======================================================================
@@ -225,8 +219,8 @@ print_results('Top 5', results)
 subheader('pc_level = 3 (all games eligible)')
 results = recommend(budget=100000, pc_level=3, preferred_rating=50,
                     preferred_playtime=10, genre='Simulation', top_n=5)
-all_pc_ok = all(g['pc_level'] <= 3 for g in results)
-print(f'  All PC <= 3: {all_pc_ok}')
+all_affordable = all(float(g['price_idr']) <= 100000 for g in results)
+print(f'  All price <= 100K: {all_affordable}')
 print_results('Top 5', results)
 
 

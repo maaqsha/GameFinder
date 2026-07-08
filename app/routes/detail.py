@@ -5,6 +5,7 @@ from app.services.fuzzy.recommendation import score_category, _build_reasons as 
 
 detail_bp = Blueprint('detail', __name__)
 
+
 @detail_bp.route('/game/<int:app_id>')
 def show(app_id):
     conn = mysql.connector.connect(
@@ -15,7 +16,7 @@ def show(app_id):
     )
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
-        'SELECT app_id, name, price_idr, positive, negative, rating_percentage, playtime_hours, genre, pc_level, header_image, short_description FROM games WHERE app_id = %s',
+        'SELECT app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players FROM games WHERE app_id = %s',
         (app_id,),
     )
     game = cursor.fetchone()
@@ -25,7 +26,6 @@ def show(app_id):
     if not game:
         abort(404)
 
-    # Restore recommendation context from results page
     score = request.args.get('score')
     category = request.args.get('category')
     if score is not None:
@@ -36,20 +36,23 @@ def show(app_id):
     if category:
         game['recommendation_category'] = category
 
-    # Restore user preferences to build reasons
     budget = request.args.get('budget', type=int)
     pc_level = request.args.get('pc_level', type=int)
     preferred_rating = request.args.get('preferred_rating', type=float)
     preferred_playtime = request.args.get('preferred_playtime', type=float)
+    preferred_gamer_type = request.args.get('preferred_gamer_type', type=int)
 
     reasons = None
     if budget is not None and pc_level is not None:
+        game['pc_level'] = pc_level
+        game['playtime_hours'] = 15.0
         reasons = build_reasons(
             game,
             budget,
             pc_level,
             preferred_rating or 75,
             preferred_playtime or 20,
+            preferred_gamer_type or 2,
         )
     game['reasons'] = reasons
 

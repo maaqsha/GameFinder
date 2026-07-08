@@ -1,6 +1,7 @@
 from .membership import (
     BUDGET_LOW, BUDGET_MEDIUM, BUDGET_HIGH,
     PC_LEVEL_LOW, PC_LEVEL_MEDIUM, PC_LEVEL_HIGH,
+    GAMER_CASUAL, GAMER_BALANCED, GAMER_HARDCORE,
     RATING_LOW, RATING_MEDIUM, RATING_HIGH,
     PLAYTIME_SHORT, PLAYTIME_MEDIUM, PLAYTIME_LONG,
     triangular,
@@ -49,11 +50,21 @@ def fuzzify_playtime(playtime_hours, preferred_playtime):
     }
 
 
+def fuzzify_gamer_type(gamer_type):
+    return {
+        'Casual': GAMER_CASUAL(gamer_type),
+        'Balanced': GAMER_BALANCED(gamer_type),
+        'Hardcore': GAMER_HARDCORE(gamer_type),
+    }
+
+
 def fuzzify_game(price_idr, pc_level, rating_percentage, playtime_hours,
-                 preferred_rating=100, preferred_playtime=50):
+                 preferred_rating=100, preferred_playtime=50,
+                 preferred_gamer_type=2):
     return {
         'budget': fuzzify_budget(price_idr),
         'pc_level': fuzzify_pc_level(pc_level),
+        'gamer_type': fuzzify_gamer_type(preferred_gamer_type),
         'rating': fuzzify_rating(rating_percentage, preferred_rating),
         'playtime': fuzzify_playtime(playtime_hours, preferred_playtime),
     }

@@ -23,8 +23,8 @@
               <span class="value-label">Maximum spend</span>
               <span id="budget-display" class="value-display">Rp 300.000</span>
             </div>
-            <input type="range" class="range-slider" id="budget" name="budget" min="0" max="10000000" step="50000" value="300000">
-            <div class="range-slider-labels"><span>Rp 0</span><span>Rp 10.000.000</span></div>
+            <input type="range" class="range-slider" id="budget" name="budget" min="0" max="{{ max_budget }}" step="50000" value="300000">
+            <div class="range-slider-labels"><span>Rp 0</span><span>Rp {{ "{:,.0f}".format(max_budget) }}</span></div>
           </div>
         </section>
 
@@ -33,16 +33,17 @@
             <span class="form-step-dot">2</span>
             <span>
               <span class="form-step-number">What mood are you in?</span>
-              <span class="form-step-help">Choose a genre signal. You can also type your own.</span>
+              <span class="form-step-help">Choose one or more genres. You can also search below.</span>
             </span>
           </div>
           <div>
             <div class="search-input-wrapper">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input type="text" id="genre" name="genre" value="Action" placeholder="Search or type a genre...">
+              <input type="text" id="genre-search" placeholder="Search genres..." autocomplete="off">
             </div>
+            <input type="hidden" id="genre" name="genre" value="Action">
             <div class="genre-chips" id="genre-chips">
-              {% set genres = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Indie', 'Racing', 'Sports', 'Horror'] %}
+              {% set genres = ['Action', 'Adventure', 'RPG', 'Strategy', 'Simulation', 'Indie', 'Racing', 'Sports', 'Casual', 'Massively Multiplayer', 'Early Access'] %}
               {% for g in genres %}
               <button type="button" class="genre-chip {% if g == 'Action' %}active{% endif %}" data-genre="{{ g }}">{{ g }}</button>
               {% endfor %}
@@ -81,7 +82,31 @@
           <div class="form-step-label">
             <span class="form-step-dot">4</span>
             <span>
-              <span class="form-step-number">How important are reviews?</span>
+              <span class="form-step-number">What's your gamer type?</span>
+              <span class="form-step-help">Describe your play style so we can tailor recommendations.</span>
+            </span>
+          </div>
+          <div>
+            <div class="segment-group cols-3">
+              <button type="button" class="segment-btn" data-gamer="1">
+                <span>Casual</span><span class="seg-desc">Relaxed, short sessions</span>
+              </button>
+              <button type="button" class="segment-btn active" data-gamer="2">
+                <span>Balanced</span><span class="seg-desc">Moderate everything</span>
+              </button>
+              <button type="button" class="segment-btn" data-gamer="3">
+                <span>Hardcore</span><span class="seg-desc">Long, demanding sessions</span>
+              </button>
+            </div>
+            <input type="hidden" id="gamer_type" name="gamer_type" value="2">
+          </div>
+        </section>
+
+        <section class="journey-step">
+          <div class="form-step-label">
+            <span class="form-step-dot">5</span>
+            <span>
+              <span class="form-step-number">Preferred Rating</span>
               <span class="form-step-help">Higher values prioritize games with stronger player reception.</span>
             </span>
           </div>
@@ -101,7 +126,7 @@
 
         <section class="journey-step">
           <div class="form-step-label">
-            <span class="form-step-dot">5</span>
+            <span class="form-step-dot">6</span>
             <span>
               <span class="form-step-number">How long do you usually play one game?</span>
               <span class="form-step-help">Pick the session commitment that feels right for your library.</span>
@@ -157,15 +182,50 @@
     });
   }
 
+  // Multi-genre selection
   var chips = document.querySelectorAll('.genre-chip');
   var genreInput = document.getElementById('genre');
+  var selectedGenres = new Set();
+  // Init with default
+  chips.forEach(function(chip) {
+    if (chip.classList.contains('active')) {
+      selectedGenres.add(chip.getAttribute('data-genre'));
+    }
+  });
+  genreInput.value = Array.from(selectedGenres).join(',');
+
   chips.forEach(function(chip) {
     chip.addEventListener('click', function() {
-      chips.forEach(function(c) { c.classList.remove('active'); });
-      this.classList.add('active');
-      genreInput.value = this.getAttribute('data-genre');
+      var genre = this.getAttribute('data-genre');
+      if (selectedGenres.has(genre)) {
+        selectedGenres.delete(genre);
+        this.classList.remove('active');
+      } else {
+        selectedGenres.add(genre);
+        this.classList.add('active');
+      }
+      genreInput.value = Array.from(selectedGenres).join(',');
+      if (selectedGenres.size === 0) {
+        genreInput.value = '';
+      }
     });
   });
+
+  // Genre search / filter
+  var genreSearch = document.getElementById('genre-search');
+  if (genreSearch) {
+    genreSearch.addEventListener('input', function() {
+      var q = this.value.toLowerCase().trim();
+      chips.forEach(function(chip) {
+        var label = chip.textContent.toLowerCase();
+        if (q === '' || label.indexOf(q) !== -1) {
+          chip.style.display = '';
+        } else {
+          chip.style.display = 'none';
+        }
+      });
+    });
+  }
 
   function bindSegments(selector, inputId, attr) {
     var buttons = document.querySelectorAll(selector);
@@ -179,6 +239,7 @@
     });
   }
   bindSegments('[data-pc]', 'pc_level', 'data-pc');
+  bindSegments('[data-gamer]', 'gamer_type', 'data-gamer');
   bindSegments('[data-playtime]', 'preferred_playtime', 'data-playtime');
 
   // Loading state on form submit
@@ -198,7 +259,7 @@
 <div id="loading-overlay" class="loading-overlay" style="display:none;">
   <div class="loading-card">
     <div class="loading-spinner large"></div>
-    <p>GameFinder is analyzing 150,000+ games...</p>
+    <p>GameFinder is analyzing top Steam titles...</p>
   </div>
 </div>
 {% endblock %}

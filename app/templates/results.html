@@ -18,8 +18,9 @@
     <section class="glass-card results-summary" aria-label="Preference summary">
       <div><span class="summary-item-label">Budget</span><span class="summary-item-value">Rp {{ "{:,.0f}".format(form_data.budget|int) }}</span></div>
       <div><span class="summary-item-label">PC Level</span><span class="summary-item-value">{% set pc_names = {1: 'Low End (1)', 2: 'Mid End (2)', 3: 'High End (3)'} %}{{ pc_names.get(form_data.pc_level|int, form_data.pc_level) }}</span></div>
+      <div><span class="summary-item-label">Gamer Type</span><span class="summary-item-value">{% set gt_names = {1: 'Casual', 2: 'Balanced', 3: 'Hardcore'} %}{{ gt_names.get(form_data.preferred_gamer_type|int, 'Balanced') }}</span></div>
       <div><span class="summary-item-label">Rating</span><span class="summary-item-value">&ge; {{ form_data.preferred_rating }}%</span></div>
-      <div><span class="summary-item-label">Playtime</span><span class="summary-item-value">&ge; {{ form_data.preferred_playtime }} hours</span></div>
+      <div><span class="summary-item-label">Playtime</span><span class="summary-item-value">{{ form_data.preferred_playtime }} hours</span></div>
       <div><span class="summary-item-label">Genre</span><span class="summary-item-value">{{ form_data.genre }}</span></div>
     </section>
     {% endif %}
@@ -35,28 +36,31 @@
     <section class="results-list" aria-label="Recommended games">
       {% for game in results %}
       {% set genre_list = game.genre.split(',') %}
-      <a href="{{ url_for('detail.show', app_id=game.app_id, score='%.2f'|format(game.recommendation_score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime) }}" class="glass-card glass-card-hover result-row {% if loop.first %}featured-result{% endif %}">
+      {% set tag_list = game.tags.split(',') if game.tags else [] %}
+      <a href="{{ url_for('detail.show', app_id=game.app_id, score='%.2f'|format(game.recommendation_score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime, preferred_gamer_type=form_data.preferred_gamer_type) }}" class="glass-card glass-card-hover result-row {% if loop.first %}featured-result{% endif %}">
         <div class="result-rank {% if loop.index <= 3 %}top-3{% endif %}">{{ loop.index }}</div>
 
         <div class="result-game">
-          {% if game.header_image %}
-          <img src="{{ game.header_image }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.visibility='hidden'">
-          {% endif %}
-            <div class="result-game-info">
-              <h3>{{ game.name }}</h3>
-              <div class="result-game-tags">
-                {% for g in genre_list[:3] %}
-                <span class="result-game-tag">{{ g.strip() }}</span>
-                {% endfor %}
-              </div>
-              <div class="result-reasons">
-                {% if game.reasons %}
-                  {% for r in game.reasons[:3] %}
-                  <span class="reason-chip reason-{{ r.match }}">{{ r.text.split('—')[0].strip() }}</span>
-                  {% endfor %}
-                {% endif %}
-              </div>
+          <div class="result-game-info">
+            <h3>{{ game.name }}</h3>
+            <div class="result-game-tags">
+              {% for g in genre_list[:2] %}
+              <span class="result-game-tag">{{ g.strip() }}</span>
+              {% endfor %}
+              {% if tag_list %}
+              {% for t in tag_list[:2] %}
+              <span class="result-game-tag tag-secondary">{{ t.strip() }}</span>
+              {% endfor %}
+              {% endif %}
             </div>
+            <div class="result-reasons">
+              {% if game.reasons %}
+                {% for r in game.reasons[:3] %}
+                <span class="reason-chip reason-{{ r.match }}">{{ r.text.split('—')[0].strip() }}</span>
+                {% endfor %}
+              {% endif %}
+            </div>
+          </div>
         </div>
 
         <div class="result-stat score">
@@ -68,8 +72,8 @@
           <div class="result-stat-label">Rating</div>
         </div>
         <div class="result-stat">
-          <div class="result-stat-value">{{ "%.0f"|format(game.playtime_hours) }}h</div>
-          <div class="result-stat-label">Playtime</div>
+          <div class="result-stat-value">{{ "{:,.0f}".format(game.estimated_owners) }}</div>
+          <div class="result-stat-label">Owners</div>
         </div>
         <div class="result-stat price">
           <div class="result-stat-value">Rp {{ "{:,.0f}".format(game.price_idr) }}</div>
@@ -87,10 +91,10 @@
       <p>Scores are calculated using the Fuzzy Mamdani engine across the signals you provided.</p>
       <div class="factor-list">
         <span>Budget match</span>
-        <span>PC compatibility</span>
         <span>Rating preference</span>
         <span>Playtime preference</span>
         <span>Genre match</span>
+        <span>Community size</span>
       </div>
     </section>
     {% endif %}
