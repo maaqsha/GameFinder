@@ -155,6 +155,12 @@
 {% endblock %}
 
 {% block extra_scripts %}
+<div id="loading-overlay" class="loading-overlay" style="display:none;">
+  <div class="loading-card">
+    <div class="loading-spinner large"></div>
+    <p>GameFinder is analyzing top Steam titles...</p>
+  </div>
+</div>
 <script>
 (function() {
   var budgetSlider = document.getElementById('budget');
@@ -255,11 +261,4 @@
   }
 })();
 </script>
-
-<div id="loading-overlay" class="loading-overlay" style="display:none;">
-  <div class="loading-card">
-    <div class="loading-spinner large"></div>
-    <p>GameFinder is analyzing top Steam titles...</p>
-  </div>
-</div>
 {% endblock %}

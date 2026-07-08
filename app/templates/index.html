@@ -75,7 +75,8 @@
       {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
       <article class="glass-card glass-card-hover featured-card">
         <div class="featured-card-image">
-          <img src="{{ steam_img }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'">
+          <img src="{{ steam_img }}" alt="{{ game.name }} on Steam" loading="lazy" onerror="this.style.display='none'" onload="this.classList.add('loaded')">
+          <div class="featured-img-overlay"></div>
           <div class="game-img-fallback">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
             <span>{{ game.name }}</span>

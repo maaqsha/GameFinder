@@ -9,9 +9,9 @@ LABELS = {
 }
 
 GAMER_PROFILES = {
-    'Casual': {'budget': 'Low', 'pc_level': 'Low', 'rating': 'Medium', 'playtime': 'Short'},
-    'Balanced': {'budget': 'Low', 'pc_level': 'Low', 'rating': 'High', 'playtime': 'Medium'},
-    'Hardcore': {'budget': 'High', 'pc_level': 'High', 'rating': 'High', 'playtime': 'Long'},
+    'Casual': {'budget': 'Low', 'rating': 'Medium', 'playtime': 'Medium'},
+    'Balanced': {'budget': 'Medium', 'rating': 'High', 'playtime': 'Medium'},
+    'Hardcore': {'budget': 'High', 'rating': 'High', 'playtime': 'Medium'},
 }
 
 
@@ -19,11 +19,10 @@ def _get_output(budget, pc, gamer, rating, playtime):
     ideal = GAMER_PROFILES[gamer]
     matches = sum([
         budget == ideal['budget'],
-        pc == ideal['pc_level'],
         rating == ideal['rating'],
         playtime == ideal['playtime'],
     ])
-    return {4: 3, 3: 2, 2: 1}.get(matches, 0)
+    return {3: 3, 2: 2, 1: 1, 0: 0}.get(matches, 0)
 
 
 def generate_rules():

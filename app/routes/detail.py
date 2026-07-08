@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, abort, request
 import mysql.connector
 from app.config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
-from app.services.fuzzy.recommendation import score_category, _build_reasons as build_reasons
+from app.services.fuzzy.recommendation import _build_reasons as build_reasons
 
 detail_bp = Blueprint('detail', __name__)
 
@@ -16,7 +16,7 @@ def show(app_id):
     )
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
-        'SELECT app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players FROM games WHERE app_id = %s',
+        'SELECT app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players, release_date FROM games WHERE app_id = %s',
         (app_id,),
     )
     game = cursor.fetchone()
@@ -44,8 +44,6 @@ def show(app_id):
 
     reasons = None
     if budget is not None and pc_level is not None:
-        game['pc_level'] = pc_level
-        game['playtime_hours'] = 15.0
         reasons = build_reasons(
             game,
             budget,
@@ -55,5 +53,13 @@ def show(app_id):
             preferred_gamer_type or 2,
         )
     game['reasons'] = reasons
+
+    release_year = None
+    if game.get('release_date'):
+        try:
+            release_year = int(str(game['release_date'])[:4])
+        except (ValueError, TypeError):
+            pass
+    game['release_year'] = release_year
 
     return render_template('detail.html', game=game)

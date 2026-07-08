@@ -2,7 +2,6 @@ from .membership import (
     BUDGET_LOW, BUDGET_MEDIUM, BUDGET_HIGH,
     PC_LEVEL_LOW, PC_LEVEL_MEDIUM, PC_LEVEL_HIGH,
     GAMER_CASUAL, GAMER_BALANCED, GAMER_HARDCORE,
-    RATING_LOW, RATING_MEDIUM, RATING_HIGH,
     PLAYTIME_SHORT, PLAYTIME_MEDIUM, PLAYTIME_LONG,
     triangular,
 )
@@ -26,14 +25,10 @@ def fuzzify_pc_level(pc_level):
 
 def fuzzify_rating(rating_percentage, preferred_rating):
     p = max(preferred_rating, 1)
-    # Compare game rating to user's preferred rating.
-    # High = meets or exceeds preference
-    # Medium = slightly below preference
-    # Low = far below preference
     return {
-        'Low': triangular(rating_percentage, 0, 0, p + 10),
-        'Medium': triangular(rating_percentage, p - 20, p - 5, p + 10),
-        'High': 1.0 if rating_percentage >= p else triangular(rating_percentage, p - 15, p, p),
+        'Low': triangular(rating_percentage, 0, 0, p + 20),
+        'Medium': triangular(rating_percentage, p - 25, p - 5, p + 25),
+        'High': triangular(rating_percentage, p - 15, 100, 100),
     }
 
 

@@ -37,9 +37,7 @@ def recommend():
         preferred_rating = float(request.form.get('preferred_rating', 80))
         preferred_playtime = float(request.form.get('preferred_playtime', 30))
         preferred_gamer_type = int(request.form.get('gamer_type', 2))
-        genre = request.form.get('genre', 'Action')
-        if not genre.strip():
-            genre = 'Action'
+        genre = request.form.get('genre', 'Action').strip()
 
         results = rec_engine(
             budget=budget,

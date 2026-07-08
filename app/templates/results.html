@@ -37,60 +37,97 @@
       {% for game in results %}
       {% set genre_list = game.genre.split(',') %}
       {% set tag_list = game.tags.split(',') if game.tags else [] %}
-      <a href="{{ url_for('detail.show', app_id=game.app_id, score='%.2f'|format(game.recommendation_score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime, preferred_gamer_type=form_data.preferred_gamer_type) }}" class="glass-card glass-card-hover result-row {% if loop.first %}featured-result{% endif %}">
+      {% set game_types = ['Singleplayer', 'Multiplayer', 'Co-op', 'Online PvP', 'LAN', 'PvP', 'Shared/Split Screen'] %}
+      {% set gamer_tags = ['Casual', 'Hardcore', 'Competitive', 'Story Rich'] %}
+      {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
+      {% set steam_url = 'https://store.steampowered.com/app/' ~ game.app_id %}
+      {% set score = game.recommendation_score %}
+      {% set score_deg = (score / 100 * 360)|round %}
+      {% set rating = game.rating_percentage %}
+      {% if rating >= 80 %}{% set rating_class = 'rating-high' %}
+      {% elif rating >= 60 %}{% set rating_class = 'rating-mid' %}
+      {% else %}{% set rating_class = 'rating-low' %}{% endif %}
+      {% set is_free = game.price_idr == 0 %}
+      {% set detail_url = url_for('detail.show', app_id=game.app_id, score='%.2f'|format(score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime, preferred_gamer_type=form_data.preferred_gamer_type) %}
+      <div class="glass-card glass-card-hover result-card {% if loop.first %}featured-result{% endif %}">
+
+        {# 1. Rank #}
         <div class="result-rank {% if loop.index <= 3 %}top-3{% endif %}">{{ loop.index }}</div>
 
-        <div class="result-game">
-          {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
-          <div class="result-game-img-wrapper">
-            <img src="{{ steam_img }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'" class="game-img">
-            <div class="game-img-fallback">
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
-              <span>{{ game.name[:12] }}</span>
-            </div>
-          </div>
-          <div class="result-game-info">
-            <h3>{{ game.name }}</h3>
-            <div class="result-game-tags">
-              {% for g in genre_list[:2] %}
-              <span class="result-game-tag">{{ g.strip() }}</span>
-              {% endfor %}
-              {% if tag_list %}
-              {% for t in tag_list[:2] %}
-              <span class="result-game-tag tag-secondary">{{ t.strip() }}</span>
-              {% endfor %}
-              {% endif %}
-            </div>
-            <div class="result-reasons">
-              {% if game.reasons %}
-                {% for r in game.reasons[:3] %}
-                <span class="reason-chip reason-{{ r.match }}">{{ r.text.split('—')[0].strip() }}</span>
-                {% endfor %}
-              {% endif %}
-            </div>
+        {# 2. Game Image #}
+        <div class="result-img-col">
+          <img src="{{ steam_img }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'" onload="this.classList.add('loaded')" class="game-img">
+          <div class="img-fallback">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
+            <span>{{ game.name[:16] }}</span>
           </div>
         </div>
 
-        <div class="result-stat score">
-          <div class="result-stat-value">{{ "%.2f"|format(game.recommendation_score) }}</div>
-          <div class="result-stat-label">Match score</div>
+        {# 3. Game Information #}
+        <div class="result-info-col">
+          <h3><a href="{{ detail_url }}">{{ game.name }}</a></h3>
+
+          <div class="info-badges">
+            {% for g in genre_list[:2] %}
+            <span class="badge badge-genre">{{ g.strip() }}</span>
+            {% endfor %}
+            {% if game.release_year %}
+            <span class="badge badge-year">{{ game.release_year }}</span>
+            {% endif %}
+            {% if tag_list %}
+              {% set ns = namespace(types=0, gamer=0) %}
+              {% for t in tag_list %}
+                {% set tt = t.strip() %}
+                {% if tt in game_types and ns.types < 2 %}
+                <span class="badge badge-type">{{ tt }}</span>
+                {% set ns.types = ns.types + 1 %}
+                {% elif tt in gamer_tags and ns.gamer < 1 %}
+                <span class="badge badge-gamer">{{ tt }}</span>
+                {% set ns.gamer = ns.gamer + 1 %}
+                {% endif %}
+              {% endfor %}
+            {% endif %}
+          </div>
+
+          <div class="info-stats">
+            <span class="badge badge-rating {{ rating_class }}">
+              <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              {{ "%.0f"|format(rating) }}%
+            </span>
+            {% if game.total_reviews %}
+            <span class="stat-reviews">{{ "{:,}".format(game.total_reviews) }} reviews</span>
+            {% endif %}
+            <span class="stat-price {% if is_free %}free{% endif %}">
+              {% if is_free %}Free{% else %}Rp {{ "{:,.0f}".format(game.price_idr) }}{% endif %}
+            </span>
+          </div>
+
+          {% if game.reasons %}
+          <ul class="info-reasons">
+            {% for r in game.reasons[:3] %}
+            <li class="reason-{{ r.match }}">{{ r.text }}</li>
+            {% endfor %}
+          </ul>
+          {% endif %}
         </div>
-        <div class="result-stat">
-          <div class="result-stat-value">{{ "%.1f"|format(game.rating_percentage) }}%</div>
-          <div class="result-stat-label">Rating</div>
+
+        {# 4. Match Score & Actions #}
+        <div class="result-actions-col">
+          <div class="score-pill" style="--score-deg: {{ score_deg }}deg;" aria-label="{{ '%.0f'|format(score) }}% match">
+            <span class="score-pill-value">{{ '%.0f'|format(score) }}%</span>
+          </div>
+          <span class="score-pill-label">Match</span>
+          <a href="{{ detail_url }}" class="action-btn action-details">View Details</a>
+          <a href="{{ steam_url }}" class="action-btn action-steam" target="_blank" rel="noopener" onclick="event.stopPropagation();">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Steam
+          </a>
+          <button class="fav-btn" onclick="event.stopPropagation();event.preventDefault();" aria-label="Save {{ game.name }}">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
+          </button>
         </div>
-        <div class="result-stat">
-          <div class="result-stat-value">{{ "{:,.0f}".format(game.estimated_owners) }}</div>
-          <div class="result-stat-label">Owners</div>
-        </div>
-        <div class="result-stat price">
-          <div class="result-stat-value">Rp {{ "{:,.0f}".format(game.price_idr) }}</div>
-          <div class="result-stat-label {% if game.price_idr == 0 %}free-label{% endif %}">{% if game.price_idr == 0 %}Free{% else %}Price{% endif %}</div>
-        </div>
-        <span class="result-fav-btn" onclick="event.stopPropagation();event.preventDefault();" aria-label="Save {{ game.name }}">
-          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-        </span>
-      </a>
+
+      </div>
       {% endfor %}
     </section>
 
