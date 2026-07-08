@@ -77,20 +77,6 @@ def evaluate_game(price_idr, pc_level, rating_percentage, playtime_hours,
     return round(score, 2), agg
 
 
-def evaluate_game_no_playtime(price_idr, pc_level, rating_percentage,
-                              preferred_rating=100, preferred_playtime=50,
-                              preferred_gamer_type=2):
-    return evaluate_game(
-        price_idr=price_idr,
-        pc_level=pc_level,
-        rating_percentage=rating_percentage,
-        playtime_hours=preferred_playtime,
-        preferred_rating=preferred_rating,
-        preferred_playtime=preferred_playtime,
-        preferred_gamer_type=preferred_gamer_type,
-    )
-
-
 def score_category(score):
     if score <= 25:
         return 'Not Recommended'

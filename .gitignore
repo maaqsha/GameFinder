@@ -6,10 +6,16 @@ dist/
 build/
 .venv/
 venv/
+.pytest_cache/
 
 # Flask
 instance/
 .env
+
+# Runtime logs
+stderr.txt
+stdout.txt
+*.log
 
 # Database
 *.db
@@ -22,6 +28,9 @@ dataset/steamgamesdataset.csv
 # IDE
 .vscode/
 .idea/
+
+# Agent working files
+.agents/
 
 # OS
 Thumbs.db
