@@ -65,16 +65,21 @@
     </div>
     <div class="featured-grid">
       {% set featured = [
-        {'name': 'Elden Ring', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/library_600x900.jpg', 'tags': ['RPG', 'Souls-like'], 'price': 'Rp 599.000', 'rating': 96},
-        {'name': "Baldur's Gate 3", 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_600x900.jpg', 'tags': ['RPG', 'Strategy'], 'price': 'Rp 599.000', 'rating': 96},
-        {'name': 'Hades', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/library_600x900.jpg', 'tags': ['Roguelike', 'Action'], 'price': 'Rp 118.999', 'rating': 97},
-        {'name': 'Red Dead Redemption 2', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/1174180/library_600x900.jpg', 'tags': ['Adventure', 'Action'], 'price': 'Rp 299.000', 'rating': 96},
-        {'name': 'Stardew Valley', 'image': 'https://cdn.cloudflare.steamstatic.com/steam/apps/413150/library_600x900.jpg', 'tags': ['RPG', 'Simulation'], 'price': 'Rp 79.999', 'rating': 98}
+        {'name': 'Elden Ring', 'app_id': 1245620, 'tags': ['RPG', 'Souls-like'], 'price': 'Rp 599.000', 'rating': 96},
+        {'name': "Baldur's Gate 3", 'app_id': 1086940, 'tags': ['RPG', 'Strategy'], 'price': 'Rp 599.000', 'rating': 96},
+        {'name': 'Hades', 'app_id': 1145360, 'tags': ['Roguelike', 'Action'], 'price': 'Rp 118.999', 'rating': 97},
+        {'name': 'Red Dead Redemption 2', 'app_id': 1174180, 'tags': ['Adventure', 'Action'], 'price': 'Rp 299.000', 'rating': 96},
+        {'name': 'Stardew Valley', 'app_id': 413150, 'tags': ['RPG', 'Simulation'], 'price': 'Rp 79.999', 'rating': 98}
       ] %}
       {% for game in featured %}
+      {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
       <article class="glass-card glass-card-hover featured-card">
         <div class="featured-card-image">
-          <img src="{{ game.image }}" alt="{{ game.name }}" loading="lazy">
+          <img src="{{ steam_img }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'">
+          <div class="game-img-fallback">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
+            <span>{{ game.name }}</span>
+          </div>
           <span class="floating-fav" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
           </span>

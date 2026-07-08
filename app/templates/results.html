@@ -41,6 +41,14 @@
         <div class="result-rank {% if loop.index <= 3 %}top-3{% endif %}">{{ loop.index }}</div>
 
         <div class="result-game">
+          {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
+          <div class="result-game-img-wrapper">
+            <img src="{{ steam_img }}" alt="{{ game.name }}" loading="lazy" onerror="this.style.display='none'" class="game-img">
+            <div class="game-img-fallback">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
+              <span>{{ game.name[:12] }}</span>
+            </div>
+          </div>
           <div class="result-game-info">
             <h3>{{ game.name }}</h3>
             <div class="result-game-tags">
