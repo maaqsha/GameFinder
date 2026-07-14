@@ -1,14 +1,14 @@
 """
-Unit tests for GameFinder recommendation engine — pure Python, no DB.
+Tes unit untuk mesin rekomendasi GameFinder — murni Python, tanpa DB.
 
-Tests:
-  1. Triangular membership boundary conditions
-  2. evaluate_game() synthetic game profiles
-  3. Rule distribution (81 rules)
-  4. Centroid / defuzzification sanity
-  5. Fuzzification cross-check
-  6. Category boundary mapping
-  7. Edge cases (zero/degenerate inputs)
+Tes:
+  1. Kondisi batas keanggotaan segitiga
+  2. evaluate_game() profil game sintetis
+  3. Distribusi aturan (81 aturan)
+  4. Kewarasan Centroid / defuzzifikasi
+  5. Pemeriksaan silang fuzzifikasi
+  6. Pemetaan batas kategori
+  7. Kasus tepi (input nol/degenerasi)
 """
 
 import sys
@@ -49,10 +49,10 @@ def assert_category(label, score, expected_cat):
 
 
 # ======================================================================
-# 1. Triangular membership boundary conditions
+# 1. Kondisi batas keanggotaan segitiga
 # ======================================================================
 
-header('1.1 Triangular Membership — Boundary Conditions')
+header('1.1 Keanggotaan Segitiga — Kondisi Batas')
 
 assert_near('tri(0,0,0,0) point', triangular(0, 0, 0, 0), 1.0)
 assert_near('tri(5,0,0,0) degenerate a=b', triangular(5, 0, 0, 0), 1.0)
@@ -67,58 +67,58 @@ assert_near('tri(0,0,0,100) left shoulder', triangular(0, 0, 0, 100), 1.0)
 
 
 # ======================================================================
-# 2. evaluate_game — synthetic game profiles
+# 2. evaluate_game — profil game sintetis
 # ======================================================================
 
-header('1.2 evaluate_game — Synthetic Game Profiles')
+header('1.2 evaluate_game — Profil Game Sintetis')
 
-# Profile A: Cheap indie, low PC, high rating (Casual match)
-#   Casual ideal: budget=Low, rating=Medium, playtime=Medium
-#   95% rating: High=0.857, Medium=0.333, Low=0.05
-#   Medium fires Highly Rec(3/3), High fires Rec(2/3) → centroid ≈ 44
+# Profil A: Indie murah, PC rendah, rating tinggi (Kecocokan kasual)
+#   Ideal Kasual: anggaran=Rendah, rating=Sedang, waktu bermain=Sedang
+#   rating 95%: Tinggi=0.857, Sedang=0.333, Rendah=0.05
+#   Sedang memicu Sangat Direkomendasikan(3/3), Tinggi memicu Direkomendasikan(2/3) → centroid ≈ 44
 s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=1)
 assert_near('[A] Cheap indie, Casual score', s, 43.98, tolerance=1.0)
 assert_category('[A] Cheap indie, Casual category', s, 'Less Recommended')
 
-# Profile A2: Same game with Balanced
-#   Balanced ideal: budget=Medium, rating=High, playtime=Medium
-#   budget Low≠Medium✗, rating High=High✓, playtime✓ → 2/3 → Rec
-#   But Medium fires Less Rec(1/3) at 0.333. Centroid pulled left.
+# Profil A2: Game yang sama dengan Seimbang
+#   Ideal Seimbang: anggaran=Sedang, rating=Tinggi, waktu bermain=Sedang
+#   anggaran Rendah≠Sedang✗, rating Tinggi=Tinggi✓, waktu bermain✓ → 2/3 → Rec
+#   Tapi Sedang memicu Kurang Direkomendasikan(1/3) pada 0.333. Centroid ditarik ke kiri.
 s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[A2] Cheap indie, Balanced score', s, 27.20, tolerance=1.0)
 assert_category('[A2] Cheap indie, Balanced category', s, 'Less Recommended')
 
-# Profile A3: Same game with Hardcore
-#   Hardcore ideal: budget=High, rating=High, playtime=Medium
-#   budget Low≠High✗, rating High=High✓, playtime✓ → 2/3 → Rec
-#   Same structure as Balanced (budget mismatch + rating match)
+# Profil A3: Game yang sama dengan Hardcore
+#   Ideal Hardcore: anggaran=Tinggi, rating=Tinggi, waktu bermain=Sedang
+#   anggaran Rendah≠Tinggi✗, rating Tinggi=Tinggi✓, waktu bermain✓ → 2/3 → Rec
+#   Struktur sama dengan Seimbang (anggaran tidak cocok + rating cocok)
 s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=3)
 assert_near('[A3] Cheap indie, Hardcore score', s, 27.20, tolerance=1.0)
 assert_category('[A3] Cheap indie, Hardcore category', s, 'Less Recommended')
 
-# Profile B: AAA game, high PC, medium rating, long playtime with Balanced
-#   budget High≠Medium✗, rating Medium≠High✗, playtime Medium✓ → 1/3 → Less Rec
+# Profil B: Game AAA, PC tinggi, rating sedang, waktu bermain lama dengan Seimbang
+#   anggaran Tinggi≠Sedang✗, rating Sedang≠Tinggi✗, waktu bermain Sedang✓ → 1/3 → Kurang Direkomendasikan
 s, agg = evaluate_game(800000, 3, 70, 60, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[B] AAA score', s, 16.19, tolerance=1.0)
 assert_category('[B] AAA category', s, 'Not Recommended')
 
-# Profile C: Mid-range game with Balanced
-#   budget: 350k → Medium=0.75, High=0 (not enough)
-#   rating=60 → Low=0.4, Medium=0.25
-#   playtime Medium=1.0 → ✓
-#   Various match combos create multi-category firing
+# Profil C: Game kelas menengah dengan Seimbang
+#   anggaran: 350k → Sedang=0.75, Tinggi=0 (tidak cukup)
+#   rating=60 → Rendah=0.4, Sedang=0.25
+#   waktu bermain Sedang=1.0 → ✓
+#   Berbagai kombinasi kecocokan menciptakan pemicu multi-kategori
 s, agg = evaluate_game(350000, 2, 60, 30, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[C] Mid-range score', s, 43.22, tolerance=1.0)
 assert_category('[C] Mid-range category', s, 'Less Recommended')
 
-# Profile D: Cheap, bad rating with Balanced
-#   budget Low≠Medium✗, rating Low≠High✗, playtime Medium✓ → 1/3 → Less Rec
-#   Very low ratings mean all categories fire weakly → centroid near 0
+# Profil D: Murah, rating buruk dengan Seimbang
+#   anggaran Rendah≠Sedang✗, rating Rendah≠Tinggi✗, waktu bermain Sedang✓ → 1/3 → Kurang Direkomendasikan
+#   Rating yang sangat rendah berarti semua kategori terpicu dengan lemah → centroid mendekati 0
 s, agg = evaluate_game(0, 1, 20, 5, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[D] Cheap junk score', s, 9.09, tolerance=1.0)

@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 from flask import Blueprint, render_template, abort, request
 import mysql.connector
 from app.config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
@@ -16,7 +17,7 @@ def show(app_id):
     )
     cursor = conn.cursor(dictionary=True)
     cursor.execute(
-        'SELECT app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players, release_date FROM games WHERE app_id = %s',
+        'SELECT app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players FROM games WHERE app_id = %s',
         (app_id,),
     )
     game = cursor.fetchone()

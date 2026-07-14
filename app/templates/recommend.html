@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
-{% block title %}Find Your Game - GameFinder{% endblock %}
+{% block title %}Temukan Game Anda - GameFinder{% endblock %}
 {% block content %}
 <div class="page-shell min-h-screen">
   <div class="container container-narrow">
     <header class="page-heading">
-      <h1>Find Your Perfect Game</h1>
-      <p>Tell GameFinder how you play. We will translate your preferences into a ranked Steam recommendation.</p>
+      <h1>Temukan Game Sempurna Anda</h1>
+      <p>Beri tahu GameFinder bagaimana Anda bermain. Kami akan menerjemahkan preferensi Anda menjadi rekomendasi Steam berperingkat.</p>
     </header>
 
     <form method="POST" action="{{ url_for('recommendation.recommend') }}" class="glass-card journey-card">
@@ -14,13 +14,13 @@
           <div class="form-step-label">
             <span class="form-step-dot">1</span>
             <span>
-              <span class="form-step-number">What's your budget?</span>
-              <span class="form-step-help">Set the maximum price you are comfortable paying.</span>
+              <span class="form-step-number">Berapa anggaran Anda?</span>
+              <span class="form-step-help">Tetapkan harga maksimum yang nyaman Anda bayar.</span>
             </span>
           </div>
           <div>
             <div class="value-row">
-              <span class="value-label">Maximum spend</span>
+              <span class="value-label">Pengeluaran maksimum</span>
               <span id="budget-display" class="value-display">Rp 300.000</span>
             </div>
             <input type="range" class="range-slider" id="budget" name="budget" min="0" max="{{ max_budget }}" step="50000" value="300000">
@@ -32,14 +32,14 @@
           <div class="form-step-label">
             <span class="form-step-dot">2</span>
             <span>
-              <span class="form-step-number">Which genres do you like?</span>
-              <span class="form-step-help">Choose one or more genres. You can also search below.</span>
+              <span class="form-step-number">Genre mana yang Anda suka?</span>
+              <span class="form-step-help">Pilih satu atau lebih genre. Anda juga dapat mencari di bawah.</span>
             </span>
           </div>
           <div>
             <div class="search-input-wrapper">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-              <input type="text" id="genre-search" placeholder="Search genres..." autocomplete="off">
+              <input type="text" id="genre-search" placeholder="Cari genre..." autocomplete="off">
             </div>
             <input type="hidden" id="genre" name="genre" value="Action">
             <div class="genre-chips" id="genre-chips">
@@ -55,8 +55,8 @@
           <div class="form-step-label">
             <span class="form-step-dot">3</span>
             <span>
-              <span class="form-step-number">What's your PC level?</span>
-              <span class="form-step-help">GameFinder uses this to avoid recommending games that feel wrong for your machine.</span>
+              <span class="form-step-number">Apa level PC Anda?</span>
+              <span class="form-step-help">GameFinder menggunakan ini untuk menghindari rekomendasi game yang tidak cocok untuk perangkat Anda.</span>
             </span>
           </div>
           <div>
@@ -82,20 +82,20 @@
           <div class="form-step-label">
             <span class="form-step-dot">4</span>
             <span>
-              <span class="form-step-number">What's your gamer type?</span>
-              <span class="form-step-help">Describe your play style so we can tailor recommendations.</span>
+              <span class="form-step-number">Apa tipe gamer Anda?</span>
+              <span class="form-step-help">Gambarkan gaya bermain Anda agar kami dapat menyesuaikan rekomendasi.</span>
             </span>
           </div>
           <div>
             <div class="segment-group cols-3">
               <button type="button" class="segment-btn" data-gamer="1">
-                <span>Casual</span><span class="seg-desc">Relaxed, short sessions</span>
+                <span>Kasual</span><span class="seg-desc">Santai, sesi singkat</span>
               </button>
               <button type="button" class="segment-btn active" data-gamer="2">
-                <span>Balanced</span><span class="seg-desc">Moderate everything</span>
+                <span>Seimbang</span><span class="seg-desc">Serba sedang</span>
               </button>
               <button type="button" class="segment-btn" data-gamer="3">
-                <span>Hardcore</span><span class="seg-desc">Long, demanding sessions</span>
+                <span>Hardcore</span><span class="seg-desc">Sesi panjang dan menantang</span>
               </button>
             </div>
             <input type="hidden" id="gamer_type" name="gamer_type" value="2">
@@ -106,8 +106,8 @@
           <div class="form-step-label">
             <span class="form-step-dot">5</span>
             <span>
-              <span class="form-step-number">What rating do you expect?</span>
-              <span class="form-step-help">Higher values prioritize games with stronger player reception.</span>
+              <span class="form-step-number">Berapa rating yang Anda harapkan?</span>
+              <span class="form-step-help">Nilai yang lebih tinggi memprioritaskan game dengan penerimaan pemain yang lebih kuat.</span>
             </span>
           </div>
           <div>
@@ -128,15 +128,15 @@
           <div class="form-step-label">
             <span class="form-step-dot">6</span>
             <span>
-              <span class="form-step-number">How long do you usually play one game?</span>
-              <span class="form-step-help">Choose your typical playtime per game.</span>
+              <span class="form-step-number">Berapa lama Anda biasanya memainkan satu game?</span>
+              <span class="form-step-help">Pilih waktu bermain khas Anda per game.</span>
             </span>
           </div>
           <div>
             <div class="segment-group cols-3">
-              <button type="button" class="segment-btn" data-playtime="10"><span>Short</span><span class="seg-desc">&lt; 10 hours</span></button>
-              <button type="button" class="segment-btn active" data-playtime="30"><span>Medium</span><span class="seg-desc">10 - 50 hours</span></button>
-              <button type="button" class="segment-btn" data-playtime="100"><span>Long</span><span class="seg-desc">&gt; 50 hours</span></button>
+              <button type="button" class="segment-btn" data-playtime="10"><span>Singkat</span><span class="seg-desc">&lt; 10 jam</span></button>
+              <button type="button" class="segment-btn active" data-playtime="30"><span>Sedang</span><span class="seg-desc">10 - 50 jam</span></button>
+              <button type="button" class="segment-btn" data-playtime="100"><span>Lama</span><span class="seg-desc">&gt; 50 jam</span></button>
             </div>
             <input type="hidden" id="preferred_playtime" name="preferred_playtime" value="30">
           </div>
@@ -145,7 +145,7 @@
         <div class="submit-row">
           <button type="submit" class="gradient-btn gradient-btn-lg">
             <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-            Find My Perfect Game
+            Temukan Game Sempurna Saya
           </button>
         </div>
       </div>
@@ -158,7 +158,7 @@
 <div id="loading-overlay" class="loading-overlay" style="display:none;">
   <div class="loading-card">
     <div class="loading-spinner large"></div>
-    <p>GameFinder is analyzing top Steam titles...</p>
+    <p>GameFinder sedang menganalisis judul Steam teratas...</p>
   </div>
 </div>
 <script>
@@ -255,7 +255,7 @@
     var overlay = document.getElementById('loading-overlay');
     form.addEventListener('submit', function() {
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="loading-spinner"></span> Finding matches...';
+      submitBtn.innerHTML = '<span class="loading-spinner"></span> Mencari kecocokan...';
       if (overlay) overlay.style.display = 'flex';
     });
   }

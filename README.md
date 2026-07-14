@@ -1,32 +1,32 @@
-# Steam Game Recommendation System
+# Sistem Rekomendasi Game Steam
 
-A web-based Steam game recommendation system using **Fuzzy Mamdani** inference. Built with Flask, MySQL, and a 243-rule fuzzy engine.
+Sistem rekomendasi game Steam berbasis web menggunakan inferensi **Fuzzy Mamdani**. Dibangun dengan Flask, MySQL, dan 243-aturan mesin fuzzy.
 
-## Architecture
+## Arsitektur
 
 ```
-User Input ──▶ Fuzzification ──▶ Inference (243 rules) ──▶ Aggregation ──▶ Defuzzification ──▶ Ranked Results
+Input Pengguna ──▶ Fuzzifikasi ──▶ Inferensi (243 aturan) ──▶ Agregasi ──▶ Defuzzifikasi ──▶ Hasil Peringkat
 ```
 
-Five input dimensions: budget, PC level, gamer type, preferred rating, preferred playtime. Each game is scored against the user's profile, then sorted by score descending.
+Lima dimensi input: anggaran, level PC, tipe gamer, rating yang disukai, waktu bermain yang disukai. Setiap game diberi skor berdasarkan profil pengguna, kemudian diurutkan berdasarkan skor secara menurun.
 
-## Requirements
+## Persyaratan
 
 - Python 3.12+
 - MySQL 8+
-- Dependencies listed in `requirements.txt`
+- Dependensi tercantum di `requirements.txt`
 
-## Setup
+## Persiapan
 
-### 1. Database
+### 1. Basis Data (Database)
 
 ```bash
 mysql -u root < dataset/import.sql
 ```
 
-This creates the `gamefinder` database and `games` table, then imports 600+ curated Steam titles.
+Ini akan membuat basis data `gamefinder` dan tabel `games`, kemudian mengimpor 600+ judul game Steam yang telah dikurasi.
 
-### 2. Python environment
+### 2. Lingkungan Python
 
 ```bash
 python -m venv venv
@@ -38,50 +38,50 @@ source venv/bin/activate
 pip install -r requirements.txt
 ```
 
-### 3. Run
+### 3. Jalankan
 
 ```bash
 python run.py
 ```
 
-Open http://127.0.0.1:5000
+Buka http://127.0.0.1:5000
 
-## Project Structure
+## Struktur Proyek
 
 ```
 app/
 ├── routes/                   # Flask blueprints (home, recommend, detail)
-├── services/fuzzy/           # Fuzzy Mamdani engine
-│   ├── membership.py         # Membership functions
-│   ├── fuzzification.py      # Input → fuzzy sets
-│   ├── inference.py          # 243-rule evaluation
-│   ├── aggregation.py        # Rule output aggregation
-│   ├── defuzzification.py    # Centroid defuzzification
-│   └── recommendation.py     # Orchestration & scoring
-├── templates/                # Jinja2 templates
+├── services/fuzzy/           # Mesin Fuzzy Mamdani
+│   ├── membership.py         # Fungsi keanggotaan
+│   ├── fuzzification.py      # Input → himpunan fuzzy
+│   ├── inference.py          # Evaluasi 243-aturan
+│   ├── aggregation.py        # Agregasi output aturan
+│   ├── defuzzification.py    # Defuzzifikasi centroid
+│   └── recommendation.py     # Orkestrasi & penentuan skor
+├── templates/                # Template Jinja2
 ├── static/                   # CSS, JS
-tests/                        # Unit & integration tests
-docs/                         # Design documentation
+tests/                        # Pengujian unit & integrasi
+docs/                         # Dokumentasi desain
 ```
 
-## Tests
+## Pengujian (Tests)
 
 ```bash
-# Unit tests (no database required)
+# Pengujian unit (tidak memerlukan basis data)
 python tests/test_recommendation.py
 
-# Integration tests (MySQL required)
+# Pengujian integrasi (memerlukan MySQL)
 python tests/test_integration.py
 ```
 
-## Documentation
+## Dokumentasi
 
-Detailed design docs are in `docs/`:
+Dokumentasi desain terperinci ada di `docs/`:
 
-- `01_Project_Overview.md` — Project summary and objectives
-- `02_Functional_Requirements.md` — Functional requirements
-- `03_Database_Design.md` — Schema and data sources
-- `04_Fuzzy_Design.md` — Fuzzy Mamdani architecture
-- `05_Membership_Function.md` — Membership function definitions
-- `06_Rule_Strategy.md` — Rule base strategy
-- `08_Project_Structure.md` — File structure reference
+- `01_Project_Overview.md` — Ringkasan dan tujuan proyek
+- `02_Functional_Requirements.md` — Kebutuhan fungsional
+- `03_Database_Design.md` — Skema dan sumber data
+- `04_Fuzzy_Design.md` — Arsitektur Fuzzy Mamdani
+- `05_Membership_Function.md` — Definisi fungsi keanggotaan
+- `06_Rule_Strategy.md` — Strategi basis aturan
+- `08_Project_Structure.md` — Referensi struktur file

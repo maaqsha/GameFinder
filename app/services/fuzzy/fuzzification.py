@@ -34,10 +34,10 @@ def fuzzify_rating(rating_percentage, preferred_rating):
 
 def fuzzify_playtime(playtime_hours, preferred_playtime):
     p = max(preferred_playtime, 1)
-    # Compare game playtime to user's preferred playtime.
-    # Short = much shorter than preferred
-    # Medium = close to preferred (best match)
-    # Long = much longer than preferred
+    # Bandingkan waktu bermain game dengan waktu bermain pilihan pengguna.
+    # Short = jauh lebih singkat dari pilihan
+    # Medium = mendekati pilihan (kecocokan terbaik)
+    # Long = jauh lebih lama dari pilihan
     return {
         'Short': triangular(playtime_hours, 0, 0, p * 0.7),
         'Medium': triangular(playtime_hours, p * 0.4, p, p * 1.6),

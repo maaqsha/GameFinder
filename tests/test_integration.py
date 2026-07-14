@@ -1,17 +1,17 @@
 """
-Integration tests for GameFinder recommendation engine - requires MySQL.
+Tes integrasi untuk mesin rekomendasi GameFinder - membutuhkan MySQL.
 
-Scenarios (from task requirements):
-  A. Low budget, Low PC
-  B. Medium budget, Medium PC
-  C. High budget, High PC
-  D. Free games only
-  E. No matching genre
-  F. Very high preferred rating
-  G. Very short preferred playtime
-  H. Very long preferred playtime
-  I. Boundary values
-  J. Ranking verification
+Skenario (dari persyaratan tugas):
+  A. Anggaran rendah, PC rendah
+  B. Anggaran menengah, PC menengah
+  C. Anggaran tinggi, PC tinggi
+  D. Hanya game gratis
+  E. Tidak ada genre yang cocok
+  F. Rating pilihan sangat tinggi
+  G. Waktu bermain pilihan sangat singkat
+  H. Waktu bermain pilihan sangat lama
+  I. Nilai batas
+  J. Verifikasi peringkat
 """
 
 import sys
@@ -49,15 +49,15 @@ def print_results(label, results):
 header('A. Low Budget (50K IDR), Low PC (1), Action')
 
 print('''
-Rationale: User has very limited budget and an old/weak PC.
-Expect: Games with price_idr <= 50,000 (pc_level no longer in schema).
+Alasan: Pengguna memiliki anggaran sangat terbatas dan PC lama/lemah.
+Harapan: Game dengan price_idr <= 50,000 (pc_level tidak ada lagi di skema).
 ''')
 results = recommend(budget=50000, pc_level=1, preferred_rating=50,
                     preferred_playtime=10, genre='Action', top_n=10)
 print_results('Top 10', results)
 all_affordable = all(float(g['price_idr']) <= 50000 for g in results)
 print(f'\n  SQL FILTER:    All price <= 50K: {all_affordable}')
-print(f'  Reasonable?    YES -- user gets free/cheap games.')
+print(f'  Masuk akal?    YA -- pengguna mendapatkan game gratis/murah.')
 
 
 # ======================================================================
@@ -67,15 +67,15 @@ print(f'  Reasonable?    YES -- user gets free/cheap games.')
 header('B. Medium Budget (300K IDR), Medium PC (2), RPG')
 
 print('''
-Rationale: Mainstream gamer with mid-range budget and PC.
-Expect: Games within budget and genre.
+Alasan: Gamer mainstream dengan anggaran dan PC menengah.
+Harapan: Game dalam anggaran dan genre.
 ''')
 results = recommend(budget=300000, pc_level=2, preferred_rating=70,
                     preferred_playtime=20, genre='RPG', top_n=10)
 print_results('Top 10', results)
 all_affordable = all(float(g['price_idr']) <= 300000 for g in results)
 print(f'\n  SQL FILTER:    All price <= 300K: {all_affordable}')
-print(f'  Reasonable?    YES - budget-friendly RPGs within spec.')
+print(f'  Masuk akal?    YA - RPG ramah anggaran dalam spesifikasi.')
 
 
 # ======================================================================
@@ -85,8 +85,8 @@ print(f'  Reasonable?    YES - budget-friendly RPGs within spec.')
 header('C. High Budget (1M IDR), High PC (3), Strategy')
 
 print('''
-Rationale: Enthusiast with high-end PC, willing to spend.
-Expect: Games with price <= 1M.
+Alasan: Penggemar dengan PC kelas atas, bersedia menghabiskan uang.
+Harapan: Game dengan harga <= 1M.
 ''')
 results = recommend(budget=1000000, pc_level=3, preferred_rating=90,
                     preferred_playtime=50, genre='Strategy', top_n=10)
@@ -95,7 +95,7 @@ all_affordable = all(float(g['price_idr']) <= 1000000 for g in results)
 high_rated = sum(1 for g in results if float(g['rating_percentage']) >= 85)
 print(f'\n  SQL FILTER:    All price <= 1M: {all_affordable}')
 print(f'  Games with rating >= 85%: {high_rated}/10')
-print(f'  Reasonable?    YES - top Strategy games within budget.')
+print(f'  Masuk akal?    YA - game Strategi teratas dalam anggaran.')
 
 
 # ======================================================================
@@ -105,15 +105,15 @@ print(f'  Reasonable?    YES - top Strategy games within budget.')
 header('D. Free Games Only (Budget=0), PC 2, Indie')
 
 print('''
-Rationale: User wants only free-to-play games.
-Expect: Only games with price_idr = 0.
+Alasan: Pengguna hanya menginginkan game gratis (free-to-play).
+Harapan: Hanya game dengan price_idr = 0.
 ''')
 results = recommend(budget=0, pc_level=2, preferred_rating=50,
                     preferred_playtime=20, genre='Indie', top_n=10)
 print_results('Top 10', results)
 all_free = all(float(g['price_idr']) == 0 for g in results)
 print(f'\n  SQL FILTER:    All free (Rp=0): {all_free}')
-print(f'  Reasonable?    YES - only free Indie games.')
+print(f'  Masuk akal?    YA - hanya game Indie gratis.')
 
 
 # ======================================================================
@@ -123,14 +123,14 @@ print(f'  Reasonable?    YES - only free Indie games.')
 header('E. No Matching Genre')
 
 print('''
-Rationale: Genre string that should match nothing.
-Expect: Empty result set (no games with this genre tag).
+Alasan: String genre yang tidak cocok dengan apapun.
+Harapan: Set hasil kosong (tidak ada game dengan tag genre ini).
 ''')
 results = recommend(budget=500000, pc_level=3, preferred_rating=80,
                     preferred_playtime=30, genre='zxy_does_not_exist_xyz', top_n=10)
 print_results('Results', results)
 print(f'\n  Result count: {len(results)} (expected 0)')
-print(f'  Reasonable?    YES - no games have this made-up genre.')
+print(f'  Masuk akal?    YA - tidak ada game yang memiliki genre buatan ini.')
 
 
 # ======================================================================
@@ -140,16 +140,16 @@ print(f'  Reasonable?    YES - no games have this made-up genre.')
 header('F. Very High Preferred Rating (95%), Action')
 
 print('''
-Rationale: User demands near-perfect ratings.
-Expect: Games with rating >= 90% ranked higher; many games filtered out by
-        the fuzzy engine's rating comparison (rating < 95% -> not High).
+Alasan: Pengguna menuntut rating yang hampir sempurna.
+Harapan: Game dengan rating >= 90% berperingkat lebih tinggi; banyak game disaring oleh
+        perbandingan rating mesin fuzzy (rating < 95% -> bukan Tinggi).
 ''')
 results = recommend(budget=200000, pc_level=2, preferred_rating=95,
                     preferred_playtime=20, genre='Action', top_n=10)
 print_results('Top 10', results)
 high_rated = sum(1 for g in results if float(g['rating_percentage']) >= 90)
 print(f'\n  Games with rating >= 90%: {high_rated}/10')
-print(f'  Reasonable?    YES - top-rated Action games rise to the top when user wants high ratings.')
+print(f'  Masuk akal?    YA - game Aksi berperingkat teratas naik ke atas ketika pengguna menginginkan rating tinggi.')
 
 
 # ======================================================================
@@ -159,13 +159,13 @@ print(f'  Reasonable?    YES - top-rated Action games rise to the top when user 
 header('G. Very Short Preferred Playtime (2h), Adventure')
 
 print('''
-Rationale: User wants short gaming sessions (casual/commute).
-Expect: Games recommended for short playtime preference.
+Alasan: Pengguna menginginkan sesi permainan yang singkat (santai/perjalanan).
+Harapan: Game direkomendasikan untuk preferensi waktu bermain yang singkat.
 ''')
 results = recommend(budget=200000, pc_level=2, preferred_rating=80,
                     preferred_playtime=2, genre='Adventure', top_n=10)
 print_results('Top 10', results)
-print(f'  Reasonable?    YES - adventures recommended.')
+print(f'  Masuk akal?    YA - game petualangan direkomendasikan.')
 
 
 # ======================================================================
@@ -175,13 +175,13 @@ print(f'  Reasonable?    YES - adventures recommended.')
 header('H. Very Long Preferred Playtime (200h), RPG')
 
 print('''
-Rationale: User wants deeply replayable games for extended play.
-Expect: RPGs recommended for long playtime preference.
+Alasan: Pengguna menginginkan game yang sangat dapat dimainkan ulang untuk permainan yang lebih lama.
+Harapan: RPG direkomendasikan untuk preferensi waktu bermain yang lama.
 ''')
 results = recommend(budget=200000, pc_level=2, preferred_rating=80,
                     preferred_playtime=200, genre='RPG', top_n=10)
 print_results('Top 10', results)
-print(f'  Reasonable?    YES - RPGs recommended.')
+print(f'  Masuk akal?    YA - RPG direkomendasikan.')
 
 
 # ======================================================================
@@ -190,14 +190,14 @@ print(f'  Reasonable?    YES - RPGs recommended.')
 
 header('I. Ranking Verification')
 
-subheader('Top 10 is sorted descending by score')
+subheader('Top 10 diurutkan menurun berdasarkan skor')
 results = recommend(budget=300000, pc_level=2, preferred_rating=75,
                     preferred_playtime=20, genre='Action', top_n=10)
 scores = [g['recommendation_score'] for g in results]
 is_sorted = all(scores[i] >= scores[i + 1] for i in range(len(scores) - 1))
 print(f'  Sorted descending: {is_sorted}   Scores: {[f"{s:.2f}" for s in scores]}')
 
-subheader('Top N parameter respected')
+subheader('Parameter Top N dihormati')
 for n in [3, 5]:
     r = recommend(budget=300000, pc_level=2, preferred_rating=75,
                   preferred_playtime=20, genre='Action', top_n=n)
@@ -211,12 +211,12 @@ for n in [3, 5]:
 
 header('J. SQL Boundary Checks')
 
-subheader('price_idr = 0 (free games with low budget)')
+subheader('price_idr = 0 (game gratis dengan anggaran rendah)')
 results = recommend(budget=0, pc_level=1, preferred_rating=50,
                     preferred_playtime=10, genre='Action', top_n=5)
 print_results('Top 5', results)
 
-subheader('pc_level = 3 (all games eligible)')
+subheader('pc_level = 3 (semua game memenuhi syarat)')
 results = recommend(budget=100000, pc_level=3, preferred_rating=50,
                     preferred_playtime=10, genre='Simulation', top_n=5)
 all_affordable = all(float(g['price_idr']) <= 100000 for g in results)
@@ -230,9 +230,9 @@ print_results('Top 5', results)
 
 header('INTEGRATION TEST SUMMARY')
 print("""
-  Each scenario above tests a specific user profile against real MySQL data.
-  SQL pre-filters (genre, pc_level, budget) are verified on every call.
-  Fuzzy evaluation runs on every candidate; results are sorted by score descending.
+  Setiap skenario di atas menguji profil pengguna tertentu terhadap data MySQL asli.
+  Penyaring pra-SQL (genre, pc_level, anggaran) diverifikasi pada setiap panggilan.
+  Evaluasi fuzzy berjalan pada setiap kandidat; hasil diurutkan berdasarkan skor yang menurun.
 
-  If no crashes and all assertions pass, the system is ready for UI implementation.
+  Jika tidak ada kerusakan dan semua asersi lulus, sistem siap untuk implementasi UI.
 """)

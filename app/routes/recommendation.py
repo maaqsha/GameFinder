@@ -17,7 +17,7 @@ def _get_max_budget():
         conn.close()
         if row and row[0]:
             max_val = int(row[0])
-            # Round up to next 100K
+            # Bulatkan ke atas ke kelipatan 100K terdekat
             return ((max_val // 100000) + 1) * 100000
         return 10000000
     except Exception:

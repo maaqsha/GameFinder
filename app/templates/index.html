@@ -6,18 +6,18 @@
     <div class="hero-content">
       <div class="section-kicker">
         <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-        Steam game recommendation system
+        Sistem rekomendasi game Steam
       </div>
-      <h1 class="hero-title">Find Your Next Favorite <span class="accent">Steam Game</span></h1>
-      <p class="hero-desc">GameFinder reads your budget, PC level, review standards, playtime habits, and genre taste, then uses Fuzzy Mamdani reasoning to surface games that actually fit you.</p>
+      <h1 class="hero-title">Temukan <span class="accent">Game Steam</span> Favorit Anda Selanjutnya</h1>
+      <p class="hero-desc">GameFinder membaca anggaran, level PC, standar ulasan, kebiasaan bermain, dan selera genre Anda, lalu menggunakan penalaran Fuzzy Mamdani untuk memunculkan game yang benar-benar cocok untuk Anda.</p>
       <div class="hero-actions">
         <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">
           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m5 12 14-8-4 16-3-7-7-1Z"/></svg>
-          Start Recommendation
+          Mulai Rekomendasi
         </a>
         <a href="#about" class="btn-secondary-outline">
           <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-          Learn More
+          Pelajari Lebih Lanjut
         </a>
       </div>
     </div>
@@ -31,8 +31,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20"/><path d="M2 12h20"/><path d="m4.93 4.93 14.14 14.14"/><path d="m19.07 4.93-14.14 14.14"/></svg>
       </div>
       <div>
-        <h3>Smart Recommendations</h3>
-        <p>Fuzzy logic weighs multiple preferences instead of forcing a single rigid filter.</p>
+        <h3>Rekomendasi Cerdas</h3>
+        <p>Logika fuzzy menimbang berbagai preferensi alih-alih memaksakan filter tunggal yang kaku.</p>
       </div>
     </div>
     <div class="glass-card feature-card">
@@ -40,8 +40,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 12h4"/><path d="M14 12h4"/><path d="M8 8v8"/><path d="M16 8v8"/><rect x="2" y="6" width="20" height="12" rx="5"/></svg>
       </div>
       <div>
-        <h3>150,000+ Steam Games</h3>
-        <p>A large Steam dataset gives the recommender enough breadth to find niche matches.</p>
+        <h3>150.000+ Game Steam</h3>
+        <p>Dataset Steam yang besar memberikan sistem rekomendasi cakupan yang cukup untuk menemukan kecocokan yang spesifik (niche).</p>
       </div>
     </div>
     <div class="glass-card feature-card">
@@ -49,8 +49,8 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 15 4-4 3 3 5-7"/></svg>
       </div>
       <div>
-        <h3>Built Around Fit</h3>
-        <p>Every recommendation explains price, PC compatibility, rating quality, playtime, and genre.</p>
+        <h3>Dibangun Berdasarkan Kecocokan</h3>
+        <p>Setiap rekomendasi menjelaskan harga, kompatibilitas PC, kualitas rating, waktu bermain, dan genre.</p>
       </div>
     </div>
   </section>
@@ -59,9 +59,9 @@
     <div class="featured-header">
       <div class="featured-header-left">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#f59e0b" stroke="#f59e0b" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <h2>Featured Games</h2>
+        <h2>Game Pilihan</h2>
       </div>
-      <a href="{{ url_for('recommendation.recommend') }}" class="btn-secondary-outline" style="min-height:38px;padding:8px 16px;font-size:.86rem;">Find Yours</a>
+      <a href="{{ url_for('recommendation.recommend') }}" class="btn-secondary-outline" style="min-height:38px;padding:8px 16px;font-size:.86rem;">Temukan Milik Anda</a>
     </div>
     <div class="featured-grid">
       {% set featured = [

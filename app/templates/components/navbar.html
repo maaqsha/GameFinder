@@ -8,14 +8,14 @@
     </a>
 
     <div class="navbar-links">
-      <a href="{{ url_for('home.index') }}" class="{% if request.endpoint == 'home.index' %}active{% endif %}">Home</a>
-      <a href="{{ url_for('recommendation.recommend') }}" class="{% if request.endpoint and request.endpoint.startswith('recommendation.') %}active{% endif %}">Recommendation</a>
-      <a href="{{ url_for('home.index') }}#about">About</a>
+      <a href="{{ url_for('home.index') }}" class="{% if request.endpoint == 'home.index' %}active{% endif %}">Beranda</a>
+      <a href="{{ url_for('recommendation.recommend') }}" class="{% if request.endpoint and request.endpoint.startswith('recommendation.') %}active{% endif %}">Rekomendasi</a>
+      <a href="{{ url_for('home.index') }}#about">Tentang</a>
     </div>
 
     <button id="theme-toggle-btn" class="theme-toggle-pill" type="button" aria-label="Toggle color theme">
       <span id="theme-icon">&#9728;</span>
-      <span id="theme-label-text">Dark</span>
+      <span id="theme-label-text">Gelap</span>
     </button>
   </div>
 </nav>

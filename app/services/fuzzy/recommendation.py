@@ -165,8 +165,7 @@ def recommend(budget, pc_level, preferred_rating, preferred_playtime, genre,
     select_cols = """
         SELECT app_id, name, price_idr, rating_percentage,
                total_reviews, genre, tags,
-               estimated_owners, peak_players,
-               release_date
+               estimated_owners, peak_players
         FROM games
     """
 
@@ -178,13 +177,13 @@ def recommend(budget, pc_level, preferred_rating, preferred_playtime, genre,
         where_parts.append(genre_clause)
         where_params.extend(genre_params)
 
-    # Try with user budget first
+    # Coba dengan anggaran pengguna terlebih dahulu
     where_parts_budget = where_parts + ["price_idr <= %s"]
     sql = select_cols + " WHERE " + " AND ".join(where_parts_budget)
     cursor.execute(sql, where_params + [budget])
     candidates = cursor.fetchall()
 
-    # If no results with budget, retry with max budget
+    # Jika tidak ada hasil dengan anggaran, coba lagi dengan anggaran maksimum
     if not candidates:
         sql = select_cols + " WHERE " + " AND ".join(where_parts)
         cursor.execute(sql, where_params)

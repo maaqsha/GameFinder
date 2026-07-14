@@ -1,26 +1,26 @@
 {% extends 'base.html' %}
-{% block title %}Your Recommendations - GameFinder{% endblock %}
+{% block title %}Rekomendasi Anda - GameFinder{% endblock %}
 {% block content %}
 <div class="page-shell min-h-screen">
   <div class="container container-wide">
     <header class="results-header">
       <div>
-        <h1>Top {{ results|length }} Recommendations</h1>
-        <p>Ranked by how well each Steam game fits your preferences.</p>
+        <h1>Top {{ results|length }} Rekomendasi</h1>
+        <p>Diurutkan berdasarkan seberapa cocok setiap game Steam dengan preferensi Anda.</p>
       </div>
       <a href="{{ url_for('recommendation.recommend') }}" class="btn-secondary-outline">
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M12 7V3h4"/><path d="m15 3-3 4"/></svg>
-        Modify Search
+        Ubah Pencarian
       </a>
     </header>
 
     {% if form_data %}
     <section class="glass-card results-summary" aria-label="Preference summary">
-      <div><span class="summary-item-label">Budget</span><span class="summary-item-value">Rp {{ "{:,.0f}".format(form_data.budget|int) }}</span></div>
-      <div><span class="summary-item-label">PC Level</span><span class="summary-item-value">{% set pc_names = {1: 'Low End (1)', 2: 'Mid End (2)', 3: 'High End (3)'} %}{{ pc_names.get(form_data.pc_level|int, form_data.pc_level) }}</span></div>
-      <div><span class="summary-item-label">Gamer Type</span><span class="summary-item-value">{% set gt_names = {1: 'Casual', 2: 'Balanced', 3: 'Hardcore'} %}{{ gt_names.get(form_data.preferred_gamer_type|int, 'Balanced') }}</span></div>
+      <div><span class="summary-item-label">Anggaran</span><span class="summary-item-value">Rp {{ "{:,.0f}".format(form_data.budget|int) }}</span></div>
+      <div><span class="summary-item-label">Level PC</span><span class="summary-item-value">{% set pc_names = {1: 'Low End (1)', 2: 'Mid End (2)', 3: 'High End (3)'} %}{{ pc_names.get(form_data.pc_level|int, form_data.pc_level) }}</span></div>
+      <div><span class="summary-item-label">Tipe Gamer</span><span class="summary-item-value">{% set gt_names = {1: 'Kasual', 2: 'Seimbang', 3: 'Hardcore'} %}{{ gt_names.get(form_data.preferred_gamer_type|int, 'Seimbang') }}</span></div>
       <div><span class="summary-item-label">Rating</span><span class="summary-item-value">&ge; {{ form_data.preferred_rating }}%</span></div>
-      <div><span class="summary-item-label">Playtime</span><span class="summary-item-value">{{ form_data.preferred_playtime }} hours</span></div>
+      <div><span class="summary-item-label">Waktu Bermain</span><span class="summary-item-value">{{ form_data.preferred_playtime }} jam</span></div>
       <div><span class="summary-item-label">Genre</span><span class="summary-item-value">{{ form_data.genre }}</span></div>
     </section>
     {% endif %}
@@ -28,9 +28,9 @@
     {% if not results %}
     <section class="glass-card empty-state">
       <div class="empty-state-icon"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg></div>
-      <h2>No confident matches yet</h2>
-      <p>Try a broader genre, a higher budget, or a more flexible playtime preference.</p>
-      <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">Tune Preferences</a>
+      <h2>Belum ada kecocokan yang meyakinkan</h2>
+      <p>Cobalah genre yang lebih luas, anggaran yang lebih tinggi, atau preferensi waktu bermain yang lebih fleksibel.</p>
+      <a href="{{ url_for('recommendation.recommend') }}" class="gradient-btn gradient-btn-lg">Sesuaikan Preferensi</a>
     </section>
     {% else %}
     <section class="results-list" aria-label="Recommended games">
@@ -95,10 +95,10 @@
               {{ "%.0f"|format(rating) }}%
             </span>
             {% if game.total_reviews %}
-            <span class="stat-reviews">{{ "{:,}".format(game.total_reviews) }} reviews</span>
+            <span class="stat-reviews">{{ "{:,}".format(game.total_reviews) }} ulasan</span>
             {% endif %}
             <span class="stat-price {% if is_free %}free{% endif %}">
-              {% if is_free %}Free{% else %}Rp {{ "{:,.0f}".format(game.price_idr) }}{% endif %}
+              {% if is_free %}Gratis{% else %}Rp {{ "{:,.0f}".format(game.price_idr) }}{% endif %}
             </span>
           </div>
 
@@ -116,8 +116,8 @@
           <div class="score-pill" style="--score-deg: {{ score_deg }}deg;" aria-label="{{ '%.0f'|format(score) }}% match">
             <span class="score-pill-value">{{ '%.0f'|format(score) }}%</span>
           </div>
-          <span class="score-pill-label">Match</span>
-          <a href="{{ detail_url }}" class="action-btn action-details">View Details</a>
+          <span class="score-pill-label">Kecocokan</span>
+          <a href="{{ detail_url }}" class="action-btn action-details">Lihat Detail</a>
           <a href="{{ steam_url }}" class="action-btn action-steam" target="_blank" rel="noopener" onclick="event.stopPropagation();">
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
             Steam
@@ -132,14 +132,14 @@
     </section>
 
     <section class="glass-card recommendation-note">
-      <h2>About these recommendations</h2>
-      <p>Scores are calculated using the Fuzzy Mamdani engine across the signals you provided.</p>
+      <h2>Tentang rekomendasi ini</h2>
+      <p>Skor dihitung menggunakan mesin Fuzzy Mamdani di seluruh sinyal yang Anda berikan.</p>
       <div class="factor-list">
-        <span>Budget match</span>
-        <span>Rating preference</span>
-        <span>Playtime preference</span>
-        <span>Genre match</span>
-        <span>Community size</span>
+        <span>Kecocokan anggaran</span>
+        <span>Preferensi rating</span>
+        <span>Preferensi waktu bermain</span>
+        <span>Kecocokan genre</span>
+        <span>Ukuran komunitas</span>
       </div>
     </section>
     {% endif %}

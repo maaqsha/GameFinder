@@ -7,10 +7,10 @@ with open(path, 'r', encoding='utf-8') as f:
     reader = csv.reader(f)
     header = next(reader)
 
-    # col[28]=avg_forever, col[29]=avg_2weeks, col[30]=median_forever
-    # Also check col[8] (About the game) and col[27] (Notes)
-    # col[13]=Header image, col[14]=Website, col[22]=Positive, col[23]=Negative
-    # col[35]=Genres, col[6]=Price
+    # col[28]=avg_selamanya, col[29]=avg_2minggu, col[30]=median_selamanya
+    # Periksa juga col[8] (Tentang game) dan col[27] (Catatan)
+    # col[13]=Gambar header, col[14]=Situs web, col[22]=Positif, col[23]=Negatif
+    # col[35]=Genre, col[6]=Harga
 
     platform_stats = Counter()
     total = 0
@@ -21,7 +21,7 @@ with open(path, 'r', encoding='utf-8') as f:
 
     for row in reader:
         total += 1
-        # Median playtime forever
+        # Median waktu bermain selamanya
         pt_str = row[30].strip() if len(row) > 30 else ''
         if pt_str:
             try:

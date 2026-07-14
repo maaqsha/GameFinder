@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Error - GameFinder{% endblock %}
+{% block title %}Kesalahan - GameFinder{% endblock %}
 {% block content %}
 <div class="min-h-screen" style="padding:64px 16px;">
   <div class="error-page">
@@ -8,9 +8,9 @@
     {% if message %}
       <p>{{ message }}</p>
     {% else %}
-      <p>Something went wrong. Please try again.</p>
+      <p>Terjadi kesalahan. Silakan coba lagi.</p>
     {% endif %}
-    <a href="{{ url_for('home.index') }}" class="gradient-btn gradient-btn-lg">Back to Home</a>
+    <a href="{{ url_for('home.index') }}" class="gradient-btn gradient-btn-lg">Kembali ke Beranda</a>
   </div>
 </div>
 {% endblock %}
