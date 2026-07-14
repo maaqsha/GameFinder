@@ -1,131 +1,128 @@
 # 06_Rule_Strategy.md
 
-# Rule Strategy
+# Strategi Aturan (Rule Strategy)
 
-## Purpose
+## Tujuan
 
-This document defines how the 81 fuzzy rules are designed to ensure
-consistency across the entire rule base.
-
-------------------------------------------------------------------------
-
-# Rule Formula
-
-Each rule follows this format:
-
-    IF
-    Budget IS ...
-    AND PC_Level IS ...
-    AND Rating IS ...
-    AND Playtime IS ...
-
-    THEN Recommendation IS ...
+Dokumen ini mendefinisikan bagaimana 81 aturan fuzzy dirancang untuk memastikan konsistensi di seluruh basis aturan.
 
 ------------------------------------------------------------------------
 
-# Input Variables
+# Rumus Aturan
 
-  Variable   Memberships
-  ---------- ----------------------
-  Budget     Low, Medium, High
-  PC Level   Low, Medium, High
-  Rating     Low, Medium, High
-  Playtime   Short, Medium, Long
+Setiap aturan mengikuti format ini:
 
-Total combinations:
+    JIKA (IF)
+    Anggaran (Budget) ADALAH ...
+    DAN Level_PC ADALAH ...
+    DAN Rating ADALAH ...
+    DAN Waktu Bermain ADALAH ...
 
-    3 × 3 × 3 × 3 = 81 Rules
+    MAKA (THEN) Rekomendasi ADALAH ...
 
 ------------------------------------------------------------------------
 
-# Decision Priority
+# Variabel Masukan (Input Variables)
 
-The recommendation priority is:
+  Variabel       Fungsi Keanggotaan
+  -------------- ----------------------
+  Anggaran       Rendah, Sedang, Tinggi
+  Level PC       Rendah, Sedang, Tinggi
+  Rating         Rendah, Sedang, Tinggi
+  Waktu Bermain  Singkat, Sedang, Lama
 
-1.  PC Level
+Total kombinasi:
+
+    3 × 3 × 3 × 3 = 81 Aturan
+
+------------------------------------------------------------------------
+
+# Prioritas Keputusan
+
+Prioritas rekomendasinya adalah:
+
+1.  Level PC
 2.  Rating
-3.  Budget
-4.  Playtime
+3.  Anggaran
+4.  Waktu Bermain
 
-PC compatibility has the highest impact because a game should not be
-recommended if the user's PC cannot reasonably run it.
-
-------------------------------------------------------------------------
-
-# Output Levels
-
-  Output               Meaning
-  -------------------- ---------------------
-  Not Recommended      Poor match
-  Less Recommended     Below average match
-  Recommended          Good match
-  Highly Recommended   Excellent match
+Kompatibilitas PC memiliki dampak tertinggi karena sebuah game tidak boleh direkomendasikan jika PC pengguna tidak mampu menjalankannya dengan wajar.
 
 ------------------------------------------------------------------------
 
-# Rule Principles
+# Tingkat Keluaran
 
-## Highly Recommended
-
-Typical conditions:
-
--   High PC compatibility
--   Rating is High
--   Budget is suitable
--   Playtime matches user preference
+  Keluaran                   Arti
+  -------------------------- -----------------------
+  Tidak Direkomendasikan     Kecocokan buruk
+  Kurang Direkomendasikan    Kecocokan di bawah rata-rata
+  Direkomendasikan           Kecocokan bagus
+  Sangat Direkomendasikan    Kecocokan sangat baik
 
 ------------------------------------------------------------------------
 
-## Recommended
+# Prinsip Aturan
 
-Typical conditions:
+## Sangat Direkomendasikan (Highly Recommended)
 
--   Most conditions match
--   One variable may be Medium
+Kondisi tipikal:
 
-------------------------------------------------------------------------
-
-## Less Recommended
-
-Typical conditions:
-
--   Several Medium or Low matches
--   Recommendation is still possible
+-   Kompatibilitas PC tinggi
+-   Rating tinggi
+-   Anggaran sesuai
+-   Waktu bermain sesuai dengan preferensi pengguna
 
 ------------------------------------------------------------------------
 
-## Not Recommended
+## Direkomendasikan (Recommended)
 
-Typical conditions:
+Kondisi tipikal:
 
--   PC compatibility is poor
--   Rating is low
--   Multiple important conditions do not match
-
-------------------------------------------------------------------------
-
-# Consistency Rules
-
--   Similar inputs should produce similar outputs.
--   No contradictory rules.
--   Every input combination must map to exactly one output.
--   All 81 combinations must be covered.
+-   Sebagian besar kondisi cocok
+-   Satu variabel mungkin Sedang
 
 ------------------------------------------------------------------------
 
-# Validation Checklist
+## Kurang Direkomendasikan (Less Recommended)
 
-Before accepting the final rule base:
+Kondisi tipikal:
 
--   81 rules exist.
--   No duplicate rules.
--   No missing combinations.
--   No conflicting outputs.
--   Rule format is consistent.
+-   Beberapa variabel bernilai Sedang atau Rendah
+-   Masih mungkin direkomendasikan
 
 ------------------------------------------------------------------------
 
-# Next Document
+## Tidak Direkomendasikan (Not Recommended)
 
-The next document (07_Knowledge_Base.md) will contain the knowledge base
-used to generate all 81 fuzzy rules.
+Kondisi tipikal:
+
+-   Kompatibilitas PC buruk
+-   Rating rendah
+-   Beberapa kondisi penting tidak cocok
+
+------------------------------------------------------------------------
+
+# Aturan Konsistensi
+
+-   Masukan yang serupa harus menghasilkan keluaran yang serupa.
+-   Tidak ada aturan yang saling bertentangan.
+-   Setiap kombinasi masukan harus memetakan ke tepat satu keluaran.
+-   Semua 81 kombinasi harus tercakup.
+
+------------------------------------------------------------------------
+
+# Daftar Periksa Validasi (Validation Checklist)
+
+Sebelum menerima basis aturan akhir:
+
+-   Terdapat 81 aturan.
+-   Tidak ada aturan ganda (duplikat).
+-   Tidak ada kombinasi yang hilang.
+-   Tidak ada keluaran yang bertentangan.
+-   Format aturan konsisten.
+
+------------------------------------------------------------------------
+
+# Dokumen Selanjutnya
+
+Dokumen selanjutnya (07_Knowledge_Base.md) akan berisi basis pengetahuan yang digunakan untuk menghasilkan keseluruhan 81 aturan fuzzy.

@@ -616,7 +616,7 @@ a { color: inherit; }
 .result-card {
   display: grid;
   grid-template-columns: 40px 156px 1fr 130px;
-  align-items: start;
+  align-items: stretch;
   padding: 0;
   overflow: hidden;
   border-radius: var(--radius-md);
@@ -653,14 +653,15 @@ a { color: inherit; }
 
 /* 2. Game Image column */
 .result-img-col {
+  grid-column: 2;
   position: relative;
-  width: 100%;
+  width: calc(100% - 28px);
   aspect-ratio: 460 / 215;
-  margin-top: 16px;
-  margin-left: 14px;
+  margin: 16px 14px;
   border-radius: var(--radius-sm);
   overflow: hidden;
   background: var(--bg-soft);
+  align-self: center;
 }
 .result-img-col .game-img {
   position: absolute;
@@ -1179,7 +1180,7 @@ a { color: inherit; }
   .results-summary { grid-template-columns: repeat(2, 1fr); }
   .result-card { grid-template-columns: 34px 130px 1fr 110px; }
   .result-rank { min-height: 170px; font-size: 0.9rem; }
-  .result-img-col { margin-top: 14px; margin-left: 10px; }
+  .result-img-col { width: calc(100% - 20px); margin: 14px 10px; }
   .result-info-col { padding: 14px 10px 10px 10px; }
   .result-info-col h3 a { font-size: 0.88rem; }
   .result-actions-col { padding: 14px 8px 10px; }

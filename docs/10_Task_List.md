@@ -1,141 +1,137 @@
 # 10_Task_List.md
 
-# AI Development Task List
+# Daftar Tugas Pengembangan AI (AI Development Task List)
 
-## Purpose
+## Tujuan
 
-This document defines the implementation order for the AI coding
-assistant.
+Dokumen ini mendefinisikan urutan implementasi untuk asisten pemrograman AI (AI coding assistant).
 
-Complete each task sequentially. Do not skip tasks. Ask for confirmation
-before moving to the next major phase.
+Selesaikan setiap tugas secara berurutan. Dilarang melewati (skip) tugas. Mintalah konfirmasi sebelum beralih ke fase utama berikutnya.
 
 ------------------------------------------------------------------------
 
-# Phase 1 --- Project Initialization
+# Fase 1 --- Inisialisasi Proyek
 
-## Task 1
+## Tugas 1
 
--   Create Flask project.
--   Create the folder structure.
--   Install dependencies.
--   Verify the application runs.
+-   Buat proyek Flask.
+-   Buat struktur folder.
+-   Instal dependensi.
+-   Verifikasi aplikasi berjalan dengan baik.
 
-Deliverable: - Running Flask project.
-
-------------------------------------------------------------------------
-
-# Phase 2 --- Dataset Preparation
-
-## Task 2
-
--   Load `steamgamesdataset.csv`.
--   Keep only required columns.
--   Remove duplicate App IDs.
--   Handle missing values.
--   Generate `rating_percentage`.
--   Generate `pc_level`.
-
-Deliverable: - Clean dataset.
+Hasil akhir (Deliverable): - Proyek Flask yang dapat dijalankan.
 
 ------------------------------------------------------------------------
 
-# Phase 3 --- Database
+# Fase 2 --- Persiapan Dataset
 
-## Task 3
+## Tugas 2
 
--   Create MySQL database.
--   Create `games` table.
--   Import cleaned dataset.
--   Verify imported records.
+-   Muat `steamgamesdataset.csv`.
+-   Simpan hanya kolom-kolom yang diperlukan.
+-   Hapus duplikat App ID.
+-   Tangani nilai yang hilang (missing values).
+-   Hasilkan `rating_percentage`.
+-   Hasilkan `pc_level`.
 
-Deliverable: - Working database.
-
-------------------------------------------------------------------------
-
-# Phase 4 --- Fuzzy Engine
-
-## Task 4
-
-Implement: - Membership Function - Fuzzification - Rule Inference -
-Aggregation - Centroid Defuzzification
-
-Deliverable: - Working Fuzzy Mamdani engine.
+Hasil akhir: - Dataset yang bersih.
 
 ------------------------------------------------------------------------
 
-# Phase 5 --- Rule Base
+# Fase 3 --- Basis Data (Database)
 
-## Task 5
+## Tugas 3
 
--   Generate all 243 rules (3⁵ budget × pc_level × gamer_type × rating × playtime).
--   Validate all combinations.
--   Ensure no duplicate or conflicting rules.
+-   Buat basis data MySQL.
+-   Buat tabel `games`.
+-   Impor dataset yang telah dibersihkan.
+-   Verifikasi rekam data (records) yang telah diimpor.
 
-Deliverable: - Validated rule base.
-
-------------------------------------------------------------------------
-
-# Phase 6 --- Recommendation Engine
-
-## Task 6
-
--   Filter by genre.
--   Evaluate all candidate games.
--   Rank results.
--   Return Top 10.
-
-Deliverable: - Recommendation engine.
+Hasil akhir: - Basis data yang berfungsi.
 
 ------------------------------------------------------------------------
 
-# Phase 7 --- User Interface
+# Fase 4 --- Mesin Fuzzy
 
-## Task 7
+## Tugas 4
 
-Create: - Home - Recommendation Form - Result - Detail
+Implementasikan: - Fungsi Keanggotaan (Membership Function) - Fuzzifikasi - Inferensi Aturan (Rule Inference) - Agregasi - Defuzzifikasi Sentroid (Centroid Defuzzification)
 
-Deliverable: - Responsive UI.
-
-------------------------------------------------------------------------
-
-# Phase 8 --- Integration
-
-## Task 8
-
-Integrate: - UI - Database - Fuzzy Engine
-
-Deliverable: - End-to-end application.
+Hasil akhir: - Mesin Fuzzy Mamdani yang berfungsi.
 
 ------------------------------------------------------------------------
 
-# Phase 9 --- Testing
+# Fase 5 --- Basis Aturan (Rule Base)
 
-## Task 9
+## Tugas 5
 
-Test: - Validation - Fuzzy calculation - Ranking - Detail page - Error
-handling
+-   Hasilkan semua 243 aturan (3⁵ anggaran × pc_level × gamer_type × rating × playtime). *Catatan: Aturan asli menyebut 81 (3⁴) kombinasi, sesuaikan dengan aturan yang berlaku (misalnya 4 variabel = 81 aturan, jika 5 variabel = 243 aturan).*
+-   Validasi seluruh kombinasi.
+-   Pastikan tidak ada aturan yang ganda (duplikat) atau saling bertentangan.
 
-Deliverable: - Stable application.
-
-------------------------------------------------------------------------
-
-# Phase 10 --- Final Review
-
-## Task 10
-
--   Refactor code.
--   Remove unused code.
--   Final verification.
--   Update documentation.
-
-Deliverable: - Completed project.
+Hasil akhir: - Basis aturan yang telah divalidasi.
 
 ------------------------------------------------------------------------
 
-# Rules
+# Fase 6 --- Mesin Rekomendasi
 
--   Follow every document inside `docs/`.
--   Do not redesign the architecture.
--   Complete one phase at a time.
--   Report completion after each phase.
+## Tugas 6
+
+-   Saring berdasarkan genre.
+-   Evaluasi seluruh kandidat game.
+-   Peringkatkan hasil.
+-   Kembalikan 10 Teratas (Top 10).
+
+Hasil akhir: - Mesin rekomendasi.
+
+------------------------------------------------------------------------
+
+# Fase 7 --- Antarmuka Pengguna (UI)
+
+## Tugas 7
+
+Buat: - Beranda (Home) - Formulir Rekomendasi - Hasil - Detail
+
+Hasil akhir: - Antarmuka pengguna (UI) yang responsif.
+
+------------------------------------------------------------------------
+
+# Fase 8 --- Integrasi
+
+## Tugas 8
+
+Integrasikan: - Antarmuka pengguna (UI) - Basis Data (Database) - Mesin Fuzzy
+
+Hasil akhir: - Aplikasi ujung-ke-ujung (End-to-end application).
+
+------------------------------------------------------------------------
+
+# Fase 9 --- Pengujian (Testing)
+
+## Tugas 9
+
+Uji: - Validasi - Perhitungan Fuzzy - Peringkat (Ranking) - Halaman Detail - Penanganan Galat (Error handling)
+
+Hasil akhir: - Aplikasi yang stabil.
+
+------------------------------------------------------------------------
+
+# Fase 10 --- Peninjauan Akhir (Final Review)
+
+## Tugas 10
+
+-   Lakukan refaktorisasi (refactor) kode.
+-   Hapus kode yang tidak terpakai.
+-   Verifikasi akhir.
+-   Perbarui dokumentasi.
+
+Hasil akhir: - Proyek yang selesai sepenuhnya.
+
+------------------------------------------------------------------------
+
+# Aturan
+
+-   Ikuti semua dokumen yang berada di dalam folder `docs/`.
+-   Dilarang merancang ulang arsitektur.
+-   Selesaikan satu fase pada satu waktu.
+-   Laporkan penyelesaian setelah setiap fase berakhir.

@@ -5,7 +5,7 @@
   <div class="container container-wide">
     <div class="hero-content">
       <div class="section-kicker">
-        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="12" x2="10" y2="12"></line><line x1="8" y1="10" x2="8" y2="14"></line><line x1="15" y1="13" x2="15.01" y2="13"></line><line x1="18" y1="11" x2="18.01" y2="11"></line><rect x="2" y="6" width="20" height="12" rx="2"></rect></svg>
         Sistem rekomendasi game Steam
       </div>
       <h1 class="hero-title">Temukan <span class="accent">Game Steam</span> Favorit Anda Selanjutnya</h1>
@@ -73,32 +73,34 @@
       ] %}
       {% for game in featured %}
       {% set steam_img = 'https://shared.cloudflare.steamstatic.com/store_item_assets/steam/apps/' ~ game.app_id ~ '/header.jpg' %}
-      <article class="glass-card glass-card-hover featured-card">
-        <div class="featured-card-image">
-          <img src="{{ steam_img }}" alt="{{ game.name }} on Steam" loading="lazy" onerror="this.style.display='none'" onload="this.classList.add('loaded')">
-          <div class="featured-img-overlay"></div>
-          <div class="game-img-fallback">
-            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
-            <span>{{ game.name }}</span>
-          </div>
-          <span class="floating-fav" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
-          </span>
-        </div>
-        <div class="featured-card-body">
-          <h3>{{ game.name }}</h3>
-          <div class="featured-tags">
-            {% for tag in game.tags %}<span class="featured-tag">{{ tag }}</span>{% endfor %}
-          </div>
-          <div class="featured-card-footer">
-            <span class="featured-price">{{ game.price }}</span>
-            <span class="featured-rating">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-              {{ game.rating }}%
+      <a href="https://store.steampowered.com/app/{{ game.app_id }}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit; display: block;">
+        <article class="glass-card glass-card-hover featured-card">
+          <div class="featured-card-image">
+            <img src="{{ steam_img }}" alt="{{ game.name }} on Steam" loading="lazy" onerror="this.style.display='none'" onload="this.classList.add('loaded')">
+            <div class="featured-img-overlay"></div>
+            <div class="game-img-fallback">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M10 9l5 3-5 3Z"/></svg>
+              <span>{{ game.name }}</span>
+            </div>
+            <span class="floating-fav" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>
             </span>
           </div>
-        </div>
-      </article>
+          <div class="featured-card-body">
+            <h3>{{ game.name }}</h3>
+            <div class="featured-tags">
+              {% for tag in game.tags %}<span class="featured-tag">{{ tag }}</span>{% endfor %}
+            </div>
+            <div class="featured-card-footer">
+              <span class="featured-price">{{ game.price }}</span>
+              <span class="featured-rating">
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                {{ game.rating }}%
+              </span>
+            </div>
+          </div>
+        </article>
+      </a>
       {% endfor %}
     </div>
   </section>

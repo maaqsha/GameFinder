@@ -1,173 +1,170 @@
 # 11_AI_RULES.md
 
-# AI Coding Rules
+# Aturan Pengodean AI (AI Coding Rules)
 
-## Purpose
+## Tujuan
 
-This document defines how the AI coding assistant must behave while
-developing the project.
+Dokumen ini mendefinisikan bagaimana asisten pemrograman AI (AI coding assistant) harus bersikap dan bertindak selama mengembangkan proyek ini.
 
-These rules are mandatory.
-
-------------------------------------------------------------------------
-
-# Rule 1
-
-Read every document inside the `docs/` folder before writing any code.
+Aturan-aturan ini bersifat wajib.
 
 ------------------------------------------------------------------------
 
-# Rule 2
+# Aturan 1
 
-Do not change the project scope unless explicitly instructed.
-
-------------------------------------------------------------------------
-
-# Rule 3
-
-Do not redesign the architecture.
-
-Follow the documented folder structure.
+Bacalah setiap dokumen yang ada di dalam folder `docs/` sebelum menulis kode apa pun.
 
 ------------------------------------------------------------------------
 
-# Rule 4
+# Aturan 2
 
-Do not add features that are outside the documented scope.
+Dilarang mengubah cakupan (scope) proyek kecuali secara eksplisit diinstruksikan demikian.
 
-Examples:
+------------------------------------------------------------------------
 
--   Login
--   Registration
--   Admin Dashboard
+# Aturan 3
+
+Dilarang merancang ulang (redesign) arsitektur.
+
+Ikuti struktur folder yang telah didokumentasikan.
+
+------------------------------------------------------------------------
+
+# Aturan 4
+
+Dilarang menambahkan fitur-fitur yang berada di luar cakupan yang telah didokumentasikan.
+
+Contoh:
+
+-   Proses Masuk (Login)
+-   Pendaftaran (Registration)
+-   Dasbor Admin
 -   Steam API
--   Payment System
--   Machine Learning
--   Deep Learning
+-   Sistem Pembayaran
+-   Pembelajaran Mesin (Machine Learning)
+-   Pembelajaran Mendalam (Deep Learning)
 
 ------------------------------------------------------------------------
 
-# Rule 5
+# Aturan 5
 
-Always follow the implementation order defined in `10_Task_List.md`.
-
-------------------------------------------------------------------------
-
-# Rule 6
-
-Complete one major task at a time.
-
-Do not work on multiple major phases simultaneously.
+Selalu ikuti urutan implementasi yang didefinisikan dalam `10_Task_List.md`.
 
 ------------------------------------------------------------------------
 
-# Rule 7
+# Aturan 6
 
-Business logic belongs only inside the Fuzzy service module.
+Selesaikan satu tugas besar (major task) pada satu waktu.
 
-Routes should only:
-
--   Receive requests
--   Validate input
--   Call services
--   Return responses
+Dilarang mengerjakan beberapa fase besar secara bersamaan (simultan).
 
 ------------------------------------------------------------------------
 
-# Rule 8
+# Aturan 7
 
-Do not use third-party fuzzy logic libraries.
+Logika bisnis (business logic) hanya berada di dalam modul layanan (service) Fuzzy.
 
-Implement the complete Fuzzy Mamdani algorithm manually.
+Rute (Routes) hanya boleh melakukan hal-hal berikut:
 
-------------------------------------------------------------------------
-
-# Rule 9
-
-If documentation conflicts are found:
-
--   Stop implementation.
--   Explain the conflict.
--   Ask for clarification.
-
-Never guess.
+-   Menerima permintaan (requests)
+-   Memvalidasi masukan (input)
+-   Memanggil layanan (services)
+-   Mengembalikan respons (responses)
 
 ------------------------------------------------------------------------
 
-# Rule 10
+# Aturan 8
 
-If information is missing:
+Dilarang menggunakan pustaka (library) logika fuzzy pihak ketiga.
 
--   Make the smallest reasonable assumption.
--   Clearly document that assumption.
--   Continue only if it does not affect the architecture.
+Implementasikan keseluruhan algoritma Fuzzy Mamdani secara manual.
 
 ------------------------------------------------------------------------
 
-# Rule 11
+# Aturan 9
 
-Generate clean Python code.
+Jika ditemukan konflik di dalam dokumentasi:
 
-Requirements:
+-   Hentikan implementasi.
+-   Jelaskan konflik tersebut.
+-   Mintalah klarifikasi.
 
--   Follow PEP 8
--   Small functions
--   Reusable code
--   Meaningful names
--   Avoid duplication
+Dilarang menebak-nebak (Never guess).
 
 ------------------------------------------------------------------------
 
-# Rule 12
+# Aturan 10
 
-Before completing each phase:
+Jika ada informasi yang kurang (missing):
 
-Verify:
-
--   No syntax errors
--   No runtime errors
--   No missing imports
--   No broken routes
+-   Buatlah asumsi paling masuk akal yang terkecil.
+-   Dokumentasikan asumsi tersebut secara jelas.
+-   Lanjutkan hanya jika tidak memengaruhi arsitektur.
 
 ------------------------------------------------------------------------
 
-# Rule 13
+# Aturan 11
 
-After finishing a phase:
+Hasilkan kode Python yang bersih.
 
-Provide:
+Persyaratan:
 
--   Completed tasks
--   Files created
--   Important implementation notes
--   Remaining work
-
-Wait for user confirmation before starting the next major phase.
-
-------------------------------------------------------------------------
-
-# Rule 14
-
-When generating the fuzzy rule base:
-
--   Cover all 81 combinations.
--   No duplicate rules.
--   No conflicting outputs.
--   Follow:
-    -   Membership Function
-    -   Rule Strategy
-    -   Knowledge Base
+-   Mengikuti PEP 8
+-   Fungsi-fungsi berukuran kecil
+-   Kode dapat digunakan ulang (reusable)
+-   Penamaan yang bermakna
+-   Hindari duplikasi
 
 ------------------------------------------------------------------------
 
-# Rule 15
+# Aturan 12
 
-Project Goal
+Sebelum menyelesaikan setiap fase:
 
-The objective is not to build the most complex website.
+Verifikasi:
 
-The objective is to correctly implement the Fuzzy Mamdani recommendation
-algorithm in a clean, maintainable Flask application.
+-   Tidak ada galat sintaksis (syntax errors)
+-   Tidak ada galat saat berjalan (runtime errors)
+-   Tidak ada impor yang tertinggal (missing imports)
+-   Tidak ada rute yang rusak (broken routes)
 
-Always prioritize correctness, simplicity, and consistency over
-unnecessary complexity.
+------------------------------------------------------------------------
+
+# Aturan 13
+
+Setelah menyelesaikan suatu fase:
+
+Sediakan:
+
+-   Tugas-tugas yang telah diselesaikan
+-   Berkas-berkas yang telah dibuat
+-   Catatan-catatan penting seputar implementasi
+-   Sisa pekerjaan
+
+Tunggu konfirmasi pengguna sebelum memulai fase besar selanjutnya.
+
+------------------------------------------------------------------------
+
+# Aturan 14
+
+Saat menghasilkan basis aturan fuzzy:
+
+-   Cakup seluruh kombinasi (81 aturan).
+-   Tidak boleh ada aturan yang ganda (duplikat).
+-   Tidak boleh ada keluaran yang bertentangan.
+-   Ikuti:
+    -   Fungsi Keanggotaan (Membership Function)
+    -   Strategi Aturan (Rule Strategy)
+    -   Basis Pengetahuan (Knowledge Base)
+
+------------------------------------------------------------------------
+
+# Aturan 15
+
+Tujuan Proyek
+
+Tujuannya bukanlah membangun situs web yang paling kompleks.
+
+Tujuannya adalah mengimplementasikan algoritma rekomendasi Fuzzy Mamdani dengan benar di dalam aplikasi Flask yang bersih dan mudah dipelihara.
+
+Selalu utamakan ketepatan, kesederhanaan, dan konsistensi alih-alih kerumitan yang tidak diperlukan.

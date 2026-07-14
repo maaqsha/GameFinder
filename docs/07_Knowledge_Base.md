@@ -1,129 +1,119 @@
 # 07_Knowledge_Base.md
 
-# Knowledge Base
+# Basis Pengetahuan (Knowledge Base)
 
-## Purpose
+## Tujuan
 
-This document defines the decision knowledge used to build the Fuzzy
-Mamdani rule base. Every fuzzy rule must follow these principles.
-
-------------------------------------------------------------------------
-
-# KB-01 PC Compatibility
-
-PC compatibility is the highest priority.
-
-If the user's PC level is lower than the game's required PC level, the
-recommendation must decrease significantly.
+Dokumen ini mendefinisikan pengetahuan keputusan yang digunakan untuk membangun basis aturan Fuzzy Mamdani. Setiap aturan fuzzy harus mengikuti prinsip-prinsip ini.
 
 ------------------------------------------------------------------------
 
-# KB-02 Budget
+# KB-01 Kompatibilitas PC
 
-Games within the user's budget are preferred.
+Kompatibilitas PC merupakan prioritas tertinggi.
 
-Games exceeding the user's budget receive a lower recommendation.
+Jika level PC pengguna lebih rendah dari level PC yang dibutuhkan oleh game, rekomendasi harus diturunkan secara signifikan.
+
+------------------------------------------------------------------------
+
+# KB-02 Anggaran
+
+Game yang berada di dalam jangkauan anggaran pengguna akan lebih diutamakan.
+
+Game yang melebihi anggaran pengguna akan menerima rekomendasi yang lebih rendah.
 
 ------------------------------------------------------------------------
 
 # KB-03 Rating
 
-Games with higher Steam ratings are more desirable.
+Game dengan rating Steam yang lebih tinggi lebih diminati.
 
-Low-rated games should rarely receive a high recommendation.
+Game dengan rating rendah seharusnya jarang menerima rekomendasi tinggi.
 
 ------------------------------------------------------------------------
 
-# KB-04 Playtime
+# KB-04 Waktu Bermain
 
-Games whose playtime matches the user's preference receive a higher
-recommendation.
+Game yang perkiraan waktu bermainnya sesuai dengan preferensi pengguna akan menerima rekomendasi yang lebih tinggi.
 
 ------------------------------------------------------------------------
 
 # KB-05 Genre
 
-Genre is not a fuzzy variable.
+Genre bukanlah variabel fuzzy.
 
-Genre is only used to filter candidate games before fuzzy inference.
+Genre hanya digunakan untuk menyaring kandidat game sebelum proses inferensi fuzzy dilakukan.
 
 ------------------------------------------------------------------------
 
-# KB-06 Priority Order
+# KB-06 Urutan Prioritas
 
-The importance of each variable is:
+Tingkat kepentingan setiap variabel adalah:
 
-1.  PC Level
+1.  Level PC
 2.  Rating
-3.  Budget
-4.  Playtime
+3.  Anggaran
+4.  Waktu Bermain
 
 ------------------------------------------------------------------------
 
-# KB-07 Highly Recommended
+# KB-07 Sangat Direkomendasikan (Highly Recommended)
 
-A game should be classified as **Highly Recommended** only when almost
-all important criteria match the user's preferences.
-
-------------------------------------------------------------------------
-
-# KB-08 Recommended
-
-A game should be classified as **Recommended** when most criteria match
-and no critical mismatch exists.
+Sebuah game hanya boleh diklasifikasikan sebagai **Sangat Direkomendasikan** apabila hampir seluruh kriteria penting cocok dengan preferensi pengguna.
 
 ------------------------------------------------------------------------
 
-# KB-09 Less Recommended
+# KB-08 Direkomendasikan (Recommended)
 
-Used when several criteria partially match but one or more important
-factors reduce suitability.
-
-------------------------------------------------------------------------
-
-# KB-10 Not Recommended
-
-Assigned when there is a major mismatch, especially in PC compatibility
-or multiple important criteria.
+Sebuah game diklasifikasikan sebagai **Direkomendasikan** jika sebagian besar kriteria cocok dan tidak ada ketidakcocokan yang kritis.
 
 ------------------------------------------------------------------------
 
-# KB-11 Score Interpretation
+# KB-09 Kurang Direkomendasikan (Less Recommended)
 
-Recommendation Score:
+Digunakan ketika beberapa kriteria hanya sebagian yang cocok atau terdapat satu atau lebih faktor penting yang mengurangi kecocokan.
 
-      Score Category
+------------------------------------------------------------------------
+
+# KB-10 Tidak Direkomendasikan (Not Recommended)
+
+Diberikan apabila terdapat ketidakcocokan besar, terutama dalam hal kompatibilitas PC atau ada beberapa kriteria penting sekaligus yang tidak terpenuhi.
+
+------------------------------------------------------------------------
+
+# KB-11 Interpretasi Skor
+
+Skor Rekomendasi:
+
+        Skor Kategori
   --------- --------------------
-      0--25 Not Recommended
-     26--50 Less Recommended
-     51--75 Recommended
-    76--100 Highly Recommended
+      0--25 Tidak Direkomendasikan
+     26--50 Kurang Direkomendasikan
+     51--75 Direkomendasikan
+    76--100 Sangat Direkomendasikan
 
 ------------------------------------------------------------------------
 
-# KB-12 Rule Consistency
+# KB-12 Konsistensi Aturan
 
--   Similar inputs should produce similar outputs.
--   No contradictory rules.
--   Every input combination must map to exactly one output.
-
-------------------------------------------------------------------------
-
-# KB-13 Scalability
-
-Adding new games to the database must not require changes to the fuzzy
-rule base.
+-   Masukan yang serupa harus menghasilkan keluaran yang serupa.
+-   Tidak boleh ada aturan yang saling bertentangan.
+-   Setiap kombinasi masukan harus secara tepat memetakan pada satu keluaran.
 
 ------------------------------------------------------------------------
 
-# KB-14 Explainability
+# KB-13 Skalabilitas
 
-Every recommendation should be explainable using these knowledge rules
-rather than arbitrary scoring.
+Menambahkan game baru ke dalam basis data tidak boleh mewajibkan adanya perubahan pada basis aturan fuzzy.
 
 ------------------------------------------------------------------------
 
-# Conclusion
+# KB-14 Penjelasan (Explainability)
 
-The complete 81-rule base must be generated according to this knowledge
-base to ensure consistency, explainability, and maintainability.
+Setiap rekomendasi harus dapat dijelaskan menggunakan aturan pengetahuan (knowledge rules) ini daripada menggunakan skor sembarang yang tidak beralasan.
+
+------------------------------------------------------------------------
+
+# Kesimpulan
+
+Keseluruhan basis aturan yang berjumlah 81 ini harus dihasilkan berdasarkan basis pengetahuan (knowledge base) ini demi memastikan konsistensi, kemudahan penjelasan (explainability), dan kemudahan pemeliharaan (maintainability).

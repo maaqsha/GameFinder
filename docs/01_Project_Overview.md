@@ -1,216 +1,202 @@
 # 01_Project_Overview.md
 
-# Steam Game Recommendation System using Fuzzy Mamdani
+# Sistem Rekomendasi Game Steam menggunakan Fuzzy Mamdani
 
-## 1. Project Information
+## 1. Informasi Proyek
 
-  Item                   Description
+  Item                   Deskripsi
   ---------------------- ----------------------------------
-  Project Name           Steam Game Recommendation System
-  Method                 Fuzzy Mamdani
-  Platform               Web Application
-  Programming Language   Python
-  Framework              Flask
-  Database               MySQL
+  Nama Proyek            Sistem Rekomendasi Game Steam
+  Metode                 Fuzzy Mamdani
+  Platform               Aplikasi Web
+  Bahasa Pemrograman     Python
+  Kerangka Kerja (Framework) Flask
+  Basis Data (Database)  MySQL
   Frontend               HTML, Bootstrap 5, JavaScript
-  Development Type       Academic AI Project
+  Jenis Pengembangan     Proyek AI Akademik
 
 ------------------------------------------------------------------------
 
-# 2. Project Summary
+# 2. Ringkasan Proyek
 
-This project is a web-based recommendation system that helps users
-discover suitable Steam games based on their preferences and computer
-specifications.
+Proyek ini adalah sistem rekomendasi berbasis web yang membantu pengguna menemukan game Steam yang cocok berdasarkan preferensi dan spesifikasi komputer mereka.
 
-The recommendation process uses the Fuzzy Mamdani method to evaluate
-multiple criteria and generate a recommendation score for each game.
+Proses rekomendasi menggunakan metode Fuzzy Mamdani untuk mengevaluasi berbagai kriteria dan menghasilkan skor rekomendasi untuk setiap game.
 
-The system is designed for educational purposes to demonstrate the
-implementation of fuzzy logic in decision support systems.
+Sistem ini dirancang untuk tujuan pendidikan untuk mendemonstrasikan implementasi logika fuzzy dalam sistem pendukung keputusan.
 
 ------------------------------------------------------------------------
 
-# 3. Objectives
+# 3. Tujuan
 
-The project aims to:
+Proyek ini bertujuan untuk:
 
--   Implement the Fuzzy Mamdani algorithm in a real-world recommendation
-    system.
--   Recommend Steam games based on multiple user preferences.
--   Rank recommended games using fuzzy inference.
--   Provide recommendation scores along with understandable
-    explanations.
--   Demonstrate the complete fuzzy reasoning process from user input to
-    recommendation output.
+- Mengimplementasikan algoritma Fuzzy Mamdani dalam sistem rekomendasi dunia nyata.
+- Merekomendasikan game Steam berdasarkan berbagai preferensi pengguna.
+- Memeringkat game yang direkomendasikan menggunakan inferensi fuzzy.
+- Memberikan skor rekomendasi beserta penjelasan yang mudah dipahami.
+- Mendemonstrasikan keseluruhan proses penalaran fuzzy dari masukan pengguna hingga keluaran rekomendasi.
 
 ------------------------------------------------------------------------
 
-# 4. Project Scope
+# 4. Ruang Lingkup Proyek
 
-The system includes:
+Sistem ini mencakup:
 
--   Home page
--   Recommendation form
--   Recommendation result page
--   Game detail page
--   Fuzzy Mamdani inference engine
--   Game dataset stored in MySQL
--   Recommendation score calculation
--   Top 10 recommendation ranking
-
-------------------------------------------------------------------------
-
-# 5. Non-Goals
-
-The project does **NOT** include:
-
--   User registration
--   User login
--   Administrator dashboard
--   CRUD management interface
--   Steam account integration
--   Steam API integration
--   Game purchasing
--   Online payment
--   Multiplayer features
--   Chat system
--   Wishlist system
--   Machine Learning
--   Deep Learning
--   Automatic web scraping
-
-The project focuses only on implementing the Fuzzy Mamdani
-recommendation algorithm.
+- Halaman Beranda (Home)
+- Formulir rekomendasi
+- Halaman hasil rekomendasi
+- Halaman detail game
+- Mesin inferensi Fuzzy Mamdani
+- Kumpulan data (dataset) game yang disimpan di MySQL
+- Perhitungan skor rekomendasi
+- Peringkat 10 besar rekomendasi (Top 10)
 
 ------------------------------------------------------------------------
 
-# 6. Target Users
+# 5. Di Luar Cakupan (Non-Goals)
 
-The target users are anyone who wants to discover Steam games that match
-their preferences and computer specifications.
+Proyek ini **TIDAK** mencakup:
 
-No account or authentication is required.
+- Pendaftaran pengguna (Registrasi)
+- Proses masuk pengguna (Login)
+- Dasbor administrator
+- Antarmuka manajemen CRUD
+- Integrasi akun Steam
+- Integrasi Steam API
+- Pembelian game
+- Pembayaran daring (Online payment)
+- Fitur multipemain (Multiplayer)
+- Sistem obrolan (Chat)
+- Sistem daftar keinginan (Wishlist)
+- Pembelajaran Mesin (Machine Learning)
+- Pembelajaran Mendalam (Deep Learning)
+- Pengikisan web otomatis (Web scraping)
+
+Proyek ini hanya berfokus pada implementasi algoritma rekomendasi Fuzzy Mamdani.
 
 ------------------------------------------------------------------------
 
-# 7. Technology Stack
+# 6. Target Pengguna
+
+Target penggunanya adalah siapa saja yang ingin menemukan game Steam yang sesuai dengan preferensi dan spesifikasi komputer mereka.
+
+Tidak diperlukan akun atau autentikasi.
+
+------------------------------------------------------------------------
+
+# 7. Tumpukan Teknologi (Technology Stack)
 
 ## Backend
 
--   Python 3.12+
--   Flask
+- Python 3.12+
+- Flask
 
 ## Frontend
 
--   HTML5
--   Bootstrap 5
--   JavaScript
+- HTML5
+- Bootstrap 5
+- JavaScript
 
-## Database
+## Basis Data (Database)
 
--   MySQL
+- MySQL
 
-## Development Tools
+## Alat Pengembangan
 
--   Visual Studio Code
--   Git
--   GitHub
+- Visual Studio Code
+- Git
+- GitHub
 
 ------------------------------------------------------------------------
 
-# 8. System Workflow
+# 8. Alur Kerja Sistem
 
 ``` text
-User opens website
+Pengguna membuka situs web
         ↓
-Fill recommendation form
+Mengisi formulir rekomendasi
         ↓
-Select preferred genre
+Memilih genre yang disukai
         ↓
-Input preferences
+Memasukkan preferensi
         ↓
-Filter games by genre
+Menyaring game berdasarkan genre
         ↓
-Run Fuzzy Mamdani inference
+Menjalankan inferensi Fuzzy Mamdani
         ↓
-Calculate recommendation score
+Menghitung skor rekomendasi
         ↓
-Sort games by score
+Mengurutkan game berdasarkan skor
         ↓
-Display Top 10 recommendations
+Menampilkan 10 besar rekomendasi
         ↓
-View detailed game information
+Melihat informasi detail game
 ```
 
 ------------------------------------------------------------------------
 
-# 9. Project Modules
+# 9. Modul Proyek
 
-### Home Module
+### Modul Beranda
 
-Displays project information and provides access to the recommendation
-system.
+Menampilkan informasi proyek dan menyediakan akses ke sistem rekomendasi.
 
-### Recommendation Input Module
+### Modul Input Rekomendasi
 
-Collects user preferences through an input form.
+Mengumpulkan preferensi pengguna melalui formulir input.
 
-### Fuzzy Engine Module
+### Modul Mesin Fuzzy
 
-Processes user inputs using the Fuzzy Mamdani algorithm.
+Memproses input pengguna menggunakan algoritma Fuzzy Mamdani.
 
-### Recommendation Engine Module
+### Modul Mesin Rekomendasi
 
-Calculates recommendation scores for all candidate games.
+Menghitung skor rekomendasi untuk semua kandidat game.
 
-### Result Module
+### Modul Hasil
 
-Displays the Top 10 recommended games sorted by score.
+Menampilkan 10 besar game yang direkomendasikan, diurutkan berdasarkan skor.
 
-### Detail Module
+### Modul Detail
 
-Shows complete information about a selected game along with the
-recommendation explanation.
+Menampilkan informasi lengkap tentang game yang dipilih beserta penjelasan rekomendasinya.
 
 ------------------------------------------------------------------------
 
-# 10. Success Criteria
+# 10. Kriteria Keberhasilan
 
-The project is considered complete when:
+Proyek dianggap selesai apabila:
 
--   The website runs without runtime errors.
--   Users can submit recommendation preferences.
--   The Fuzzy Mamdani algorithm executes successfully.
--   Recommendation scores are generated correctly.
--   The system displays the Top 10 recommended games.
--   Users can open a game detail page.
--   Recommendation results are consistent with the defined fuzzy rules.
-
-------------------------------------------------------------------------
-
-# 11. Future Development
-
-Possible future improvements include:
-
--   Steam API integration
--   User account system
--   Personalized recommendation history
--   Favorite game list
--   More recommendation variables
--   Hybrid recommendation methods
--   Mobile application version
--   Real-time Steam data synchronization
+- Situs web berjalan tanpa galat (runtime errors).
+- Pengguna dapat mengirimkan preferensi rekomendasi.
+- Algoritma Fuzzy Mamdani dieksekusi dengan sukses.
+- Skor rekomendasi dihasilkan dengan benar.
+- Sistem menampilkan 10 besar game yang direkomendasikan.
+- Pengguna dapat membuka halaman detail game.
+- Hasil rekomendasi konsisten dengan aturan fuzzy yang telah ditentukan.
 
 ------------------------------------------------------------------------
 
-# 12. Project Philosophy
+# 11. Pengembangan Masa Depan
 
-The primary focus of this project is the implementation of the Fuzzy
-Mamdani algorithm.
+Kemungkinan perbaikan di masa depan meliputi:
 
-The website serves only as a user interface for interacting with the
-recommendation engine.
+- Integrasi API Steam
+- Sistem akun pengguna
+- Riwayat rekomendasi yang dipersonalisasi
+- Daftar game favorit
+- Menambah variabel rekomendasi
+- Metode rekomendasi hibrida (Hybrid)
+- Versi aplikasi seluler
+- Sinkronisasi data Steam secara langsung (real-time)
 
-The recommendation algorithm, fuzzy rule base, and inference process are
-the core components of the system.
+------------------------------------------------------------------------
+
+# 12. Filosofi Proyek
+
+Fokus utama proyek ini adalah penerapan algoritma Fuzzy Mamdani.
+
+Situs web hanya berfungsi sebagai antarmuka pengguna untuk berinteraksi dengan mesin rekomendasi.
+
+Algoritma rekomendasi, basis aturan fuzzy, dan proses inferensi adalah komponen inti dari sistem ini.

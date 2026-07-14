@@ -1,94 +1,91 @@
 # 05_Membership_Function.md
 
-# Membership Function Specification
+# Spesifikasi Fungsi Keanggotaan (Membership Function)
 
-## Overview
+## Tinjauan
 
-This document defines all membership functions used by the Fuzzy Mamdani
-inference engine.
+Dokumen ini mendefinisikan semua fungsi keanggotaan yang digunakan oleh mesin inferensi Fuzzy Mamdani.
 
-Membership Shape:
+Bentuk Keanggotaan:
 
--   Triangular
--   Overlapping
--   Smooth transition between adjacent sets
+-   Segitiga (Triangular)
+-   Tumpang tindih (Overlapping)
+-   Transisi halus antara himpunan yang berdekatan
 
 ------------------------------------------------------------------------
 
-# 1. Budget (IDR)
+# 1. Anggaran (IDR)
 
-Range: 0 -- 1,000,000
+Rentang: 0 -- 1.000.000
 
-  Membership   Range
+  Keanggotaan  Rentang
   ------------ ----------------------
-  Low          0 -- 300,000
-  Medium       200,000 -- 700,000
-  High         600,000 -- 1,000,000
+  Rendah       0 -- 300.000
+  Sedang       200.000 -- 700.000
+  Tinggi       600.000 -- 1.000.000
 
 ------------------------------------------------------------------------
 
-# 2. PC Level
+# 2. Level PC
 
-Range: 1 -- 3
+Rentang: 1 -- 3
 
-    Value Meaning
+    Nilai Arti
   ------- ---------
-        1 Low
-        2 Medium
-        3 High
+        1 Rendah
+        2 Sedang
+        3 Tinggi
 
-PC Level uses crisp singleton membership — μ(x) = 1 when value matches, 0 otherwise. No triangular membership.
+Level PC menggunakan keanggotaan singleton yang tegas (crisp) — μ(x) = 1 jika nilainya cocok, 0 jika tidak. Tidak ada fungsi keanggotaan segitiga.
 
 ------------------------------------------------------------------------
 
-# 3. Preferred Rating (%)
+# 3. Rating Pilihan (%)
 
-Range: 0 -- 100
+Rentang: 0 -- 100
 
-  Membership   Range
+  Keanggotaan  Rentang
   ------------ -----------
-  Low          0 -- 75
-  Medium       60 -- 90
-  High         80 -- 100
+  Rendah       0 -- 75
+  Sedang       60 -- 90
+  Tinggi       80 -- 100
 
 ------------------------------------------------------------------------
 
-# 4. Preferred Playtime (Hours)
+# 4. Waktu Bermain Pilihan (Jam)
 
-Range: 0 -- 200
+Rentang: 0 -- 200
 
-  Membership   Range
+  Keanggotaan  Rentang
   ------------ -----------
-  Short        0 -- 20
-  Medium       10 -- 80
-  Long         60 -- 200
+  Singkat      0 -- 20
+  Sedang       10 -- 80
+  Lama         60 -- 200
 
 ------------------------------------------------------------------------
 
-# Output: Recommendation Score
+# Keluaran: Skor Rekomendasi
 
-Range: 0 -- 100
+Rentang: 0 -- 100
 
-  Membership           Range
-  -------------------- -----------
-  Not Recommended      0 -- 25
-  Less Recommended     20 -- 50
-  Recommended          45 -- 75
-  Highly Recommended   70 -- 100
-
-------------------------------------------------------------------------
-
-# Design Rules
-
--   Every adjacent membership overlaps.
--   All variables use the same inference method.
--   Centroid is used for defuzzification.
--   Membership values are normalized to 0--1 during computation.
+  Keanggotaan                Rentang
+  -------------------------- -----------
+  Tidak Direkomendasikan     0 -- 25
+  Kurang Direkomendasikan    20 -- 50
+  Direkomendasikan           45 -- 75
+  Sangat Direkomendasikan    70 -- 100
 
 ------------------------------------------------------------------------
 
-# Notes
+# Aturan Desain
 
-These ranges are the official specification for the project. Any
-implementation must follow this document unless the specification is
-updated.
+-   Setiap keanggotaan yang berdekatan saling tumpang tindih.
+-   Semua variabel menggunakan metode inferensi yang sama.
+-   Sentroid digunakan untuk defuzzifikasi.
+-   Nilai keanggotaan dinormalisasi menjadi 0--1 selama perhitungan.
+
+------------------------------------------------------------------------
+
+# Catatan
+
+Rentang-rentang ini adalah spesifikasi resmi untuk proyek ini. Implementasi apa pun harus mengikuti dokumen ini kecuali spesifikasinya diperbarui.

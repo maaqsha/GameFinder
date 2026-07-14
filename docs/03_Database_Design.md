@@ -1,110 +1,107 @@
 # 03_Database_Design.md
 
-# Database Design
+# Desain Basis Data (Database Design)
 
-## Overview
+## Tinjauan
 
-The system uses a simple database design focused on supporting the Fuzzy
-Mamdani recommendation process.
+Sistem ini menggunakan desain basis data sederhana yang difokuskan untuk mendukung proses rekomendasi Fuzzy Mamdani.
 
-Only one table is required.
+Hanya diperlukan satu tabel.
 
 ------------------------------------------------------------------------
 
-# Database Schema
+# Skema Basis Data
 
-## Table: games
+## Tabel: games
 
-  Column              Type                          Description
+  Kolom               Tipe                          Deskripsi
   ------------------- ----------------------------- ------------------------------------
-  app_id              BIGINT                        Steam App ID (Primary Key)
-  name                VARCHAR(255)                  Game name
-  price               DECIMAL(10,2)                 Game price
-  positive            INT                           Positive reviews
-  negative            INT                           Negative reviews
-  rating_percentage   DECIMAL(5,2)                  Calculated rating percentage
-  playtime_hours      DECIMAL(8,2)                  Average playtime forever (hours)
-  genre               VARCHAR(255)                  Game genres
-  pc_level            TINYINT                       PC requirement level (1=Low, 2=Medium, 3=High)
-  about               TEXT                          Game description
-  header_image        TEXT                          Cover image URL
-  website             TEXT                          Official website
+  app_id              BIGINT                        Steam App ID (Kunci Utama / Primary Key)
+  name                VARCHAR(255)                  Nama game
+  price               DECIMAL(10,2)                 Harga game
+  positive            INT                           Ulasan positif
+  negative            INT                           Ulasan negatif
+  rating_percentage   DECIMAL(5,2)                  Persentase rating yang dihitung
+  playtime_hours      DECIMAL(8,2)                  Rata-rata waktu bermain (jam)
+  genre               VARCHAR(255)                  Genre game
+  pc_level            TINYINT                       Level persyaratan PC (1=Rendah, 2=Sedang, 3=Tinggi)
+  about               TEXT                          Deskripsi game
+  header_image        TEXT                          URL gambar sampul (cover image)
+  website             TEXT                          Situs web resmi
 
 ------------------------------------------------------------------------
 
-# Primary Key
+# Kunci Utama (Primary Key)
 
 -   app_id
 
 ------------------------------------------------------------------------
 
-# Derived Columns
+# Kolom Turunan (Derived Columns)
 
-These values are generated during preprocessing.
+Nilai-nilai ini dihasilkan selama pra-pemrosesan (preprocessing).
 
 ## rating_percentage
 
-Formula:
+Rumus:
 
     positive / (positive + negative) * 100
 
 ## pc_level
 
-Assigned during preprocessing.
+Ditetapkan selama pra-pemrosesan.
 
-Values:
+Nilai:
 
--   1 = Low
--   2 = Medium
--   3 = High
+-   1 = Rendah (Low)
+-   2 = Sedang (Medium)
+-   3 = Tinggi (High)
 
 ------------------------------------------------------------------------
 
-# Data Source
+# Sumber Data
 
 Dataset:
 
--   Steam Games Dataset
+-   Dataset Game Steam (Steam Games Dataset)
 
-Imported as CSV during preprocessing.
-
-------------------------------------------------------------------------
-
-# Data Preprocessing
-
-Before importing:
-
--   Remove duplicate App IDs.
--   Replace missing descriptions with an empty string.
--   Replace missing website URLs with NULL.
--   Convert price from USD to IDR using a configurable exchange rate.
--   Convert average playtime from minutes to hours.
--   Calculate rating_percentage.
--   Assign pc_level as INTEGER (1, 2, or 3).
--   Normalize genre values.
+Diimpor sebagai CSV selama pra-pemrosesan.
 
 ------------------------------------------------------------------------
 
-# Query Flow
+# Pra-pemrosesan Data (Data Preprocessing)
+
+Sebelum mengimpor:
+
+-   Hapus duplikat App ID.
+-   Ganti deskripsi yang hilang dengan string kosong.
+-   Ganti URL situs web yang hilang dengan NULL.
+-   Ubah harga dari USD ke IDR menggunakan nilai tukar yang dapat dikonfigurasi.
+-   Ubah rata-rata waktu bermain dari menit ke jam.
+-   Hitung rating_percentage.
+-   Tetapkan pc_level sebagai INTEGER (1, 2, atau 3).
+-   Normalisasi nilai genre.
+
+------------------------------------------------------------------------
+
+# Alur Kueri (Query Flow)
 
 ``` text
-Load games
+Muat game
       ↓
-Filter by genre
+Saring berdasarkan genre
       ↓
-Run Fuzzy Mamdani
+Jalankan Fuzzy Mamdani
       ↓
-Calculate score
+Hitung skor
       ↓
-Sort descending
+Urutkan menurun (descending)
       ↓
-Return Top 10
+Kembalikan 10 Teratas (Top 10)
 ```
 
 ------------------------------------------------------------------------
 
-# Design Decision
+# Keputusan Desain (Design Decision)
 
-This project intentionally uses a single-table database because the
-focus is the Fuzzy Mamdani algorithm rather than relational database
-complexity.
+Proyek ini sengaja menggunakan basis data tabel tunggal karena fokusnya adalah algoritma Fuzzy Mamdani, bukan kerumitan basis data relasional.

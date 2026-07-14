@@ -87,55 +87,83 @@ def score_category(score):
     return 'Highly Recommended'
 
 
-GAMER_NAMES = {1: 'Casual', 2: 'Balanced', 3: 'Hardcore'}
+GAMER_NAMES = {1: 'Kasual', 2: 'Seimbang', 3: 'Hardcore'}
 
 
 PC_NAMES = {1: 'Low End', 2: 'Mid End', 3: 'High End'}
 
 
-def _build_reasons(game, budget, pc_level, preferred_rating, preferred_playtime,
-                   preferred_gamer_type=2):
+def _estimate_game_features(game):
+    tags = (game.get('tags') or '').lower()
+    genre = (game.get('genre') or '').lower()
+    
+    # Estimasi PC Level
+    pc_level = 2
+    if any(t in tags for t in ['pixel graphics', '2d', 'retro', 'minimalist', 'visual novel', 'text-based', 'point & click', 'platformer']):
+        pc_level = 1
+    if any(t in tags for t in ['realistic', 'open world', 'vr', 'ray tracing', 'cyberpunk', 'next gen', 'simulation', 'survival']):
+        pc_level = 3
+        
+    # Estimasi Playtime
+    playtime_hours = 30
+    if any(t in tags for t in ['rpg', 'mmo', 'massively multiplayer', 'strategy', 'open world', 'survival']):
+        playtime_hours = 80
+    elif any(t in tags for t in ['casual', 'puzzle', 'short', 'platformer', 'visual novel', 'indie']):
+        playtime_hours = 12
+    
+    # Variasi kecil berdasarkan app_id agar tidak seragam persis
+    variance = (game.get('app_id', 0) % 15) - 7
+    playtime_hours = max(2, playtime_hours + variance)
+    
+    return pc_level, playtime_hours
+
+
+def _build_reasons(game, budget, user_pc_level, preferred_rating, preferred_playtime,
+                   preferred_gamer_type=2, game_pc_level=2, game_playtime=30):
     reasons = []
     total_reviews = int(game['total_reviews'])
     estimated_owners = int(game.get('estimated_owners', 0))
     peak_players = int(game.get('peak_players', 0))
 
-    gamer_label = GAMER_NAMES.get(preferred_gamer_type, 'Balanced')
-    reasons.append({'key': 'gamer_type', 'text': f'Matched for {gamer_label} play style', 'match': 'excellent'})
+    gamer_label = GAMER_NAMES.get(preferred_gamer_type, 'Seimbang')
+    reasons.append({'key': 'gamer_type', 'text': f'Cocok untuk gaya bermain {gamer_label}', 'match': 'excellent'})
 
-    pc_label = PC_NAMES.get(pc_level, 'Mid End')
-    reasons.append({'key': 'pc_level', 'text': f'PC level {pc_label} — performance matched to your system', 'match': 'excellent'})
+    game_pc_label = PC_NAMES.get(game_pc_level, 'Mid End')
+    if game_pc_level > user_pc_level:
+        reasons.append({'key': 'pc_level', 'text': f'Game ini membutuhkan spesifikasi {game_pc_label} (mungkin berat untuk PC Anda)', 'match': 'poor'})
+    else:
+        reasons.append({'key': 'pc_level', 'text': f'Level PC {game_pc_label} — berjalan lancar di sistem Anda', 'match': 'excellent'})
 
     price = float(game['price_idr'])
     if price <= budget:
         if price == 0:
-            reasons.append({'key': 'budget', 'text': 'Free game — fits any budget', 'match': 'excellent'})
+            reasons.append({'key': 'budget', 'text': 'Game gratis — pas dengan semua anggaran', 'match': 'excellent'})
         else:
-            reasons.append({'key': 'budget', 'text': f'Rp {price:,.0f} is within your Rp {budget:,.0f} budget', 'match': 'excellent'})
+            reasons.append({'key': 'budget', 'text': f'Rp {price:,.0f} sesuai dengan anggaran Rp {budget:,.0f} Anda', 'match': 'excellent'})
     else:
-        reasons.append({'key': 'budget', 'text': f'Rp {price:,.0f} exceeds your Rp {budget:,.0f} budget', 'match': 'poor'})
+        reasons.append({'key': 'budget', 'text': f'Rp {price:,.0f} melebihi anggaran Rp {budget:,.0f} Anda', 'match': 'poor'})
 
     rating = float(game['rating_percentage'])
     if rating >= preferred_rating:
-        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% meets your {preferred_rating:.0f}% preference', 'match': 'excellent'})
+        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% memenuhi preferensi {preferred_rating:.0f}% Anda', 'match': 'excellent'})
     elif rating >= preferred_rating * 0.7:
-        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% is close to your {preferred_rating:.0f}% preference', 'match': 'good'})
+        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% mendekati preferensi {preferred_rating:.0f}% Anda', 'match': 'good'})
     else:
-        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% is below your {preferred_rating:.0f}% preference', 'match': 'poor'})
+        reasons.append({'key': 'rating', 'text': f'Rating {rating:.0f}% di bawah preferensi {preferred_rating:.0f}% Anda', 'match': 'poor'})
 
     if estimated_owners >= 1000000:
-        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimated owners — massive player base', 'match': 'excellent'})
+        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimasi pemilik — basis pemain yang sangat besar', 'match': 'excellent'})
     elif estimated_owners >= 100000:
-        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimated owners — large community', 'match': 'good'})
+        reasons.append({'key': 'community', 'text': f'{estimated_owners:,} estimasi pemilik — komunitas besar', 'match': 'good'})
     elif peak_players >= 1000:
-        reasons.append({'key': 'community', 'text': f'{peak_players:,} peak players — active community', 'match': 'good'})
+        reasons.append({'key': 'community', 'text': f'{peak_players:,} pemain aktif bersamaan — komunitas aktif', 'match': 'good'})
     elif total_reviews >= 50:
-        reasons.append({'key': 'community', 'text': f'{total_reviews} reviews — trusted by the community', 'match': 'excellent'})
+        reasons.append({'key': 'community', 'text': f'{total_reviews} ulasan — dipercaya oleh komunitas', 'match': 'excellent'})
     elif total_reviews >= MIN_REVIEWS:
-        reasons.append({'key': 'community', 'text': f'{total_reviews} reviews — some community feedback', 'match': 'good'})
+        reasons.append({'key': 'community', 'text': f'{total_reviews} ulasan — beberapa masukan komunitas', 'match': 'good'})
 
     if total_reviews >= 20 and rating >= 80:
-        reasons.append({'key': 'popular', 'text': f'{rating:.0f}% positive from {total_reviews:,} reviews', 'match': 'excellent'})
+        reasons.append({'key': 'popular', 'text': f'{rating:.0f}% positif dari {total_reviews:,} ulasan', 'match': 'excellent'})
 
     return reasons
 
@@ -197,18 +225,21 @@ def recommend(budget, pc_level, preferred_rating, preferred_playtime, genre,
         if _is_content_blocked(g['genre'], g['tags'], g['name']):
             continue
 
+        game_pc_level, game_playtime = _estimate_game_features(g)
+
         score, _ = evaluate_game(
             price_idr=float(g['price_idr']),
-            pc_level=pc_level,
+            pc_level=game_pc_level,
             rating_percentage=float(g['rating_percentage']),
-            playtime_hours=preferred_playtime,
+            playtime_hours=game_playtime,
             preferred_rating=preferred_rating,
             preferred_playtime=preferred_playtime,
             preferred_gamer_type=preferred_gamer_type,
         )
         cat = score_category(score)
         reasons = _build_reasons(g, budget, pc_level, preferred_rating,
-                                 preferred_playtime, preferred_gamer_type)
+                                 preferred_playtime, preferred_gamer_type,
+                                 game_pc_level, game_playtime)
         release_year = None
         if g.get('release_date'):
             try:

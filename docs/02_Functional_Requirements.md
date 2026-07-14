@@ -1,167 +1,165 @@
 # 02_Functional_Requirements.md
 
-# Functional Requirements
+# Persyaratan Fungsional (Functional Requirements)
 
-## Overview
+## Tinjauan
 
-This document defines all functional requirements for the Steam Game
-Recommendation System.
+Dokumen ini mendefinisikan semua persyaratan fungsional untuk Sistem Rekomendasi Game Steam.
 
-The system has only one actor:
+Sistem ini hanya memiliki satu aktor:
 
--   Guest User
+-   Pengguna Tamu (Guest User)
 
-No authentication or administrator module is included.
-
-------------------------------------------------------------------------
-
-# Functional Modules
-
-## FR-01 Home Page
-
-### Description
-
-The system shall provide a landing page introducing the project.
-
-### Requirements
-
--   Display project title.
--   Display project description.
--   Explain how the recommendation system works.
--   Provide a **Start Recommendation** button.
+Tidak ada modul autentikasi atau administrator yang disertakan.
 
 ------------------------------------------------------------------------
 
-## FR-02 Recommendation Form
+# Modul Fungsional
 
-### Input Fields
+## FR-01 Halaman Beranda
 
-  ID   Field                            Required
+### Deskripsi
+
+Sistem harus menyediakan halaman arahan (landing page) yang memperkenalkan proyek ini.
+
+### Persyaratan
+
+-   Menampilkan judul proyek.
+-   Menampilkan deskripsi proyek.
+-   Menjelaskan bagaimana sistem rekomendasi bekerja.
+-   Menyediakan tombol **Mulai Rekomendasi**.
+
+------------------------------------------------------------------------
+
+## FR-02 Formulir Rekomendasi
+
+### Bidang Input (Input Fields)
+
+  ID   Bidang                           Wajib (Required)
   ---- -------------------------------- ----------
-  F1   Budget                           Yes
-  F2   Preferred Genre                  Yes
-  F3   PC Level (Low / Medium / High)   Yes
-  F4   Preferred Rating                 Yes
-  F5   Preferred Playtime               Yes
+  F1   Anggaran (Budget)                Ya
+  F2   Genre Pilihan                    Ya
+  F3   Level PC (Rendah / Sedang / Tinggi) Ya
+  F4   Rating Pilihan                   Ya
+  F5   Waktu Bermain Pilihan            Ya
 
-### Requirements
+### Persyaratan
 
--   Validate all inputs.
--   Prevent empty submission.
--   Display validation messages.
-
-------------------------------------------------------------------------
-
-## FR-03 Genre Filtering
-
-Genre is used only as a database filter.
-
-Requirements:
-
--   Filter games by selected genre.
--   Exclude games outside the selected genre.
--   Send filtered games to the fuzzy engine.
+-   Memvalidasi semua masukan (input).
+-   Mencegah pengiriman formulir kosong.
+-   Menampilkan pesan validasi.
 
 ------------------------------------------------------------------------
 
-## FR-04 Fuzzy Mamdani Engine
+## FR-03 Penyaringan Genre (Genre Filtering)
 
-Process:
+Genre hanya digunakan sebagai penyaring basis data (database filter).
 
-1.  Read user input.
-2.  Perform fuzzification.
-3.  Execute rule inference.
-4.  Aggregate outputs.
-5.  Perform centroid defuzzification.
-6.  Generate recommendation score.
+Persyaratan:
 
-------------------------------------------------------------------------
-
-## FR-05 Recommendation Ranking
-
-Requirements:
-
--   Calculate scores for all filtered games.
--   Sort by score (highest first).
--   Display Top 10 recommendations.
+-   Menyaring game berdasarkan genre yang dipilih.
+-   Mengecualikan game yang berada di luar genre yang dipilih.
+-   Mengirimkan game yang telah disaring ke mesin fuzzy.
 
 ------------------------------------------------------------------------
 
-## FR-06 Recommendation Result
+## FR-04 Mesin Fuzzy Mamdani
 
-Display:
+Proses:
 
--   Rank
--   Game Name
--   Recommendation Score
--   Recommendation Category
--   View Detail button
+1.  Membaca masukan pengguna.
+2.  Melakukan fuzzifikasi.
+3.  Menjalankan inferensi aturan.
+4.  Mengagregasi keluaran (outputs).
+5.  Melakukan defuzzifikasi sentroid (centroid).
+6.  Menghasilkan skor rekomendasi.
 
 ------------------------------------------------------------------------
 
-## FR-07 Game Detail
+## FR-05 Peringkat Rekomendasi
 
-Display:
+Persyaratan:
 
--   Cover Image
--   Game Name
+-   Menghitung skor untuk semua game yang telah disaring.
+-   Mengurutkan berdasarkan skor (tertinggi lebih dulu).
+-   Menampilkan 10 rekomendasi teratas (Top 10).
+
+------------------------------------------------------------------------
+
+## FR-06 Hasil Rekomendasi
+
+Tampilan:
+
+-   Peringkat
+-   Nama Game
+-   Skor Rekomendasi
+-   Kategori Rekomendasi
+-   Tombol Lihat Detail (View Detail)
+
+------------------------------------------------------------------------
+
+## FR-07 Detail Game
+
+Tampilan:
+
+-   Gambar Sampul (Cover Image)
+-   Nama Game
 -   Genre
--   Price
--   Steam Rating
--   Minimum PC Level
--   Estimated Playtime
--   Recommendation Score
--   Recommendation Explanation
--   Steam Store URL
+-   Harga
+-   Rating Steam
+-   Level PC Minimum
+-   Perkiraan Waktu Bermain
+-   Skor Rekomendasi
+-   Penjelasan Rekomendasi
+-   URL Toko Steam (Steam Store URL)
 
 ------------------------------------------------------------------------
 
-## FR-08 Recommendation Explanation
+## FR-08 Penjelasan Rekomendasi
 
-Example explanations:
+Contoh penjelasan:
 
--   Budget matches user preference.
--   PC level is sufficient.
--   Rating meets minimum requirement.
--   Playtime matches preference.
-
-------------------------------------------------------------------------
-
-# Business Rules
-
--   BR-01: Recommendation scores are generated using Fuzzy Mamdani.
--   BR-02: Genre filtering occurs before fuzzy calculation.
--   BR-03: Only filtered games are evaluated.
--   BR-04: Results are sorted in descending order.
--   BR-05: Display at most 10 recommendations.
--   BR-06: Empty input is not allowed.
+-   Anggaran sesuai dengan preferensi pengguna.
+-   Level PC memadai.
+-   Rating memenuhi persyaratan minimum.
+-   Waktu bermain sesuai dengan preferensi.
 
 ------------------------------------------------------------------------
 
-# Non-Functional Requirements
+# Aturan Bisnis (Business Rules)
 
-## Performance
-
--   Generate recommendations within 3 seconds for datasets up to 500
-    games.
-
-## Usability
-
--   Responsive interface.
--   Simple navigation.
--   Beginner-friendly layout.
-
-## Reliability
-
--   Invalid input must not crash the application.
+-   BR-01: Skor rekomendasi dihasilkan menggunakan Fuzzy Mamdani.
+-   BR-02: Penyaringan genre terjadi sebelum perhitungan fuzzy.
+-   BR-03: Hanya game yang telah disaring yang dievaluasi.
+-   BR-04: Hasil diurutkan secara menurun (descending).
+-   BR-05: Menampilkan maksimal 10 rekomendasi.
+-   BR-06: Masukan kosong tidak diizinkan.
 
 ------------------------------------------------------------------------
 
-# Acceptance Criteria
+# Persyaratan Non-Fungsional
 
--   Users can submit all required inputs.
--   The fuzzy engine executes successfully.
--   Recommendation scores are generated.
--   Top 10 games are displayed.
--   Detail pages display complete information.
--   Recommendation explanations are shown correctly.
+## Kinerja (Performance)
+
+-   Menghasilkan rekomendasi dalam waktu 3 detik untuk dataset hingga 500 game.
+
+## Kegunaan (Usability)
+
+-   Antarmuka yang responsif.
+-   Navigasi sederhana.
+-   Tata letak ramah pemula (Beginner-friendly).
+
+## Keandalan (Reliability)
+
+-   Masukan yang tidak valid tidak boleh merusak (crash) aplikasi.
+
+------------------------------------------------------------------------
+
+# Kriteria Penerimaan (Acceptance Criteria)
+
+-   Pengguna dapat mengirimkan semua masukan yang diperlukan.
+-   Mesin fuzzy berhasil dieksekusi.
+-   Skor rekomendasi berhasil dihasilkan.
+-   10 game teratas berhasil ditampilkan.
+-   Halaman detail menampilkan informasi yang lengkap.
+-   Penjelasan rekomendasi ditampilkan dengan benar.

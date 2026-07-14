@@ -1,16 +1,14 @@
 # 08_Project_Structure.md
 
-# Project Structure
+# Struktur Proyek
 
-## Overview
+## Tinjauan
 
-The project follows a modular Flask architecture. The Fuzzy Mamdani
-engine is isolated from the web layer to improve maintainability and
-testing.
+Proyek ini mengikuti arsitektur modular Flask. Mesin Fuzzy Mamdani dipisahkan (diisolasi) dari lapisan web untuk meningkatkan kemudahan pemeliharaan (maintainability) dan pengujian.
 
 ------------------------------------------------------------------------
 
-# Folder Structure
+# Struktur Folder
 
 ``` text
 steam-game-recommendation/
@@ -76,46 +74,50 @@ steam-game-recommendation/
 
 ------------------------------------------------------------------------
 
-# Module Responsibilities
+# Tanggung Jawab Modul
 
 ## Routes
 
-Handle HTTP requests and responses.
+Menangani permintaan (requests) dan respons (responses) HTTP.
 
 ## Models
 
-Represent database entities.
+Merepresentasikan entitas basis data (database).
 
 ## Services/Fuzzy
 
-Contains the complete Fuzzy Mamdani implementation.
+Berisi implementasi Fuzzy Mamdani secara keseluruhan.
 
 ## Templates
 
-Render user interface pages.
+Melakukan proses render halaman antarmuka pengguna (UI).
 
 ## Static
 
-Stores CSS, JavaScript, and images.
+Menyimpan CSS, JavaScript, dan gambar-gambar.
 
 ## Dataset
 
-Stores the original CSV dataset.
+Menyimpan dataset orisinal dalam format CSV.
 
 ------------------------------------------------------------------------
 
-# Core Principle
+# Prinsip Utama
 
-Business logic must remain inside the `services/fuzzy` module.
+Logika bisnis harus tetap berada di dalam modul `services/fuzzy`.
 
-Routes must only: - Receive user input - Call the recommendation
-service - Return results
+Routes hanya diperbolehkan untuk:
+- Menerima masukan dari pengguna
+- Memanggil layanan (service) rekomendasi
+- Mengembalikan hasil
 
 ------------------------------------------------------------------------
 
-# Future Expansion
+# Ekspansi Masa Depan
 
-The architecture allows adding: - Steam API integration - User
-accounts - Additional recommendation methods
+Arsitektur ini memungkinkan untuk menambahkan hal-hal berikut:
+- Integrasi Steam API
+- Akun pengguna
+- Metode rekomendasi tambahan
 
-without changing the fuzzy engine.
+tanpa perlu mengubah sistem mesin fuzzy.

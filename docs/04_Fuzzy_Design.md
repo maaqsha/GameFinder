@@ -1,144 +1,142 @@
 # 04_Fuzzy_Design.md
 
-# Fuzzy Mamdani Design
+# Desain Fuzzy Mamdani
 
-## Overview
+## Tinjauan
 
-This document defines the fuzzy inference system used by the Steam Game
-Recommendation System.
+Dokumen ini mendefinisikan sistem inferensi fuzzy yang digunakan oleh Sistem Rekomendasi Game Steam.
 
-Method: **Fuzzy Mamdani**
+Metode: **Fuzzy Mamdani**
 
-Defuzzification: **Centroid**
-
-------------------------------------------------------------------------
-
-# Input Variables
-
-## 1. Budget
-
-Memberships:
-
--   Low
--   Medium
--   High
+Defuzzifikasi: **Sentroid (Centroid)**
 
 ------------------------------------------------------------------------
 
-## 2. PC Level
+# Variabel Masukan (Input Variables)
 
-Memberships:
+## 1. Anggaran (Budget)
 
--   Low
--   Medium
--   High
+Fungsi Keanggotaan (Memberships):
 
-------------------------------------------------------------------------
-
-## 3. Preferred Rating
-
-Memberships:
-
--   Low
--   Medium
--   High
+-   Rendah (Low)
+-   Sedang (Medium)
+-   Tinggi (High)
 
 ------------------------------------------------------------------------
 
-## 4. Preferred Playtime
+## 2. Level PC (PC Level)
 
-Memberships:
+Fungsi Keanggotaan:
 
--   Short
--   Medium
--   Long
+-   Rendah (Low)
+-   Sedang (Medium)
+-   Tinggi (High)
 
 ------------------------------------------------------------------------
 
-# Output Variable
+## 3. Rating Pilihan (Preferred Rating)
 
-## Recommendation Score
+Fungsi Keanggotaan:
 
-Memberships:
+-   Rendah (Low)
+-   Sedang (Medium)
+-   Tinggi (High)
 
--   Not Recommended
--   Less Recommended
--   Recommended
--   Highly Recommended
+------------------------------------------------------------------------
 
-Output Range:
+## 4. Waktu Bermain Pilihan (Preferred Playtime)
+
+Fungsi Keanggotaan:
+
+-   Singkat (Short)
+-   Sedang (Medium)
+-   Lama (Long)
+
+------------------------------------------------------------------------
+
+# Variabel Keluaran (Output Variable)
+
+## Skor Rekomendasi
+
+Fungsi Keanggotaan:
+
+-   Tidak Direkomendasikan (Not Recommended)
+-   Kurang Direkomendasikan (Less Recommended)
+-   Direkomendasikan (Recommended)
+-   Sangat Direkomendasikan (Highly Recommended)
+
+Rentang Keluaran:
 
 0 - 100
 
 ------------------------------------------------------------------------
 
-# Inference Process
+# Proses Inferensi
 
 ``` text
-User Input
+Masukan Pengguna
       ↓
-Fuzzification
+Fuzzifikasi
       ↓
-Rule Evaluation
+Evaluasi Aturan
       ↓
-Aggregation
+Agregasi
       ↓
-Centroid Defuzzification
+Defuzzifikasi Sentroid
       ↓
-Recommendation Score
+Skor Rekomendasi
 ```
 
 ------------------------------------------------------------------------
 
-# Recommendation Categories
+# Kategori Rekomendasi
 
-       Score Category
+        Skor Kategori
   ---------- --------------------
-      0 - 25 Not Recommended
-     26 - 50 Less Recommended
-     51 - 75 Recommended
-    76 - 100 Highly Recommended
+      0 - 25 Tidak Direkomendasikan
+     26 - 50 Kurang Direkomendasikan
+     51 - 75 Direkomendasikan
+    76 - 100 Sangat Direkomendasikan
 
 ------------------------------------------------------------------------
 
-# Rule Base
+# Basis Aturan (Rule Base)
 
-The fuzzy engine uses:
+Mesin fuzzy menggunakan:
 
--   4 input variables
--   3 membership functions for each input
--   Total possible combinations:
+-   4 variabel masukan
+-   3 fungsi keanggotaan untuk setiap masukan
+-   Total kombinasi yang mungkin:
 
-    3^4 = 81 Rules
+    3^4 = 81 Aturan
 
-All combinations are covered in the rule base.
-
-------------------------------------------------------------------------
-
-# Design Decisions
-
--   Genre is **not** a fuzzy variable.
--   Genre is used only to filter candidate games before fuzzy inference.
--   Every filtered game is evaluated independently.
--   Recommendation scores are sorted in descending order.
--   The Top 10 games are returned to the user.
+Semua kombinasi dicakup dalam basis aturan.
 
 ------------------------------------------------------------------------
 
-# Defuzzification
+# Keputusan Desain
 
-Method:
-
-**Centroid (Center of Area)**
-
-The centroid method converts the aggregated fuzzy output into a crisp
-recommendation score.
+-   Genre **bukan** variabel fuzzy.
+-   Genre digunakan hanya untuk menyaring kandidat game sebelum inferensi fuzzy.
+-   Setiap game yang disaring dievaluasi secara independen.
+-   Skor rekomendasi diurutkan secara menurun (descending).
+-   10 game teratas (Top 10) dikembalikan ke pengguna.
 
 ------------------------------------------------------------------------
 
-# Acceptance Criteria
+# Defuzzifikasi
 
--   All input variables participate in inference.
--   Every input combination matches at least one rule.
--   Every evaluated game receives a recommendation score.
--   Scores are generated in the range 0--100.
+Metode:
+
+**Sentroid (Pusat Area / Center of Area)**
+
+Metode sentroid mengubah keluaran fuzzy yang telah diagregasi menjadi skor rekomendasi tegas (crisp).
+
+------------------------------------------------------------------------
+
+# Kriteria Penerimaan
+
+-   Semua variabel masukan berpartisipasi dalam inferensi.
+-   Setiap kombinasi masukan cocok dengan setidaknya satu aturan.
+-   Setiap game yang dievaluasi menerima skor rekomendasi.
+-   Skor dihasilkan dalam rentang 0--100.

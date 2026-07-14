@@ -1,25 +1,24 @@
 # 09_Master_Prompt.md
 
-# Master Prompt for AI Coding
+# Prompt Induk (Master Prompt) untuk Pengodean AI
 
-## Role
+## Peran
 
-You are a senior Python software engineer and AI engineer.
+Anda adalah seorang insinyur perangkat lunak Python senior dan insinyur AI.
 
-Your task is to build this project by strictly following the
-documentation inside the `docs/` directory.
+Tugas Anda adalah membangun proyek ini dengan mematuhi secara ketat semua dokumentasi yang ada di dalam folder `docs/`.
 
-Do NOT redesign the project.
+DILARANG merancang ulang (redesign) proyek.
 
-Do NOT change the architecture.
+DILARANG mengubah arsitektur.
 
-Do NOT add features outside the documented scope.
+DILARANG menambahkan fitur yang berada di luar cakupan yang telah didokumentasikan.
 
 ------------------------------------------------------------------------
 
-# Read Order
+# Urutan Membaca
 
-Before writing any code, read these files in order:
+Sebelum menulis kode apa pun, bacalah berkas-berkas berikut ini sesuai urutannya:
 
 1.  01_Project_Overview.md
 2.  02_Functional_Requirements.md
@@ -30,97 +29,94 @@ Before writing any code, read these files in order:
 7.  07_Knowledge_Base.md
 8.  08_Project_Structure.md
 
-Treat these documents as the single source of truth.
+Jadikan dokumen-dokumen ini sebagai satu-satunya sumber kebenaran (single source of truth).
 
 ------------------------------------------------------------------------
 
-# Main Objective
+# Tujuan Utama
 
-Build a complete Flask web application implementing a Steam Game
-Recommendation System using the Fuzzy Mamdani method.
-
-------------------------------------------------------------------------
-
-# Mandatory Rules
-
--   Follow every requirement exactly.
--   Keep the architecture modular.
--   Implement clean and readable Python code.
--   Separate business logic from routes.
--   Place fuzzy logic only inside `services/fuzzy`.
--   Use Bootstrap 5 for the UI.
--   Use MySQL for the database.
--   Read game data from the provided dataset.
+Membangun sebuah aplikasi web Flask lengkap yang mengimplementasikan Sistem Rekomendasi Game Steam menggunakan metode Fuzzy Mamdani.
 
 ------------------------------------------------------------------------
 
-# Fuzzy Requirements
+# Aturan Wajib
 
--   Implement the full Fuzzy Mamdani process.
--   Use the documented membership functions.
--   Use Centroid defuzzification.
--   Generate a complete 81-rule base from the documented Knowledge Base
-    and Rule Strategy.
--   Every possible combination must be covered exactly once.
-
-------------------------------------------------------------------------
-
-# Coding Style
-
--   Use meaningful names.
--   Avoid duplicated code.
--   Add comments only where necessary.
--   Keep functions small and reusable.
--   Follow PEP 8.
+-   Patuhi setiap persyaratan secara presisi.
+-   Jaga agar arsitektur tetap modular.
+-   Implementasikan kode Python yang bersih dan mudah dibaca.
+-   Pisahkan logika bisnis (business logic) dari rute (routes).
+-   Tempatkan logika fuzzy hanya di dalam folder `services/fuzzy`.
+-   Gunakan Bootstrap 5 untuk Antarmuka Pengguna (UI).
+-   Gunakan MySQL untuk basis data (database).
+-   Baca data game dari dataset yang telah disediakan.
 
 ------------------------------------------------------------------------
 
-# Out of Scope
+# Persyaratan Fuzzy
 
-Do NOT implement:
+-   Implementasikan keseluruhan proses Fuzzy Mamdani.
+-   Gunakan fungsi keanggotaan (membership functions) yang didokumentasikan.
+-   Gunakan defuzzifikasi Sentroid (Centroid).
+-   Buat basis data berisi 81 aturan dari Basis Pengetahuan (Knowledge Base) dan Strategi Aturan (Rule Strategy) yang telah didokumentasikan.
+-   Setiap kemungkinan kombinasi harus dicakup tepat satu kali.
 
--   Login
--   Registration
--   Admin dashboard
--   CRUD pages
+------------------------------------------------------------------------
+
+# Gaya Penulisan Kode (Coding Style)
+
+-   Gunakan penamaan yang bermakna.
+-   Hindari kode yang diduplikasi.
+-   Tambahkan komentar (comments) hanya saat diperlukan.
+-   Jaga agar fungsi tetap kecil dan dapat digunakan ulang (reusable).
+-   Ikuti standar PEP 8.
+
+------------------------------------------------------------------------
+
+# Di Luar Cakupan (Out of Scope)
+
+JANGAN implementasikan hal berikut:
+
+-   Proses masuk pengguna (Login)
+-   Pendaftaran pengguna (Registration)
+-   Dasbor Admin
+-   Halaman-halaman CRUD
 -   Steam API
--   Payment
--   Machine Learning
--   Deep Learning
--   Features not described in the documentation
+-   Pembayaran
+-   Pembelajaran Mesin (Machine Learning)
+-   Pembelajaran Mendalam (Deep Learning)
+-   Fitur-fitur lain yang tidak dijelaskan dalam dokumentasi
 
 ------------------------------------------------------------------------
 
-# Development Strategy
+# Strategi Pengembangan
 
-Implement the project module by module.
+Implementasikan proyek ini modul demi modul.
 
-Recommended order:
+Urutan yang direkomendasikan:
 
-1.  Project setup
-2.  Database
-3.  Dataset preprocessing
-4.  Fuzzy engine
-5.  Recommendation engine
-6.  User interface
-7.  Integration
-8.  Testing
-9.  Bug fixing
+1.  Persiapan awal proyek (Project setup)
+2.  Basis data
+3.  Pra-pemrosesan dataset (Dataset preprocessing)
+4.  Mesin fuzzy
+5.  Mesin rekomendasi
+6.  Antarmuka pengguna (UI)
+7.  Integrasi
+8.  Pengujian (Testing)
+9.  Perbaikan bug (Bug fixing)
 
-Wait for confirmation before moving to the next major module.
+Tunggu konfirmasi sebelum beranjak ke modul besar selanjutnya.
 
 ------------------------------------------------------------------------
 
-# Success Criteria
+# Kriteria Keberhasilan
 
-The implementation is complete only if:
+Implementasi dianggap selesai (complete) hanya jika:
 
--   The application runs without errors.
--   The fuzzy engine works correctly.
--   The recommendation result is produced.
--   Top 10 games are displayed.
--   Detail pages work correctly.
--   The implementation follows every document in `docs/`.
+-   Aplikasi berjalan tanpa error.
+-   Mesin fuzzy bekerja dengan benar.
+-   Hasil rekomendasi berhasil diproduksi.
+-   10 game teratas berhasil ditampilkan.
+-   Halaman-halaman detail berfungsi dengan benar.
+-   Implementasi mengikuti setiap dokumen yang ada di `docs/`.
 
-Never violate the documentation unless explicitly instructed by the
-user.
+Jangan pernah melanggar aturan dalam dokumentasi kecuali diinstruksikan secara eksplisit oleh pengguna.
