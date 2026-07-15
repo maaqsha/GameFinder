@@ -1,4 +1,4 @@
-# 01_Project_Overview.md
+﻿# 01_Project_Overview.md
 
 # Sistem Rekomendasi Game Steam menggunakan Fuzzy Mamdani
 
@@ -114,24 +114,24 @@ Tidak diperlukan akun atau autentikasi.
 
 ``` text
 Pengguna membuka situs web
-        ↓
+        â†“
 Mengisi formulir rekomendasi
-        ↓
-Memilih genre yang disukai
-        ↓
+        â†“
+Memilih genre, gamer type, budget, rating, playtime
+        â†“
 Memasukkan preferensi
-        ↓
-Menyaring game berdasarkan genre
-        ↓
-Menjalankan inferensi Fuzzy Mamdani
-        ↓
+        â†“
+Menyaring game berdasarkan genre + budget
+        â†“
+Menjalankan inferensi Fuzzy Mamdani (243 rules)
+        â†“
 Menghitung skor rekomendasi
-        ↓
+        â†“
 Mengurutkan game berdasarkan skor
-        ↓
-Menampilkan 10 besar rekomendasi
-        ↓
-Melihat informasi detail game
+        â†“
+Menampilkan 10 besar rekomendasi + skor
+        â†“
+Melihat informasi detail game + alasan rekomendasi
 ```
 
 ------------------------------------------------------------------------
@@ -200,3 +200,5 @@ Fokus utama proyek ini adalah penerapan algoritma Fuzzy Mamdani.
 Situs web hanya berfungsi sebagai antarmuka pengguna untuk berinteraksi dengan mesin rekomendasi.
 
 Algoritma rekomendasi, basis aturan fuzzy, dan proses inferensi adalah komponen inti dari sistem ini.
+
+

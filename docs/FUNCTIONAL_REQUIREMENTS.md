@@ -1,4 +1,4 @@
-# 02_Functional_Requirements.md
+﻿# 02_Functional_Requirements.md
 
 # Persyaratan Fungsional (Functional Requirements)
 
@@ -42,6 +42,7 @@ Sistem harus menyediakan halaman arahan (landing page) yang memperkenalkan proye
   F3   Level PC (Rendah / Sedang / Tinggi) Ya
   F4   Rating Pilihan                   Ya
   F5   Waktu Bermain Pilihan            Ya
+   F6   Gamer Type (Casual/Balanced/Hardcore) Ya            Ya
 
 ### Persyaratan
 
@@ -141,7 +142,7 @@ Contoh penjelasan:
 
 ## Kinerja (Performance)
 
--   Menghasilkan rekomendasi dalam waktu 3 detik untuk dataset hingga 500 game.
+-   Menghasilkan rekomendasi dalam waktu 3 detik untuk dataset hingga 1000 game.
 
 ## Kegunaan (Usability)
 
@@ -163,3 +164,4 @@ Contoh penjelasan:
 -   10 game teratas berhasil ditampilkan.
 -   Halaman detail menampilkan informasi yang lengkap.
 -   Penjelasan rekomendasi ditampilkan dengan benar.
+

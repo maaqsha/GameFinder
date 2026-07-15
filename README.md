@@ -78,10 +78,9 @@ python tests/test_integration.py
 
 Dokumentasi desain terperinci ada di `docs/`:
 
-- `01_Project_Overview.md` — Ringkasan dan tujuan proyek
-- `02_Functional_Requirements.md` — Kebutuhan fungsional
-- `03_Database_Design.md` — Skema dan sumber data
-- `04_Fuzzy_Design.md` — Arsitektur Fuzzy Mamdani
-- `05_Membership_Function.md` — Definisi fungsi keanggotaan
-- `06_Rule_Strategy.md` — Strategi basis aturan
-- `08_Project_Structure.md` — Referensi struktur file
+- `PROJECT_OVERVIEW.md` — Ringkasan dan tujuan proyek
+- `INSTALLATION.md` — Panduan instalasi
+- `SYSTEM_ARCHITECTURE.md` — Arsitektur sistem, skema DB, struktur folder
+- `FUZZY_LOGIC.md` — Desain Fuzzy Mamdani lengkap (MF, 243 aturan, inferensi)
+- `FUNCTIONAL_REQUIREMENTS.md` — Kebutuhan fungsional
+- `USER_GUIDE.md` — Panduan penggunaan
