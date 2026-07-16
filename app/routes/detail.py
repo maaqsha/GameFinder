@@ -55,12 +55,6 @@ def show(app_id):
         )
     game['reasons'] = reasons
 
-    release_year = None
-    if game.get('release_date'):
-        try:
-            release_year = int(str(game['release_date'])[:4])
-        except (ValueError, TypeError):
-            pass
-    game['release_year'] = release_year
+    game['release_year'] = None
 
     return render_template('detail.html', game=game)

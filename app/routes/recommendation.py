@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request
 from app.services.fuzzy.recommendation import recommend as rec_engine
+from app.config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
 import mysql.connector
 
 recommendation_bp = Blueprint('recommendation', __name__)
@@ -8,7 +9,7 @@ recommendation_bp = Blueprint('recommendation', __name__)
 def _get_max_budget():
     try:
         conn = mysql.connector.connect(
-            host='localhost', user='root', password='', database='gamefinder',
+            host=MYSQL_HOST, user=MYSQL_USER, password=MYSQL_PASSWORD, database=MYSQL_DATABASE,
         )
         cursor = conn.cursor()
         cursor.execute('SELECT MAX(price_idr) FROM games')

@@ -1,14 +1,18 @@
 """Drop and recreate games table with new schema, then import clean CSV."""
 import mysql.connector
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CSV_PATH = os.path.join('dataset', 'steamgames_clean.csv')
 
 conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    database='gamefinder',
-    allow_local_infile=True
+    host=os.getenv('MYSQL_HOST', 'localhost'),
+    user=os.getenv('MYSQL_USER', 'root'),
+    password=os.getenv('MYSQL_PASSWORD', ''),
+    database=os.getenv('MYSQL_DATABASE', 'gamefinder'),
+    allow_local_infile=True,
 )
 cursor = conn.cursor()
 
@@ -20,7 +24,6 @@ cursor.execute("""
 CREATE TABLE games (
     app_id BIGINT NOT NULL,
     name VARCHAR(255) NOT NULL,
-    release_date DATE NULL,
     price_idr BIGINT NOT NULL DEFAULT 0,
     rating_percentage DECIMAL(5,2) NOT NULL DEFAULT 0.00,
     total_reviews INT NOT NULL DEFAULT 0,
@@ -48,8 +51,7 @@ OPTIONALLY ENCLOSED BY '"'
 ESCAPED BY '\\\\'
 LINES TERMINATED BY '\\r\\n'
 IGNORE 1 LINES
-(app_id, name, @release_date, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players)
-SET release_date = NULLIF(@release_date, '')
+(app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players)
 """
 cursor.execute(sql)
 conn.commit()

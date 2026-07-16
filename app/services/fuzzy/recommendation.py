@@ -4,6 +4,7 @@ from .fuzzification import fuzzify_game
 from .inference import generate_rules, evaluate_rules
 from .aggregation import aggregate
 from .defuzzification import centroid
+from app.config import MYSQL_HOST, MYSQL_USER, MYSQL_PASSWORD, MYSQL_DATABASE
 
 _RULES = None
 _DB_CONFIG = None
@@ -56,10 +57,10 @@ def _get_db():
     global _DB_CONFIG
     if _DB_CONFIG is None:
         _DB_CONFIG = {
-            'host': 'localhost',
-            'user': 'root',
-            'password': '',
-            'database': 'gamefinder',
+            'host': MYSQL_HOST,
+            'user': MYSQL_USER,
+            'password': MYSQL_PASSWORD,
+            'database': MYSQL_DATABASE,
         }
     return mysql.connector.connect(**_DB_CONFIG)
 

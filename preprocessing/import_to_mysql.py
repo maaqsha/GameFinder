@@ -1,13 +1,17 @@
 import mysql.connector
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 CSV_PATH = os.path.join('dataset', 'steamgames_clean.csv')
 
 conn = mysql.connector.connect(
-    host='localhost',
-    user='root',
-    database='gamefinder',
-    allow_local_infile=True
+    host=os.getenv('MYSQL_HOST', 'localhost'),
+    user=os.getenv('MYSQL_USER', 'root'),
+    password=os.getenv('MYSQL_PASSWORD', ''),
+    database=os.getenv('MYSQL_DATABASE', 'gamefinder'),
+    allow_local_infile=True,
 )
 cursor = conn.cursor()
 
@@ -21,7 +25,7 @@ OPTIONALLY ENCLOSED BY '"'
 ESCAPED BY '\\\\'
 LINES TERMINATED BY '\\r\\n'
 IGNORE 1 LINES
-(app_id, name, price_idr, positive, negative, rating_percentage, playtime_hours, genre, pc_level, header_image, short_description)
+(app_id, name, price_idr, rating_percentage, total_reviews, genre, tags, estimated_owners, peak_players)
 """
 
 cursor.execute(sql)

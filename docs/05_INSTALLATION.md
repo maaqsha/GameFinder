@@ -5,7 +5,6 @@
 - Python 3.12+
 - MySQL 8.0+
 - Git
-- Visual Studio Code (direkomendasikan)
 
 ---
 
@@ -42,29 +41,52 @@ pip install -r requirements.txt
 
 ### 4. Konfigurasi Basis Data
 
-Buat database MySQL:
+Buat database MySQL terlebih dahulu:
 
 ```sql
 CREATE DATABASE gamefinder CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-Konfigurasi koneksi di file `.env` (buat dari `.env.example`):
+Buat file `.env` dari `.env.example`:
 
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=your_password
-DB_NAME=gamefinder
+```bash
+cp .env.example .env
 ```
 
-### 5. Impor Data
+Sesuaikan isi `.env` dengan kredensial MySQL Anda:
+
+```env
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=root
+MYSQL_PASSWORD=password_anda
+MYSQL_DATABASE=gamefinder
+```
+
+### 5. Impor Dataset
+
+Jalankan skrip pra-pemrosesan untuk membuat tabel dan mengimpor data:
+
+```bash
+python preprocessing/reimport_db.py
+```
+
+Skrip ini akan:
+- Menghapus tabel `games` jika sudah ada
+- Membuat ulang tabel `games` dengan skema yang benar
+- Mengimpor data dari `dataset/steamgames_clean.csv`
+
+Atau, jika ingin menggunakan MySQL CLI langsung:
 
 ```bash
 mysql -u root -p gamefinder < dataset/import.sql
 ```
 
-Atau jalankan skrip pra-pemrosesan Python (jika tersedia) untuk memuat CSV ke MySQL.
+**Catatan:** `dataset/import.sql` menggunakan `LOAD DATA LOCAL INFILE`. Pastikan MySQL mengizinkan `local_infile` dengan menjalankan:
+
+```sql
+SET GLOBAL local_infile = 1;
+```
 
 ### 6. Jalankan Aplikasi
 
@@ -76,25 +98,15 @@ Aplikasi akan tersedia di: `http://localhost:5000`
 
 ---
 
-## Struktur Dependensi
-
-| Paket | Tujuan |
-|-------|--------|
-| Flask | Framework web |
-| mysql-connector-python | Driver MySQL |
-| python-dotenv | Manajemen variabel lingkungan |
-| pytest | Framework pengujian |
-
----
-
 ## Verifikasi Instalasi
 
 1. Buka `http://localhost:5000`
-2. Halaman beranda harus muncul
-3. Klik "Mulai Rekomendasi"
-4. Isi formulir dan kirim
-5. Hasil Top 10 harus ditampilkan dengan skor
-6. Klik "Lihat Detail" → halaman detail game muncul dengan penjelasan
+2. Halaman beranda harus muncul dengan judul proyek
+3. Klik **Mulai Rekomendasi**
+4. Isi formulir (anggarkan, genre, level PC, tipe gamer, rating, waktu bermain)
+5. Klik kirim
+6. Hasil Top 10 rekomendasi harus ditampilkan dengan skor
+7. Klik nama game → halaman detail muncul dengan penjelasan rekomendasi
 
 ---
 
@@ -102,21 +114,22 @@ Aplikasi akan tersedia di: `http://localhost:5000`
 
 | Masalah | Solusi |
 |---------|--------|
-| Galat koneksi MySQL | Periksa `.env`, pastikan MySQL berjalan, verifikasi kredensial |
+| Galat koneksi MySQL | Periksa file `.env`, pastikan MySQL berjalan, verifikasi kredensial |
+| `mysql.connector.errors.DatabaseError: 1049 (42000): Unknown database` | Jalankan `CREATE DATABASE gamefinder` terlebih dahulu |
+| `LOAD DATA LOCAL INFILE` error | Jalankan `SET GLOBAL local_infile = 1;` di MySQL |
 | Modul tidak ditemukan | Jalankan `pip install -r requirements.txt` di virtual env yang aktif |
-| Port 5000 digunakan | Ubah port di `run.py` atau hentikan proses yang menggunakan port 5000 |
-| Data kosong | Pastikan `import.sql` sudah dijalankan, periksa tabel `games` |
+| Port 5000 digunakan | Ubah port di `run.py` atau hentikan proses lain yang menggunakan port 5000 |
 
 ---
 
 ## Perintah Berguna
 
 ```bash
-# Jalankan pengujian
-pytest
+# Jalankan pengujian unit (tanpa DB)
+python tests/test_recommendation.py
 
-# Jalankan dengan mode debug
-FLASK_DEBUG=1 python run.py
+# Jalankan pengujian integrasi (butuh DB)
+python tests/test_integration.py
 
 # Hapus virtual environment
 rm -rf venv
