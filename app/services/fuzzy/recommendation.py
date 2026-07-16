@@ -67,15 +67,33 @@ def _get_db():
 def evaluate_game(price_idr, pc_level, rating_percentage, playtime_hours,
                   preferred_rating=100, preferred_playtime=50,
                   preferred_gamer_type=2):
+    """
+    Fungsi utama yang menjalankan seluruh siklus algoritma Fuzzy Inference System (Mamdani).
+    Fungsi ini dipanggil untuk setiap satu game dari database yang sedang dievaluasi.
+    """
+    
+    # 1. TAHAP FUZZIFIKASI
+    # Mengonversi parameter tegas (crisp) game (harga, pc_level, dll) menjadi derajat keanggotaan fuzzy
     fuzzy_inputs = fuzzify_game(price_idr, pc_level, rating_percentage, playtime_hours,
                                 preferred_rating, preferred_playtime,
                                 preferred_gamer_type)
+                                
+    # 2. TAHAP INFERENSI (EVALUASI ATURAN)
+    # Mengambil 243 basis aturan (rules) lalu mengevaluasi semuanya menggunakan operator MIN 
+    # untuk mendapatkan α-predikat (kekuatan) dari setiap kategori output
     rules = _get_rules()
     strengths = evaluate_rules(fuzzy_inputs, rules)
+    
+    # 3. TAHAP AGREGASI
+    # Menggabungkan semua himpunan aturan menjadi satu area kurva dengan mengambil nilai maksimal (MAX)
     agg = aggregate(strengths)
+    
+    # 4. TAHAP DEFUZZIFIKASI
+    # Menghitung titik pusat massa (centroid) dari area agregasi untuk mendapatkan 1 angka pasti (skor)
     score = centroid(agg)
+    
+    # Mengembalikan skor rekomendasi (0-100) dan data agregasinya (untuk visualisasi jika diperlukan)
     return round(score, 2), agg
-
 
 def score_category(score):
     if score <= 25:

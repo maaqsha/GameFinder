@@ -1,16 +1,17 @@
 <nav class="navbar-gamefinder">
   <div class="container">
     <a href="{{ url_for('home.index') }}" class="navbar-brand-gamefinder">
-      <img src="{{ url_for('static', filename='images/logoGameFinder.png') }}?v=3" class="brand-logo-img" alt="GameFinder Logo" style="width: 52px; height: 52px; object-fit: contain; margin-right: 2px;">
+      <img src="{{ url_for('static', filename='images/logoGameFinder.png') }}?v=3" class="brand-logo-img"
+        alt="GameFinder Logo" style="width: 52px; height: 52px; object-fit: contain; margin-right: 2px;">
       <span>GameFinder</span>
     </a>
 
     <div class="navbar-links">
       <a href="{{ url_for('home.index') }}"
-        class="{% if request.endpoint == 'home.index' %}active{% endif %}">Beranda</a>
+        class="nav-item-beranda {% if request.endpoint == 'home.index' %}active{% endif %}">Beranda</a>
       <a href="{{ url_for('recommendation.recommend') }}"
         class="{% if request.endpoint and request.endpoint.startswith('recommendation.') %}active{% endif %}">Rekomendasi</a>
-      <a href="{{ url_for('home.index') }}#about">Tentang</a>
+      <a href="{{ url_for('home.index') }}#about" class="nav-item-tentang">Tentang</a>
     </div>
 
     <button id="theme-toggle-btn" class="theme-toggle-pill" type="button" aria-label="Toggle color theme">
@@ -19,3 +20,29 @@
     </button>
   </div>
 </nav>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function updateActiveLink() {
+      // Hanya berjalan jika di halaman utama
+      if (window.location.pathname === '/' || window.location.pathname === '{{ url_for("home.index") }}') {
+        const berandaLink = document.querySelector('.nav-item-beranda');
+        const tentangLink = document.querySelector('.nav-item-tentang');
+
+        if (berandaLink && tentangLink) {
+          if (window.location.hash === '#about') {
+            berandaLink.classList.remove('active');
+            tentangLink.classList.add('active');
+          } else {
+            tentangLink.classList.remove('active');
+            berandaLink.classList.add('active');
+          }
+        }
+      }
+    }
+
+    // Jalankan saat halaman dimuat dan saat hash berubah (diklik)
+    updateActiveLink();
+    window.addEventListener('hashchange', updateActiveLink);
+  });
+</script>

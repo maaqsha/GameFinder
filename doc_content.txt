@@ -1,0 +1,157 @@
+0: 1. PERMASALAHAN YANG DIANGKAT (Latar Belakang)
+1: 
+2: 1.1 Masalah Utama
+3: Platform Steam memiliki lebih dari 70.000+ judul game yang tersedia. Pengguna (terutama gamer pemula) sering mengalami information overload — kebingungan dalam memilih game yang tepat karena banyaknya pilihan.
+4: 1.2 Tantangan Spesifik yang Dihadapi Pengguna
+5: 1.3 Mengapa Masalah Ini Penting?
+6: Membeli game yang salah = uang terbuang dan waktu terbuang
+7: Tidak ada sistem di Steam yang secara cerdas mencocokkan profil pengguna (anggaran, spek PC, gaya bermain) dengan game secara bersamaan
+8: Sistem rekomendasi bawaan Steam hanya berbasis riwayat pembelian dan popularitas, bukan berdasarkan analisis multi-kriteria
+9: 
+10: 2. PERMASALAHAN YANG DISELESAIKAN OLEH SISTEM
+11: 
+12: 2.1 Solusi yang Ditawarkan
+13: GameFinder adalah Sistem Pendukung Keputusan (Decision Support System) berbasis web yang menggunakan Logika Fuzzy Mamdani untuk merekomendasikan game Steam terbaik berdasarkan profil pengguna.
+14: 2.2 Apa yang Dilakukan Sistem
+15: 2.3 Keunggulan Dibandingkan Sistem Lain
+16: Transparan: Pengguna tahu mengapa game X direkomendasikan
+17: Tidak perlu akun/login: Langsung pakai tanpa registrasi
+18: Multi-kriteria sekaligus: Tidak hanya berdasarkan 1 faktor, tapi 5 faktor bersamaan
+19: Toleransi ketidakpastian: Logika Fuzzy bisa menangani nilai "abu-abu" (misal: harga agak mahal)
+20: 
+21: 3. TEORI METODE FUZZY MAMDANI
+22: 
+23: 3.1 Apa Itu Logika Fuzzy?
+24: Logika Fuzzy adalah cabang dari kecerdasan buatan yang memungkinkan sebuah nilai memiliki derajat kebenaran antara 0 dan 1, bukan hanya 0 (Salah) atau 1 (Benar) seperti logika klasik (Boolean).
+25: Contoh Sederhana:
+26: Logika Klasik: Harga Rp 250.000 → Murah (Ya/Tidak?)
+27: Logika Fuzzy: Harga Rp 250.000 → 83% Murah DAN 17% Sedang (bisa keduanya!)
+28: 3.2 Apa Itu Metode Mamdani?
+29: Metode Mamdani (Mamdani Inference System) dikembangkan oleh Ebrahim H. Mamdani pada tahun 1975. Metode ini merupakan salah satu metode inferensi fuzzy yang paling populer dan paling banyak digunakan.
+30: Ciri khas utama metode Mamdani:
+31: Menggunakan aturan IF-THEN berbasis linguistik (bahasa manusia)
+32: Operator MIN untuk implikasi (AND pada bagian IF)
+33: Operator MAX untuk agregasi (menggabungkan beberapa aturan)
+34: Defuzzifikasi menggunakan metode Centroid (Pusat Area)
+35: 3.3 Empat Tahapan Proses Fuzzy Mamdani
+36: Tahap 1: FUZZIFIKASI
+37: Mengubah nilai tegas (crisp) menjadi derajat keanggotaan fuzzy (0.0 – 1.0). Pada tahap ini, angka pasti dari input dikonversi menjadi nilai keanggotaan menggunakan Fungsi Keanggotaan (Membership Function) berbentuk segitiga (triangular).
+38: Rumus Fungsi Segitiga:
+39: μ(x) = 0,                    jika x ≤ a atau x ≥ c
+40: μ(x) = (x − a) / (b − a),    jika a < x < b
+41: μ(x) = (c − x) / (c − b),    jika b < x < c
+42: μ(x) = 1,                    jika x = b
+43: Dimana: a = batas kiri, b = titik puncak, c = batas kanan
+44: Tahap 2: INFERENSI (Evaluasi Aturan)
+45: Mencocokkan nilai fuzzifikasi dengan basis aturan IF-THEN. Sistem menggunakan 243 aturan yang mengkombinasikan 5 variabel input.
+46: Format Aturan:
+47: JIKA Budget ADALAH [Rendah/Sedang/Tinggi]
+DAN  Level PC ADALAH [Rendah/Sedang/Tinggi]
+DAN  Tipe Gamer ADALAH [Casual/Balanced/Hardcore]
+DAN  Rating ADALAH [Rendah/Sedang/Tinggi]
+DAN  Waktu Bermain ADALAH [Singkat/Sedang/Lama]
+MAKA Rekomendasi ADALAH [Tidak Direkomendasikan / Kurang Direkomendasikan / Direkomendasikan / Sangat Direkomendasikan]
+48: Operator yang digunakan: Fungsi MIN (nilai minimum) untuk operator AND.
+49: α-predikat = MIN(μ_budget, μ_pc_level, μ_gamer_type, μ_rating, μ_playtime)
+50: Tahap 3: AGREGASI
+51: Menggabungkan semua aturan yang terpicu menjadi satu area kurva. Jika beberapa aturan menghasilkan kategori output yang sama, sistem mengambil nilai MAX (nilai tertinggi) dari kekuatan aturan tersebut.
+52: μ_output(kategori) = MAX(α₁, α₂, α₃, ..., αₙ)
+53: Tahap 4: DEFUZZIFIKASI (Metode Centroid)
+54: Mengubah area fuzzy menjadi satu nilai tegas (crisp) sebagai output akhir. Metode Centroid (Pusat Area / Center of Area) menghitung titik pusat massa dari area di bawah kurva gabungan.
+55: Rumus Centroid (kontinu):
+56: z* = ∫ x · μ(x) dx  /  ∫ μ(x) dx
+57: Implementasi diskrit (pada kode, 1000 titik sampel pada rentang 0–100):
+58: z* = Σᵢ₌₀¹⁰⁰⁰ (xᵢ · μ(xᵢ))  /  Σᵢ₌₀¹⁰⁰⁰ μ(xᵢ)
+59: Hasil defuzzifikasi ini adalah Skor Rekomendasi (0 – 100).
+60: 
+61: 4. CARA KERJA CODINGAN (Arsitektur Sistem)
+62: 
+63: 4.1 Struktur File Fuzzy Engine
+64: 4.2 Alur Kode Program (Step-by-Step)
+65: 4.3 Variabel Fuzzy yang Digunakan
+66: Variabel Input (5 variabel):
+67: 
+68: Variabel Output (1 variabel):
+69: 
+70: Total Aturan Fuzzy:
+71: 3(budget) × 3(pc_level) × 3(gamer_type) × 3(rating) × 3(playtime) = 243 Aturan
+72: 
+73: 5. CONTOH INPUT → PROSES → OUTPUT
+74: 
+75: 5.1 Skenario: Mahasiswa Mencari Game Action
+76: 📥 INPUT (Pengguna memasukkan preferensi di form web)
+77: 
+78: ⚙️ PROSES (Apa yang terjadi di dalam sistem)
+79: Langkah 1: Filter Database
+80: SELECT * FROM games
+WHERE (genre LIKE '%Action%' OR tags LIKE '%Action%')
+  AND total_reviews >= 5
+  AND price_idr <= 300000
+81: Hasil: Sistem menemukan sejumlah game Action yang sesuai budget dari database.
+82: Langkah 2: Fuzzifikasi (untuk game peringkat #1)
+83: Contoh Game Kandidat: "Nuclear Option" (Harga: Rp 287.840, Rating: 94%, 7.024 ulasan)
+84: A. Fuzzifikasi Budget (Harga game Rp 287.840):
+85: μ_Low(287840) = (c − x) / (c − b) = (300000 − 287840) / (300000 − 0) = 0.04
+86: μ_Medium(287840) = (x − a) / (b − a) = (287840 − 50000) / (300000 − 50000) = 0.95
+87: μ_High(287840) = 0.00   (di luar rentang, x < a = 500000)
+88: Hasil Fuzzifikasi Budget:
+89: Budget = { Low: 0.04,  Medium: 0.95,  High: 0.00 }
+90: B. Fuzzifikasi Level PC (Game butuh level 3/High, User punya level 2/Medium):
+91: PC Level = { Low: 0.0,  Medium: 1.0,  High: 0.0 }  (Singleton: nilai PC user = 2)
+92: C. Fuzzifikasi Tipe Gamer (User memilih Balanced = 2):
+93: Gamer Type = { Casual: 0.0,  Balanced: 1.0,  Hardcore: 0.0 }
+94: D. Fuzzifikasi Rating (Rating game 94%, preferensi user 75%):
+95: μ_High(94) = (x − a) / (b − a) = (94 − 60) / (100 − 60) = 0.85
+96: Rating = { Low: 0.0,  Medium: 0.0,  High: 0.85 }
+97: E. Fuzzifikasi Waktu Bermain (Game ~30 jam, preferensi user 30 jam):
+98: Playtime = { Short: 0.0,  Medium: 1.0,  Long: 0.0 }  (kecocokan sempurna)
+99: Langkah 3: Inferensi (Evaluasi Aturan)
+100: Dari 243 aturan, yang paling relevan untuk game ini misalnya:
+101: JIKA Budget = Medium (0.95)
+DAN  PC Level = Medium (1.0)
+DAN  Gamer Type = Balanced (1.0)
+DAN  Rating = High (0.85)
+DAN  Playtime = Medium (1.0)
+MAKA Rekomendasi = Sangat Direkomendasikan
+102: Menghitung α-predikat (menggunakan operator MIN):
+103: α = MIN(0.95, 1.0, 1.0, 0.85, 1.0) = 0.85
+104: Profil ideal untuk tipe Balanced: {budget: Medium, rating: High, playtime: Medium}
+105: Budget game = Medium, ideal Balanced = Medium → cocok ✓
+106: Rating game = High, ideal Balanced = High → cocok ✓
+107: Playtime game = Medium, ideal Balanced = Medium → cocok ✓
+108: Kecocokan = 3 dari 3 → consequent = Sangat Direkomendasikan (index 3). Kekuatan aturan untuk kategori "Sangat Direkomendasikan" = 0.85
+109: Langkah 4: Agregasi
+110: Setelah semua 243 aturan dievaluasi, hasil agregasi (MAX dari setiap kategori):
+111: 
+112: Langkah 5: Defuzzifikasi (Centroid)
+113: Sistem menghitung titik pusat massa (centroid) dari area di bawah kurva:
+114: μ(xᵢ) = MAX_kategori ( MIN( μ_mf_kategori(xᵢ), α_kategori ) )
+115: z* = Σᵢ₌₀¹⁰⁰⁰ (xᵢ · μ(xᵢ))  /  Σᵢ₌₀¹⁰⁰⁰ μ(xᵢ)
+116: Hasil Defuzzifikasi: Skor = 79.0
+117: Langkah 6: Kategorisasi Skor
+118: z* = 79.0  →  70 ≤ 79.0 ≤ 100  →  Kategori: Sangat Direkomendasikan ✓
+119: 
+120: 📤 OUTPUT (Ditampilkan di browser pengguna)
+121: Setelah semua game Action dievaluasi satu per satu, sistem mengurutkan skor tertinggi dan menampilkan Top 10:
+122: 
+123: Alasan yang ditampilkan untuk setiap game (Explainable AI):
+124: ✅ "Cocok untuk gaya bermain Seimbang"
+125: ✅ "Rp 287.840 sesuai dengan anggaran Rp 300.000 Anda"
+126: ✅ "Rating 94% memenuhi preferensi 75% Anda"
+127: ⚠️ "Game ini membutuhkan spesifikasi High End (mungkin berat untuk PC Anda)"
+128: 
+129: 7. BATASAN / KEKURANGAN SISTEM
+130: 
+131: 
+132: 8. RINGKASAN UNTUK PENUTUP PRESENTASI
+133: 
+134: Kesimpulan
+135: 1. GameFinder berhasil mengimplementasikan metode Fuzzy Mamdani sebagai mesin inferensi untuk sistem rekomendasi game Steam.
+136: 2. Sistem menggunakan 5 variabel input dan 243 aturan fuzzy untuk mengevaluasi kecocokan setiap game dengan profil pengguna.
+137: 3. Proses Fuzzifikasi → Inferensi → Agregasi → Defuzzifikasi (Centroid) menghasilkan skor rekomendasi 0-100 yang dapat dijelaskan (Explainable AI).
+138: 4. Sistem menampilkan Top 10 game terbaik beserta alasan rekomendasinya.
+139: Saran Pengembangan
+140: 1. Integrasi dengan Steam API untuk data game real-time.
+141: 2. Penambahan fitur akun pengguna untuk personalisasi riwayat.
+142: 3. Penggunaan metode hybrid (Fuzzy + Machine Learning) untuk akurasi lebih tinggi.
+143: 4. Penambahan variabel fuzzy baru seperti popularitas dan umur game.
