@@ -42,6 +42,7 @@ def show(app_id):
     preferred_rating = request.args.get('preferred_rating', type=float)
     preferred_playtime = request.args.get('preferred_playtime', type=float)
     preferred_gamer_type = request.args.get('preferred_gamer_type', type=int)
+    selected_genre = request.args.get('genre', '')
 
     reasons = None
     if budget is not None and pc_level is not None:
@@ -52,6 +53,7 @@ def show(app_id):
             preferred_rating or 75,
             preferred_playtime or 20,
             preferred_gamer_type or 2,
+            selected_genre=selected_genre,
         )
     game['reasons'] = reasons
 

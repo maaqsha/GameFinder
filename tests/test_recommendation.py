@@ -76,7 +76,7 @@ header('1.2 evaluate_game — Profil Game Sintetis')
 #   Ideal Kasual: anggaran=Rendah, rating=Sedang, waktu bermain=Sedang
 #   rating 95%: Tinggi=0.857, Sedang=0.333, Rendah=0.05
 #   Sedang memicu Sangat Direkomendasikan(3/3), Tinggi memicu Direkomendasikan(2/3) → centroid ≈ 44
-s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=1)
 assert_near('[A] Cheap indie, Casual score', s, 43.98, tolerance=1.0)
 assert_category('[A] Cheap indie, Casual category', s, 'Less Recommended')
@@ -85,7 +85,7 @@ assert_category('[A] Cheap indie, Casual category', s, 'Less Recommended')
 #   Ideal Seimbang: anggaran=Sedang, rating=Tinggi, waktu bermain=Sedang
 #   anggaran Rendah≠Sedang✗, rating Tinggi=Tinggi✓, waktu bermain✓ → 2/3 → Rec
 #   Tapi Sedang memicu Kurang Direkomendasikan(1/3) pada 0.333. Centroid ditarik ke kiri.
-s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[A2] Cheap indie, Balanced score', s, 27.20, tolerance=1.0)
 assert_category('[A2] Cheap indie, Balanced category', s, 'Less Recommended')
@@ -94,14 +94,14 @@ assert_category('[A2] Cheap indie, Balanced category', s, 'Less Recommended')
 #   Ideal Hardcore: anggaran=Tinggi, rating=Tinggi, waktu bermain=Sedang
 #   anggaran Rendah≠Tinggi✗, rating Tinggi=Tinggi✓, waktu bermain✓ → 2/3 → Rec
 #   Struktur sama dengan Seimbang (anggaran tidak cocok + rating cocok)
-s, agg = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(0, 1, 95, 2, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=3)
 assert_near('[A3] Cheap indie, Hardcore score', s, 27.20, tolerance=1.0)
 assert_category('[A3] Cheap indie, Hardcore category', s, 'Less Recommended')
 
 # Profil B: Game AAA, PC tinggi, rating sedang, waktu bermain lama dengan Seimbang
 #   anggaran Tinggi≠Sedang✗, rating Sedang≠Tinggi✗, waktu bermain Sedang✓ → 1/3 → Kurang Direkomendasikan
-s, agg = evaluate_game(800000, 3, 70, 60, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(800000, 3, 70, 60, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[B] AAA score', s, 16.19, tolerance=1.0)
 assert_category('[B] AAA category', s, 'Not Recommended')
@@ -111,7 +111,7 @@ assert_category('[B] AAA category', s, 'Not Recommended')
 #   rating=60 → Rendah=0.4, Sedang=0.25
 #   waktu bermain Sedang=1.0 → ✓
 #   Berbagai kombinasi kecocokan menciptakan pemicu multi-kategori
-s, agg = evaluate_game(350000, 2, 60, 30, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(350000, 2, 60, 30, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[C] Mid-range score', s, 43.22, tolerance=1.0)
 assert_category('[C] Mid-range category', s, 'Less Recommended')
@@ -119,7 +119,7 @@ assert_category('[C] Mid-range category', s, 'Less Recommended')
 # Profil D: Murah, rating buruk dengan Seimbang
 #   anggaran Rendah≠Sedang✗, rating Rendah≠Tinggi✗, waktu bermain Sedang✓ → 1/3 → Kurang Direkomendasikan
 #   Rating yang sangat rendah berarti semua kategori terpicu dengan lemah → centroid mendekati 0
-s, agg = evaluate_game(0, 1, 20, 5, preferred_rating=80, preferred_playtime=20,
+s, agg, _ = evaluate_game(0, 1, 20, 5, preferred_rating=80, preferred_playtime=20,
                         preferred_gamer_type=2)
 assert_near('[D] Cheap junk score', s, 9.09, tolerance=1.0)
 assert_category('[D] Cheap junk category', s, 'Not Recommended')
@@ -129,23 +129,23 @@ assert_category('[D] Cheap junk category', s, 'Not Recommended')
 #   Low rules: budget✗, playtime✓ → 1 or 2 matches depending on rating
 #   Medium rules: budget✓, playtime✓ → 2 or 3 matches
 #   Multi-category centroid between Rec and Highly Rec → ≈ 63
-s, agg = evaluate_game(200000, 2, 80, 30, preferred_rating=80, preferred_playtime=30,
+s, agg, _ = evaluate_game(200000, 2, 80, 30, preferred_rating=80, preferred_playtime=30,
                         preferred_gamer_type=2)
 assert_near('[E] Within-budget match score', s, 62.51, tolerance=1.0)
 assert_category('[E] Within-budget match category', s, 'Recommended')
 
 # Profile F: Playtime mismatch — both fire same rules with Casual (Short is ideal), so no diff
-_, a_perfect = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
+_, agg_perfect, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
                               preferred_gamer_type=1)
-_, a_off = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=200,
+_, agg_off, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=200,
                           preferred_gamer_type=1)
-check('[F] Playtime change affects recommendations', a_off['Less Recommended'] > 0 or a_perfect['Less Recommended'] > 0,
+check('[F] Playtime change affects recommendations', agg_off['Less Recommended'] > 0 or agg_perfect['Less Recommended'] > 0,
       'both produce non-zero output')
 
 # Profile G: Rating mismatch — Casual ideal is Medium, both 100% and 20% give different results
-s_good_r, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=10,
+s_good_r, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=10,
                              preferred_gamer_type=2)
-s_bad_r, _ = evaluate_game(0, 1, 20, 2, preferred_rating=80, preferred_playtime=10,
+s_bad_r, _, _ = evaluate_game(0, 1, 20, 2, preferred_rating=80, preferred_playtime=10,
                             preferred_gamer_type=2)
 check('[G] Rating mismatch changes score', s_bad_r != s_good_r,
       f'good_rating={s_good_r:.2f}, bad_rating={s_bad_r:.2f}')
@@ -308,31 +308,31 @@ fr = fuzzify_rating(0, 0)
 check('pref_rating=0, game=0%: Low active', fr['Low'] > 0.5, f'Low={fr["Low"]:.3f}')
 
 # 6f: Evaluate with degenerate preferences (should not crash)
-s, _ = evaluate_game(0, 1, 50, 10, preferred_rating=0, preferred_playtime=0,
-                     preferred_gamer_type=2)
+s, _, _ = evaluate_game(0, 1, 50, 10, preferred_rating=0, preferred_playtime=0,
+                      preferred_gamer_type=2)
 check('evaluate with pref_rating=0, pref_playtime=0', s > 0, f'score={s:.2f}')
 
 # 6g: Different rating preferences affect fuzzification (same game, different pref)
-s1, _ = evaluate_game(0, 1, 100, 2, preferred_rating=50, preferred_playtime=10,
-                      preferred_gamer_type=2)
-s2, _ = evaluate_game(0, 1, 100, 2, preferred_rating=99, preferred_playtime=10,
-                      preferred_gamer_type=2)
+s1, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=50, preferred_playtime=10,
+                       preferred_gamer_type=2)
+s2, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=99, preferred_playtime=10,
+                       preferred_gamer_type=2)
 check('Different rating pref changes score', s1 != s2,
       f's1(pref=50%)={s1:.2f}, s2(pref=99%)={s2:.2f}')
 
 # 6h: Different playtime preferences affect score
-s_short_pref, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
+s_short_pref, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
                                  preferred_gamer_type=1)
-s_long_pref, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=200,
+s_long_pref, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=200,
                                 preferred_gamer_type=1)
 check('Different playtime pref changes score', s_short_pref != s_long_pref,
       f'short_pref={s_short_pref:.2f}, long_pref={s_long_pref:.2f}')
 
 # 6i: Determinism — same inputs produce same score
-s1, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
-                       preferred_gamer_type=1)
-s2, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
-                       preferred_gamer_type=1)
+s1, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
+                        preferred_gamer_type=1)
+s2, _, _ = evaluate_game(0, 1, 100, 2, preferred_rating=80, preferred_playtime=2,
+                        preferred_gamer_type=1)
 check('Deterministic output', s1 == s2, f's1={s1:.2f}, s2={s2:.2f}')
 
 

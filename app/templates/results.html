@@ -48,7 +48,7 @@
       {% elif rating >= 60 %}{% set rating_class = 'rating-mid' %}
       {% else %}{% set rating_class = 'rating-low' %}{% endif %}
       {% set is_free = game.price_idr == 0 %}
-      {% set detail_url = url_for('detail.show', app_id=game.app_id, score='%.2f'|format(score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime, preferred_gamer_type=form_data.preferred_gamer_type) %}
+      {% set detail_url = url_for('detail.show', app_id=game.app_id, score='%.2f'|format(score), category=game.recommendation_category, budget=form_data.budget, pc_level=form_data.pc_level, preferred_rating=form_data.preferred_rating, preferred_playtime=form_data.preferred_playtime, preferred_gamer_type=form_data.preferred_gamer_type, genre=form_data.genre) %}
       <div class="glass-card glass-card-hover result-card {% if loop.first %}featured-result{% endif %}">
 
         {# 1. Rank #}
